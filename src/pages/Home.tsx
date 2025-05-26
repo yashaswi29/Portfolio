@@ -23,7 +23,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary-900 dark:text-white leading-tight animate-fade-in-up">
-              Cloud DevOps Engineer
+              Yashaswi Tiwari
             </h1>
             <p className="mt-6 text-xl text-primary-600 dark:text-primary-300 animate-fade-in-up">
               Automating infrastructure, optimizing deployments, and ensuring reliability in cloud environments.

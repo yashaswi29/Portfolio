@@ -16,9 +16,6 @@ const About: React.FC = () => {
             <h1 className="text-4xl sm:text-5xl font-bold text-primary-900 dark:text-white leading-tight animate-fade-in-up">
               About Me
             </h1>
-            <p className="mt-6 text-xl text-primary-600 dark:text-primary-300 animate-fade-in-up">
-              A passionate DevOps engineer with expertise in cloud infrastructure and automation.
-            </p>
           </div>
         </div>
       </div>
@@ -29,13 +26,13 @@ const About: React.FC = () => {
           <div className="md:col-span-2">
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-primary-900 dark:text-white leading-relaxed">
-                I'm a seasoned Cloud DevOps Engineer with over X years of experience designing, implementing, and maintaining robust cloud infrastructure. My passion lies in automating processes, optimizing performance, and ensuring scalable, reliable systems.
+                Over the past couple of years, I’ve found myself completely drawn to the world of CI/CD pipelines, infrastructure as code, and everything that makes modern engineering smoother and smarter.
               </p>
               <p className="text-primary-900 dark:text-white leading-relaxed">
-                My expertise spans infrastructure as code, containerization, orchestration, and CI/CD pipelines. I thrive in collaborative environments where I can leverage my technical skills to solve complex problems and drive innovation.
+                Currently working as a Cloud Engineering Intern at AFI Digital Services, I’m hands-on with Azure—optimizing infrastructure for real-world apps, automating pipelines, and always chasing cost-effective, high-availability solutions. Before this, I was at Wipro, diving deep into AWS, Terraform, Jenkins, and GitHub Actions—learning how real infrastructure scales and evolves.
               </p>
               <p className="text-primary-900 dark:text-white leading-relaxed">
-                Beyond technical skills, I bring strong communication abilities and a focus on documentation. I believe in creating systems that not only work efficiently but are also understandable and maintainable by teams.
+                What drives me is the constant opportunity to learn and build. Whether it’s writing Python scripts to automate boring stuff, figuring out why a container won’t deploy, or shaving dollars off a cloud bill, I’m all in. I love exploring tools, experimenting, and being part of teams where growth and knowledge-sharing are the norm. I'm looking forward to working as a team where I can keep learning, contribute meaningfully, and geek out over DevOps with people who get just as excited about infra diagrams and logs as I do.
               </p>
             </div>
             
@@ -48,7 +45,7 @@ const About: React.FC = () => {
                 <ChevronRight size={16} className="ml-2" />
               </Link>
               <a
-                href="/resume.pdf"
+                href="https://drive.google.com/file/d/1L6nbfrfm8hILaPqyJxX2Nlf8g_zH1TN4/view?usp=sharing"
                 className="inline-flex items-center justify-center ml-4 px-5 py-3 border border-primary-900 dark:border-white text-base font-medium rounded-md text-primary-900 dark:text-white hover:bg-primary-50 dark:hover:bg-primary-800 transition-colors duration-200"
               >
                 <FileText size={16} className="mr-2" />
@@ -64,16 +61,8 @@ const About: React.FC = () => {
             </h3>
             <ul className="space-y-4">
               <li className="bg-white dark:bg-primary-800 p-4 rounded-lg shadow-sm transition-colors duration-300">
-                <h4 className="font-bold text-primary-900 dark:text-white">AWS Certified DevOps Engineer</h4>
+                <h4 className="font-bold text-primary-900 dark:text-white">AWS Certified Cloud Practitoner</h4>
                 <p className="text-sm text-primary-600 dark:text-primary-300">Amazon Web Services</p>
-              </li>
-              <li className="bg-white dark:bg-primary-800 p-4 rounded-lg shadow-sm transition-colors duration-300">
-                <h4 className="font-bold text-primary-900 dark:text-white">Certified Kubernetes Administrator</h4>
-                <p className="text-sm text-primary-600 dark:text-primary-300">Cloud Native Computing Foundation</p>
-              </li>
-              <li className="bg-white dark:bg-primary-800 p-4 rounded-lg shadow-sm transition-colors duration-300">
-                <h4 className="font-bold text-primary-900 dark:text-white">HashiCorp Certified: Terraform Associate</h4>
-                <p className="text-sm text-primary-600 dark:text-primary-300">HashiCorp</p>
               </li>
             </ul>
           </div>
@@ -88,58 +77,71 @@ const About: React.FC = () => {
               <Briefcase size={20} className="mr-2" />
               Work Experience
             </h3>
-            
+
             <div className="space-y-8">
               <div className="relative pl-8 border-l-2 border-primary-200 dark:border-primary-700">
                 <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-primary-900 dark:bg-white"></div>
-                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">2021 - Present</div>
-                <h4 className="text-lg font-bold text-primary-900 dark:text-white">Senior DevOps Engineer</h4>
-                <div className="text-primary-600 dark:text-primary-300">Company Name</div>
+                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">April 2025 – Present</div>
+                <h4 className="text-lg font-bold text-primary-900 dark:text-white">Cloud Engineer</h4>
+                <div className="text-primary-600 dark:text-primary-300">AFI Digital Services LLP, Noida</div>
                 <p className="mt-2 text-primary-600 dark:text-primary-300">
-                  Led cloud infrastructure projects, optimized CI/CD pipelines, and implemented microservices architecture.
+                  Driving automation and cost-efficiency in large-scale Azure setups. 
+                  Contributing to infrastructure design, hands-on scripting, and advancing DevOps maturity by integrating observability and resilience-focused improvements.
                 </p>
               </div>
-              
+
               <div className="relative pl-8 border-l-2 border-primary-200 dark:border-primary-700">
                 <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-primary-900 dark:bg-white"></div>
-                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">2018 - 2021</div>
-                <h4 className="text-lg font-bold text-primary-900 dark:text-white">Cloud Engineer</h4>
-                <div className="text-primary-600 dark:text-primary-300">Company Name</div>
+                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">Sept 2024 – April 2025</div>
+                <h4 className="text-lg font-bold text-primary-900 dark:text-white">Cloud Engineering Intern</h4>
+                <div className="text-primary-600 dark:text-primary-300">AFI Digital Services LLP, Noida</div>
                 <p className="mt-2 text-primary-600 dark:text-primary-300">
-                  Designed and maintained AWS infrastructure, automated deployments, and improved system reliability.
+                  Optimized Azure infrastructure for a multilingual WHO-backed app using CosmosDB and Blob Storage.
+                  Built pipelines in Azure DevOps for content automation and researched cloud cost strategies, leading to substantial savings and efficiency.
+                </p>
+              </div>
+
+              <div className="relative pl-8 border-l-2 border-primary-200 dark:border-primary-700">
+                <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-primary-900 dark:bg-white"></div>
+                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">July 2024 – Aug 2024</div>
+                <h4 className="text-lg font-bold text-primary-900 dark:text-white">DevOps-Cloud Trainee</h4>
+                <div className="text-primary-600 dark:text-primary-300">Wipro Limited, Gurgaon</div>
+                <p className="mt-2 text-primary-600 dark:text-primary-300">
+                  Deployed AWS infrastructure using Terraform and automated deployments with GitHub Actions.
+                  Migrated Jenkins jobs and plugins across environments using Python and CLI to ensure stable and repeatable pipelines.
                 </p>
               </div>
             </div>
           </div>
-          
+
+        
           <div>
             <h3 className="text-xl font-bold mb-6 text-primary-900 dark:text-white flex items-center">
               <GraduationCap size={20} className="mr-2" />
               Education
             </h3>
-            
+
             <div className="space-y-8">
               <div className="relative pl-8 border-l-2 border-primary-200 dark:border-primary-700">
                 <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-primary-900 dark:bg-white"></div>
-                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">2014 - 2018</div>
-                <h4 className="text-lg font-bold text-primary-900 dark:text-white">B.S. in Computer Science</h4>
-                <div className="text-primary-600 dark:text-primary-300">University Name</div>
+                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">2021 – Present</div>
+                <h4 className="text-lg font-bold text-primary-900 dark:text-white">B.Tech in Computer Science</h4>
+                <div className="text-primary-600 dark:text-primary-300">Bennett University, Greater Noida</div>
                 <p className="mt-2 text-primary-600 dark:text-primary-300">
-                  Specialized in distributed systems and cloud computing.
                 </p>
               </div>
-              
+
               <div className="relative pl-8 border-l-2 border-primary-200 dark:border-primary-700">
                 <div className="absolute -left-2 top-0 w-4 h-4 rounded-full bg-primary-900 dark:bg-white"></div>
-                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">Continuous Learning</div>
-                <h4 className="text-lg font-bold text-primary-900 dark:text-white">Professional Development</h4>
-                <div className="text-primary-600 dark:text-primary-300">Various Platforms</div>
+                <div className="mb-1 text-sm text-primary-600 dark:text-primary-300">Graduated 2021</div>
+                <h4 className="text-lg font-bold text-primary-900 dark:text-white">Senior Secondary (10+2)</h4>
+                <div className="text-primary-600 dark:text-primary-300">Ahlcon International School, Delhi</div>
                 <p className="mt-2 text-primary-600 dark:text-primary-300">
-                  Regularly engage in courses and workshops to stay current with emerging technologies and best practices.
                 </p>
               </div>
             </div>
           </div>
+
         </div>
       </Section>
     </div>
