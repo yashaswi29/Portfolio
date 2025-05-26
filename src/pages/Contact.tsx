@@ -1,7 +1,7 @@
 import React from 'react';
 import Section from '../components/Section';
 import ContactForm from '../components/ContactForm';
-import { Mail, MapPin, Phone, Github, Linkedin } from 'lucide-react';
+import { Mail, MapPin, Github, Linkedin } from 'lucide-react';
 
 const Contact: React.FC = () => {
   return (
