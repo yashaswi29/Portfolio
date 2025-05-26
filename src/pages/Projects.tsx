@@ -83,6 +83,7 @@ const Projects: React.FC = () => {
               description={project.description}
               technologies={project.technologies}
               githubUrl={project.githubUrl}
+              // liveUrl={project.liveUrl}
             />
           ))}
         </div>
