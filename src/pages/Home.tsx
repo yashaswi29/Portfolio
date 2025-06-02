@@ -45,7 +45,7 @@ const Home: React.FC = () => {
             </div>
             <div className="mt-8 flex space-x-4">
               <a 
-                href="https://github.com/yourusername" 
+                href="https://github.com/yashaswi29" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-white transition-colors duration-200"
@@ -54,7 +54,7 @@ const Home: React.FC = () => {
                 <Github size={24} />
               </a>
               <a 
-                href="https://linkedin.com/in/yourusername" 
+                href="https://in.linkedin.com/in/yashaswi-tiwari-5423211a8" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-white transition-colors duration-200"
