@@ -7,7 +7,6 @@ git reset --hard origin/main
 
 IMAGE_BASE="portfolio"
 PORT=7000
-
 COMMIT_SHA=$(git rev-parse --short HEAD)
 
 if ! docker images "${IMAGE_BASE}" --format '{{.Tag}}' | grep -q "^${COMMIT_SHA}$"; then
@@ -16,15 +15,10 @@ else
     docker tag "${IMAGE_BASE}:${COMMIT_SHA}" "${IMAGE_BASE}:latest"
 fi
 
-PID=$(lsof -t -i:${PORT} || true)
-if [ -n "$PID" ]; then
-    sudo kill -9 $PID || true
-fi  
-
-CONTAINERS=$(docker ps -q --filter "ancestor=${IMAGE_BASE}:${COMMIT_SHA}")
-if [ -n "$CONTAINERS" ]; then
-    docker stop $CONTAINERS
-    docker rm $CONTAINERS
+EXISTING_CONTAINER=$(docker ps --format '{{.ID}} {{.Ports}}' | grep ":${PORT}->" | awk '{print $1}')
+if [ -n "$EXISTING_CONTAINER" ]; then
+    docker stop "$EXISTING_CONTAINER"
+    docker rm "$EXISTING_CONTAINER"
 fi
 
 docker run -d -p ${PORT}:80 "${IMAGE_BASE}:latest"
@@ -34,4 +28,4 @@ docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.CreatedAt}}' | grep -v lates
   docker rmi "${IMAGE_BASE}:${old_tag}" || true
 done
 
-echo "Deployment complete. Running container on port ${PORT} with image ${IMAGE_BASE}:${COMMIT_SHA}"
+echo "✅ Deployment complete. Running container on port ${PORT} with image ${IMAGE_BASE}:${COMMIT_SHA}"
