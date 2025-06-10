@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="font-mono font-bold text-xl text-primary-900 dark:text-white">
-              <code>&gt;yashaswi.cloud</code>
+              <code>&gt;</code>
             </Link>
           </div>
           
