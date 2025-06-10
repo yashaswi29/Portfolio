@@ -18,13 +18,13 @@ const Projects: React.FC = () => {
     {
       title: 'Jenkins Migration Toolkit',
       description: 'Built a Python-based toolkit to automate Jenkins job, plugin, and configuration migration between servers using Jenkins CLI and JCasC. Reduced manual intervention in CI/CD environment transitions.',
-      technologies: ['Jenkins', 'Python', 'JCasC', 'Shell', 'CI/CD'],
+      technologies: ['Jenkins', 'Python', 'JCasC', 'Shell Scripting', 'CI/CD'],
       githubUrl: 'https://github.com/yashaswi29/Jenkins-Migration-Tool', 
     },
     {
       title: 'ChatApp with Real-Time CI/CD Pipeline',
       description: 'Developed a real-time chat application featuring dynamic rooms and seamless communication, backed by a robust CI/CD pipeline. The pipeline automates build, security scanning, containerization, and deployment, ensuring rapid and secure delivery on AWS EC2 instances. Additionally, wrote Terraform scripts to automate the infrastructure provisioning of the ChatApp on AWS.',
-      technologies: ['Node.js', 'Jenkins', 'Docker', 'OWASP', 'EC2', 'Terraform'],
+      technologies: ['Jenkins', 'Docker', 'OWASP', 'EC2', 'Terraform'],
       githubUrl: 'https://github.com/yashaswi29/CICD-Realtime-ChatApp.git', 
     },
     {

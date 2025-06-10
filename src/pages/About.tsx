@@ -31,33 +31,28 @@ const About: React.FC = () => {
           <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(168,85,247,0.05)_50%,transparent_75%)]"></div>
           
           {/* Floating Icons */}
-          <div className="absolute top-32 right-20 text-indigo-400/30 animate-bounce" style={{animationDelay: '1s', animationDuration: '3s'}}>
+          <div className="absolute top-32 right-20 text-indigo-400/30" style={{animationDelay: '1s', animationDuration: '3s'}}>
             <Cloud size={32} />
           </div>
-          <div className="absolute top-48 left-16 text-purple-400/30 animate-pulse" style={{animationDelay: '2s'}}>
+          <div className="absolute top-48 left-16 text-purple-400/30" style={{animationDelay: '2s'}}>
             <Zap size={28} />
           </div>
-          <div className="absolute bottom-32 right-32 text-blue-400/30 animate-bounce" style={{animationDelay: '0.5s', animationDuration: '4s'}}>
+          <div className="absolute bottom-32 right-32 text-blue-400/30" style={{animationDelay: '0.5s', animationDuration: '4s'}}>
             <Code size={24} />
           </div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl">
-              <div className="flex items-center space-x-3 mb-6 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg">
-                  <Sparkles className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 text-sm font-semibold tracking-wide uppercase">
-                  Get to Know Me
-                </span>
+              <div className="flex items-center space-x-3 mb-6">
+                {/* Removed Sparkles icon */}
               </div>
               
-              <h1 className="text-5xl sm:text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight animate-fade-in-up mb-6" style={{animationDelay: '0.4s'}}>
+              <h1 className="text-5xl sm:text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight mb-6">
                 About Me
               </h1>
               
-              <p className="text-xl text-slate-300 leading-relaxed animate-fade-in-up max-w-3xl" style={{animationDelay: '0.6s'}}>
-                Passionate Cloud Engineer crafting with the future of infrastructure with cutting-edge DevOps practices and scalable solutions.
+              <p className="text-xl text-slate-300 leading-relaxed max-w-3xl">
+                Passionate Cloud Engineer crafting withthe future of infrastructure with cutting-edge DevOps practices and scalable solutions.
               </p>
             </div>
           </div>
@@ -67,12 +62,9 @@ const About: React.FC = () => {
         <Section title="" className="relative">
           <div className="relative">
             {/* Section Header */}
-            <div className="text-center mb-16 animate-fade-in-up">
+            <div className="text-center mb-16">
               <div className="flex items-center justify-center space-x-3 mb-4">
                 <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-indigo-500"></div>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 text-sm font-semibold tracking-wider uppercase">
-                  Biography
-                </span>
                 <div className="w-8 h-0.5 bg-gradient-to-r from-indigo-500 to-transparent"></div>
               </div>
               <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
@@ -83,7 +75,7 @@ const About: React.FC = () => {
             <div className="grid md:grid-cols-3 gap-12">
               <div className="md:col-span-2 space-y-8">
                 {/* Bio Cards */}
-                <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-indigo-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-indigo-500/10 animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+                <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-indigo-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-indigo-500/10">
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <div className="relative">
                     <div className="flex items-center space-x-3 mb-4">
@@ -98,7 +90,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+                <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/10">
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <div className="relative">
                     <div className="flex items-center space-x-3 mb-4">
@@ -113,7 +105,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/10 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+                <div className="group relative p-8 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/10">
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   <div className="relative">
                     <div className="flex items-center space-x-3 mb-4">
@@ -129,7 +121,7 @@ const About: React.FC = () => {
                 </div>
                 
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-4 pt-6 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
+                <div className="flex flex-wrap gap-4 pt-6">
                   <Link
                     to="/contact"
                     className="group relative px-8 py-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 overflow-hidden"
@@ -154,7 +146,7 @@ const About: React.FC = () => {
               </div>
               
               {/* Certifications Sidebar */}
-              <div className="animate-fade-in-up" style={{animationDelay: '1s'}}>
+              <div>
                 <div className="sticky top-8 p-8 rounded-2xl bg-gradient-to-br from-white/5 via-white/10 to-white/5 backdrop-blur-sm border border-white/10 hover:border-indigo-500/30 transition-all duration-500">
                   <div className="flex items-center space-x-3 mb-6">
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
@@ -163,8 +155,7 @@ const About: React.FC = () => {
                     <h3 className="text-xl font-bold text-slate-800 dark:text-white">Certifications</h3>
                   </div>
                   
-                  <div
-                    className="group relative p-6 rounded-xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/20 hover:border-indigo-500/40 transition-all duration-300 hover:scale-105 cursor-pointer"
+                  <div className="group relative p-6 rounded-xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/20 hover:border-indigo-500/40 transition-all duration-300 hover:scale-105 cursor-pointer"
                     onClick={() => window.open('https://drive.google.com/file/d/1gJYyj4SALVCRm_5neRtWCPcBqp212gh8/view?usp=sharing', '_blank')}
                     title="View Certificate"
                   >
@@ -192,7 +183,7 @@ const About: React.FC = () => {
         {/* Experience & Education */}
         <Section title="" className="relative bg-gradient-to-br from-slate-50/50 to-indigo-50/30 dark:from-slate-900/50 dark:to-indigo-950/30">
           {/* Section Header */}
-          <div className="text-center mb-16 animate-fade-in-up">
+          <div className="text-center mb-16">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-purple-500"></div>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 text-sm font-semibold tracking-wider uppercase">
@@ -207,7 +198,7 @@ const About: React.FC = () => {
 
           <div className="grid md:grid-cols-2 gap-12">
             {/* Work Experience */}
-            <div className="animate-fade-in-up" style={{animationDelay: '0.2s'}}>
+            <div>
               <div className="flex items-center space-x-3 mb-8">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
                   <Briefcase className="w-6 h-6 text-white" />
@@ -217,9 +208,9 @@ const About: React.FC = () => {
 
               <div className="space-y-8">
                 {/* Current Role */}
-                <div className="group relative pl-8 border-l-2 border-gradient-to-b from-indigo-500 to-purple-600 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+                <div className="group relative pl-8 border-l-2 border-gradient-to-b from-indigo-500 to-purple-600">
                   <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
                   </div>
                   <div className="p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-indigo-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-lg">
                     <div className="mb-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-100/50 dark:bg-indigo-900/30 px-3 py-1 rounded-full inline-block">
@@ -234,7 +225,7 @@ const About: React.FC = () => {
                 </div>
 
                 {/* Previous Roles */}
-                <div className="group relative pl-8 border-l-2 border-purple-300 dark:border-purple-700 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+                <div className="group relative pl-8 border-l-2 border-purple-300 dark:border-purple-700">
                   <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 shadow-lg"></div>
                   <div className="p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-lg">
                     <div className="mb-2 text-sm font-medium text-purple-600 dark:text-purple-400 bg-purple-100/50 dark:bg-purple-900/30 px-3 py-1 rounded-full inline-block">
@@ -248,7 +239,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="group relative pl-8 border-l-2 border-blue-300 dark:border-blue-700 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
+                <div className="group relative pl-8 border-l-2 border-blue-300 dark:border-blue-700">
                   <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"></div>
                   <div className="p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-lg">
                     <div className="mb-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/30 px-3 py-1 rounded-full inline-block">
@@ -265,7 +256,7 @@ const About: React.FC = () => {
             </div>
 
             {/* Education */}
-            <div className="animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+            <div>
               <div className="flex items-center space-x-3 mb-8">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-r from-purple-500 to-blue-600 flex items-center justify-center shadow-lg">
                   <GraduationCap className="w-6 h-6 text-white" />
@@ -274,9 +265,9 @@ const About: React.FC = () => {
               </div>
 
               <div className="space-y-8">
-                <div className="group relative pl-8 border-l-2 border-gradient-to-b from-purple-500 to-blue-600 animate-fade-in-up" style={{animationDelay: '0.6s'}}>
+                <div className="group relative pl-8 border-l-2 border-gradient-to-b from-purple-500 to-blue-600">
                   <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-blue-600 shadow-lg flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-white animate-pulse"></div>
+                    <div className="w-2 h-2 rounded-full bg-white"></div>
                   </div>
                   <div className="p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-purple-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-lg">
                     <div className="mb-2 text-sm font-medium text-purple-600 dark:text-purple-400 bg-purple-100/50 dark:bg-purple-900/30 px-3 py-1 rounded-full inline-block">
@@ -287,7 +278,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="group relative pl-8 border-l-2 border-blue-300 dark:border-blue-700 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
+                <div className="group relative pl-8 border-l-2 border-blue-300 dark:border-blue-700">
                   <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg"></div>
                   <div className="p-6 rounded-xl bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-blue-500/30 transition-all duration-500 hover:scale-[1.02] hover:shadow-lg">
                     <div className="mb-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/30 px-3 py-1 rounded-full inline-block">
