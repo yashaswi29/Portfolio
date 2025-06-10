@@ -120,7 +120,7 @@ const About: React.FC = () => {
                   </div>
                 </div>
                 
-                {/* Action Buttons */}
+                {/* Action Buttons
                 <div className="flex flex-wrap gap-4 pt-6">
                   <Link
                     to="/contact"
@@ -142,7 +142,7 @@ const About: React.FC = () => {
                       <span>Resume</span>
                     </div>
                   </a>
-                </div>
+                </div> */}
               </div>
               
               {/* Certifications Sidebar */}
