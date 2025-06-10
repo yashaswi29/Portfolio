@@ -29,7 +29,7 @@ const About: React.FC = () => {
                 Over the past couple of years, I’ve found myself completely drawn to the world of CI/CD pipelines, infrastructure as code, and everything that makes modern engineering smoother and smarter.
               </p>
               <p className="text-primary-900 dark:text-white leading-relaxed">
-                Currently working as a Cloud Engineering Intern at AFI Digital Services, I’m hands-on with Azure—optimizing infrastructure for real-world apps, automating pipelines, and always chasing cost-effective, high-availability solutions. Before this, I was at Wipro, diving deep into AWS, Terraform, Jenkins, and GitHub Actions—learning how real infrastructure scales and evolves.
+                Currently working as a Cloud Engineering at AFI Digital Services, I’m hands-on with Azure—optimizing infrastructure for real-world apps, automating pipelines, and always chasing cost-effective, high-availability solutions. Before this, I was at Wipro, diving deep into AWS, Terraform, Jenkins, and GitHub Actions—learning how real infrastructure scales and evolves.
               </p>
               <p className="text-primary-900 dark:text-white leading-relaxed">
                 What drives me is the constant opportunity to learn and build. Whether it’s writing Python scripts to automate boring stuff, figuring out why a container won’t deploy, or shaving dollars off a cloud bill, I’m all in. I love exploring tools, experimenting, and being part of teams where growth and knowledge-sharing are the norm. I'm looking forward to working as a team where I can keep learning, contribute meaningfully, and geek out over DevOps with people who get just as excited about infra diagrams and logs as I do.
