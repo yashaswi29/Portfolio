@@ -278,7 +278,6 @@ const Projects: React.FC = () => {
         </div>
       </Section>
 
-      {/* Custom CSS animations */}
       <style jsx>{`
         @keyframes fadeInUp {
           from {
