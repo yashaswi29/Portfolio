@@ -23,7 +23,7 @@ if [ -n "$CONTAINERS" ]; then
 fi
 
 PORT=7000
-PID=$(sudo lsof -t -i:${PORT} || true)
+PID=$(lsof -t -i:${PORT} || true)
 if [ -n "$PID" ]; then
     sudo kill -9 $PID || true
 fi  
