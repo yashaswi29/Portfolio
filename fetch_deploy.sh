@@ -16,17 +16,16 @@ else
     docker tag "${IMAGE_BASE}:${COMMIT_SHA}" "${IMAGE_BASE}:latest"
 fi
 
+PID=$(lsof -t -i:${PORT} || true)
+if [ -n "$PID" ]; then
+    sudo kill -9 $PID || true
+fi  
+
 CONTAINERS=$(docker ps -q --filter "ancestor=${IMAGE_BASE}:${COMMIT_SHA}")
 if [ -n "$CONTAINERS" ]; then
     docker stop $CONTAINERS
     docker rm $CONTAINERS
 fi
-
-PORT=7000
-PID=$(lsof -t -i:${PORT} || true)
-if [ -n "$PID" ]; then
-    sudo kill -9 $PID || true
-fi  
 
 docker run -d -p ${PORT}:80 "${IMAGE_BASE}:latest"
 
