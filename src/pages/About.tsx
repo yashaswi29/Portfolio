@@ -25,11 +25,7 @@ const About: React.FC = () => {
 
       <div className="animate-fade-in">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 pt-20 pb-24 overflow-hidden">
-          {/* Hero Background Pattern */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_70%)]"></div>
-          <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(168,85,247,0.05)_50%,transparent_75%)]"></div>
-          
+        <div className="relative pt-20 pb-24 overflow-hidden">
           {/* Floating Icons */}
           <div className="absolute top-32 right-20 text-indigo-400/30" style={{animationDelay: '1s', animationDuration: '3s'}}>
             <Cloud size={32} />
@@ -44,9 +40,7 @@ const About: React.FC = () => {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl">
               <div className="flex items-center space-x-3 mb-6">
-                {/* Removed Sparkles icon */}
               </div>
-              
               <h1 className="text-5xl sm:text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight mb-6">
                 About Me
               </h1>
@@ -182,7 +176,6 @@ const About: React.FC = () => {
         
         {/* Experience & Education */}
         <Section title="" className="relative bg-gradient-to-br from-slate-50/50 to-indigo-50/30 dark:from-slate-900/50 dark:to-indigo-950/30">
-          {/* Section Header */}
           <div className="text-center mb-16">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <div className="w-8 h-0.5 bg-gradient-to-r from-transparent to-purple-500"></div>
