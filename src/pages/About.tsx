@@ -51,9 +51,9 @@ const About: React.FC = () => {
                 About Me
               </h1>
               
-              <p className="text-xl text-slate-300 leading-relaxed max-w-3xl">
-                Passionate Cloud Engineer crafting withthe future of infrastructure with cutting-edge DevOps practices and scalable solutions.
-              </p>
+                <p className="text-xl leading-relaxed max-w-3xl text-slate-700 dark:text-white">
+                Passionate Cloud Engineer crafting with the future of infrastructure with cutting-edge DevOps practices and scalable solutions.
+                </p>
             </div>
           </div>
         </div>
