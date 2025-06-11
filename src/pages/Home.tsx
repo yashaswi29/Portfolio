@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, Container, Compass, Globe, GitBranch, Monitor, Cpu, PenSquare } from 'lucide-react';
+import { Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, Container, Compass, Globe, GitBranch, Monitor, Cpu, PenSquare, Wrench, CloudCog, Rocket, HardDrive } from 'lucide-react';
 
 const Section = ({ title, children, className = "" }) => (
   <section className={`py-16 px-4 sm:px-6 lg:px-8 ${className}`}>
@@ -28,11 +28,15 @@ const Home = () => {
     { name: 'AWS', icon: <Cloud size={48} strokeWidth={1} /> },
     { name: 'Docker', icon: <Container size={48} strokeWidth={1} /> },
     { name: 'Kubernetes', icon: <Compass size={48} strokeWidth={1} /> },
-    { name: 'CI/CD', icon: <GitBranch size={48} strokeWidth={1} /> },
     { name: 'Linux', icon: <Terminal size={48} strokeWidth={1} /> },
     { name: 'Terraform', icon: <Globe size={48} strokeWidth={1} /> },
+    { name: 'Jenkins', icon: <Wrench size={48} strokeWidth={1} /> },
+    { name: 'Azure', icon: <CloudCog size={48} strokeWidth={1} /> },
+    { name: 'GitHub Actions', icon: <Rocket size={48} strokeWidth={1} /> },
     { name: 'Monitoring', icon: <Monitor size={48} strokeWidth={1} /> },
     { name: 'Microservices', icon: <Cpu size={48} strokeWidth={1} /> },
+    { name: 'Bare Metal Hosting', icon: <HardDrive size={48} strokeWidth={1} /> },
+    { name: 'DR Solutioning', icon: <Server size={48} strokeWidth={1} /> },
   ];
 
   return (
