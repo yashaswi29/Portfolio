@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, Container, Compass, Globe, GitBranch, Monitor, Cpu } from 'lucide-react';
+import { Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, Container, Compass, Globe, GitBranch, Monitor, Cpu, PenSquare } from 'lucide-react';
 
 const Section = ({ title, children, className = "" }) => (
   <section className={`py-16 px-4 sm:px-6 lg:px-8 ${className}`}>
@@ -58,9 +58,9 @@ const Home = () => {
                 View Projects
                 <ChevronRight size={16} className="ml-2" />
               </button>
-              <button className="inline-flex items-center justify-center px-5 py-3 border border-indigo-600 dark:border-white text-base font-medium rounded-md text-indigo-600 dark:text-white hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-105">
+              {/* <button className="inline-flex items-center justify-center px-5 py-3 border border-indigo-600 dark:border-white text-base font-medium rounded-md text-indigo-600 dark:text-white hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 dark:hover:bg-gray-800 transition-all duration-200 hover:scale-105">
                 Get in Touch
-              </button>
+              </button> */}
             </div>
             <div 
               className="mt-8 flex space-x-4"
@@ -82,6 +82,15 @@ const Home = () => {
                 aria-label="LinkedIn"
               >
                 <Linkedin size={24} />
+              </a>
+              <a
+                href="https://hashnode.com/@yashaswiyeezy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white transition-all duration-200 hover:scale-110"
+                aria-label="Hashnode"
+              >
+                <PenSquare size={24} />
               </a>
             </div>
           </div>
