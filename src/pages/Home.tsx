@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, Container, Compass, Globe, GitBranch, Monitor, Cpu, PenSquare, Wrench, CloudCog, Rocket, HardDrive } from 'lucide-react';
+import { Link } from "react-router-dom";
 
 const Section = ({ title, children, className = "" }) => (
   <section className={`py-16 px-4 sm:px-6 lg:px-8 ${className}`}>
@@ -58,7 +59,10 @@ const Home = () => {
             <div 
               className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
             >
-              <button className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 hover:from-indigo-600 hover:via-purple-600 hover:to-blue-700 transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl">
+              <button
+                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 hover:from-indigo-600 hover:via-purple-600 hover:to-blue-700 transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
+                onClick={() => window.location.href = '/projects'}
+              >
                 View Projects
                 <ChevronRight size={16} className="ml-2" />
               </button>
