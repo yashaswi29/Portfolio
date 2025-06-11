@@ -99,6 +99,6 @@ No PM2 required right now, because static site + nginx = good enough. Might swit
 
 ---
 
-- _— Yashaswi Tiwari, Bare-metal believer and container whisperer_
+- _— Yashaswi Tiwari, Bare-metal believer
 
 
