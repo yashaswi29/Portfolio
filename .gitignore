@@ -45,6 +45,3 @@ coverage
 .cache
 .parcel-cache
 .npm
-
-package-lock.json
-package.json
