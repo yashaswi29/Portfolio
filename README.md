@@ -101,5 +101,4 @@ No PM2 required right now, because static site + nginx = good enough. Might swit
 
 - _— Yashaswi Tiwari, Bare-metal believer and container whisperer_
 
-📅 Last updated: 2025-06-11
 
