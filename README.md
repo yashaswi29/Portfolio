@@ -48,7 +48,6 @@ Accessible at: `http://192.168.1.3:7000` (yes, hardcoded, it's my homeserver)
 ---
 
 
-
 # Automated Deployment: Cron + Shell + Brute Force Elegance
 
 > _“If it ain’t automated, it ain’t DevOps.”_ — Also me
@@ -100,5 +99,3 @@ No PM2 required right now, because static site + nginx = good enough. Might swit
 ---
 
 - _— Yashaswi Tiwari, Bare-metal believer
-
-
