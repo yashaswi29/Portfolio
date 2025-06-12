@@ -17,19 +17,30 @@ else
 fi
 
 echo "-----Image ${IMAGE_BASE}:${COMMIT_SHA} built successfully.-----"
-echo "-----Stoping and removing any existing container running on port ${PORT}-----"
+
+
 EXISTING_CONTAINER=$(docker ps --format '{{.ID}} {{.Ports}}' | grep ":${PORT}->" | awk '{print $1}')
 if [ -n "$EXISTING_CONTAINER" ]; then
+    echo "-----Stopping and removing container using port ${PORT}-----"
     docker stop "$EXISTING_CONTAINER"
     docker rm "$EXISTING_CONTAINER"
 fi
 
+echo "-----Starting new container on port ${PORT}-----"
 docker run -d -p ${PORT}:80 "${IMAGE_BASE}:latest"
 
-echo "-----Running new container with image ${IMAGE_BASE}:latest on port ${PORT}-----"
-docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.CreatedAt}}' | grep -v latest | \
-  grep -E '^[a-f0-9]{7,}' | sort -rk2 | awk '{print $1}' | tail -n +5 | while read old_tag; do
-  docker rmi "${IMAGE_BASE}:${old_tag}" || true
-done
+echo "-----Removing orphan/idle containers linked to old images-----"
+docker ps -a --filter "ancestor=${IMAGE_BASE}:c9f62a9" -q | xargs -r docker rm -f
 
-echo "-----Deployment complete. Running container on port ${PORT} with image ${IMAGE_BASE}:${COMMIT_SHA}-----"
+echo "-----Cleaning up old image tags-----"
+docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.CreatedAt}}' | grep -v latest | \
+  grep -E '^[a-f0-9]{7,}' | sort -rk2 | awk '{print $1}' | tail -n +4 | \
+  while read old_tag; do
+    echo "Removing image tag ${old_tag}"
+    docker rmi "${IMAGE_BASE}:${old_tag}" || true
+  done
+
+docker container prune -f
+docker image prune -f
+
+echo "Deployment complete! Running ${IMAGE_BASE}:${COMMIT_SHA} on port ${PORT}"
