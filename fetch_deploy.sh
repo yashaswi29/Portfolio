@@ -33,12 +33,13 @@ echo "-----Removing orphan/idle containers linked to old images-----"
 docker ps -a --filter "ancestor=${IMAGE_BASE}:c9f62a9" -q | xargs -r docker rm -f
 
 echo "-----Cleaning up old image tags-----"
-docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.CreatedAt}}' | grep -v latest | \
-  grep -E '^[a-f0-9]{7,}' | sort -rk2 | awk '{print $1}' | tail -n +4 | \
-  while read old_tag; do
-    echo "Removing image tag ${old_tag}"
-    docker rmi "${IMAGE_BASE}:${old_tag}" || true
-  done
+docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.ID}}' | \
+grep -v -e latest -e "${COMMIT_SHA}" | \
+while read tag img_id; do
+  docker ps -a --filter "ancestor=$img_id" -q | xargs -r docker rm -f
+  docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.ID}}' | grep "$img_id" | awk '{print $1}' | \
+  xargs -I{} docker rmi "${IMAGE_BASE}:{}" || true
+done
 
 echo "-----Force removing containers using stale images-----"
 docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.ID}}' | grep -v -e latest -e "${COMMIT_SHA}" | \
