@@ -40,7 +40,13 @@ docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.CreatedAt}}' | grep -v lates
     docker rmi "${IMAGE_BASE}:${old_tag}" || true
   done
 
-docker container prune -f
+echo "-----Force removing containers using stale images-----"
+docker images "${IMAGE_BASE}" --format '{{.Tag}} {{.ID}}' | grep -v -e latest -e "${COMMIT_SHA}" | \
+while read tag img_id; do
+  docker ps -a --filter "ancestor=${img_id}" -q | xargs -r docker rm -f
+  docker rmi "${img_id}" || true
+done
+
 docker image prune -f
 
 echo "Deployment complete! Running ${IMAGE_BASE}:${COMMIT_SHA} on port ${PORT}"
