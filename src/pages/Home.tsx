@@ -51,20 +51,19 @@ const Home = () => {
   // Technology stack data
   const technologies = [
     { name: 'AWS', icon: <Cloud size={48} strokeWidth={1} /> },
+    { name: 'Azure', icon: <CloudCog size={48} strokeWidth={1} /> },
     { name: 'Docker', icon: <Container size={48} strokeWidth={1} /> },
     { name: 'Kubernetes', icon: <Compass size={48} strokeWidth={1} /> },
     { name: 'Linux', icon: <Terminal size={48} strokeWidth={1} /> },
-    { name: 'Terraform', icon: <Globe size={48} strokeWidth={1} /> },
     { name: 'Jenkins', icon: <Wrench size={48} strokeWidth={1} /> },
-    { name: 'Azure', icon: <CloudCog size={48} strokeWidth={1} /> },
     { name: 'GitHub Actions', icon: <Rocket size={48} strokeWidth={1} /> },
+    { name: 'Terraform', icon: <Globe size={48} strokeWidth={1} /> },
+    { name: 'IAC', icon: <Cpu size={48} strokeWidth={1} /> },
     { name: 'Monitoring', icon: <Monitor size={48} strokeWidth={1} /> },
-    { name: 'Microservices', icon: <Cpu size={48} strokeWidth={1} /> },
     { name: 'Bare Metal Hosting', icon: <HardDrive size={48} strokeWidth={1} /> },
     { name: 'DR Solutioning', icon: <Server size={48} strokeWidth={1} /> },
   ];
 
-  // Services data
   const services = [
     {
       icon: <Server size={24} />,
@@ -87,7 +86,7 @@ const Home = () => {
     {
       icon: <Cloud size={24} />,
       title: "Cloud Architecture",
-      description: "Designing scalable, resilient, and cost-effective cloud solutions on AWS, Azure, and GCP.",
+      description: "Designing scalable, resilient, and cost-effective cloud solutions on AWS, Azure.",
       borderColor: "border-blue-500",
       gradientFrom: "from-blue-100",
       gradientTo: "to-indigo-100 dark:from-blue-900 dark:to-indigo-900",
@@ -95,7 +94,6 @@ const Home = () => {
     }
   ];
 
-  // Social links data
   const socialLinks = [
     {
       href: "https://github.com/yashaswi29",
@@ -139,7 +137,6 @@ const Home = () => {
               </Link>
             </div>
             
-            {/* Social Links */}
             <div className="mt-8 flex space-x-4">
               {socialLinks.map((link) => (
                 <a
@@ -158,7 +155,7 @@ const Home = () => {
         </div>
       </div>
       
-      {/* Technology Stack Section */}
+
       <Section title="Technology Stack">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {technologies.map((tech) => (
@@ -166,8 +163,7 @@ const Home = () => {
           ))}
         </div>
       </Section>
-      
-      {/* Services Section */}
+
       <Section title="What I Do">
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, index) => (
