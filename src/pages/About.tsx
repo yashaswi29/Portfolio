@@ -54,7 +54,7 @@ const About: React.FC = () => {
               About Me
             </h1>
             <p className={`text-2xl leading-relaxed max-w-4xl ${isDarkMode ? 'text-white' : 'text-gray-700'} mb-8`}>
-              Passionate Cloud Engineer building scalable, automated infrastructure with DevOps best practices. I love transforming complex challenges into elegant, reliable systems.
+              Passionate Cloud Engineer building scalable, automated infrastructure with DevOps and transforming complex challenges into reliable systems.
             </p>
           </div>
 

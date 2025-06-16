@@ -9,7 +9,7 @@ import { ThemeContext } from '../context/ThemeContext';
 
 // Technology Logo Component
 const TechLogo = ({ name, icon }) => (
-  <div className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">  
+  <div className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
     <div className="text-gray-600 dark:text-gray-300 mb-2">
       {icon}
     </div>
@@ -113,7 +113,7 @@ const Home = () => {
         animate-fade-in-page`}
     >
       {/* Hero Section */}
-      <div className="pt-05 pb-10 transition-colors duration-300">
+      <div className="pt-10 pb-10 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight mb-6">
@@ -150,7 +150,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-      
       {/* Main Content Sections */}
       <div className="px-4 sm:px-6 lg:px-8 pb-12">
         <div className="max-w-7xl mx-auto">
