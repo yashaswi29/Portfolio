@@ -10,7 +10,6 @@ const Navbar: React.FC = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Fix: Implement toggleTheme using setTheme from ThemeContext
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };

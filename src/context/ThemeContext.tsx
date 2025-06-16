@@ -21,12 +21,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('theme');
       if (stored === 'light' || stored === 'dark') return stored;
+      return 'dark';
     }
     return 'dark';
   };
 
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
-
 
   useEffect(() => {
     const root = document.documentElement;
@@ -40,11 +40,9 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-
   const handleSetTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
   };
-
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme: handleSetTheme }}>
