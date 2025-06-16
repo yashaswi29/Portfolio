@@ -17,8 +17,8 @@ const Navbar: React.FC = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
     { name: 'Projects', path: '/projects' },
+    { name: 'About', path: '/about' },
     // { name: 'Contact', path: '/contact' },
   ];
 
@@ -52,10 +52,10 @@ const Navbar: React.FC = () => {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 shadow"
               aria-label="Toggle Theme"
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {theme === 'dark' ? <Sun size={20} className="text-yellow-300" /> : <Moon size={20} className="text-indigo-700" />}
             </button>
           </div>
           
