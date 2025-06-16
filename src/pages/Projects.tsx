@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Section from '../components/Section';
 import ProjectCard from '../components/ProjectCard';
-
-const homeLabTechnologies = [
-  'Debian', 'k3s', 'Airtel 100Mbps', 'Python Scripting',
-];
+import { ThemeContext } from '../context/ThemeContext';
 
 const Projects: React.FC = () => {
+  // Use ThemeContext if you want to toggle theme from here
+  // const { theme, setTheme } = useContext(ThemeContext);
+
   const [showMoreTools, setShowMoreTools] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  const homeLabTechnologies = [
+    'Debian', 'k3s', 'Airtel 100Mbps', 'Python Scripting',
+  ];
 
   const projects = [
     {
@@ -43,7 +47,7 @@ const Projects: React.FC = () => {
   };
 
   return (
-    <div className="animate-fade-in relative overflow-hidden">
+    <div className={`animate-fade-in relative overflow-hidden bg-white dark:bg-primary-900 pt-20 pb-24 transition-colors duration-300 z-10 min-h-screen transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
       {/* Animated background elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
         {/* Floating orbs */}
@@ -73,11 +77,11 @@ const Projects: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-primary-900 pt-20 pb-24 transition-colors duration-300 relative z-10">
+      <div className="bg-white dark:bg-primary-900 pt-14 pb-20 transition-colors duration-300 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section with enhanced animations */}
           <div className={`max-w-3xl transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            <h1 className="text-4xl sm:text-5xl font-bold text-primary-900 dark:text-white leading-tight animate-fade-in-up relative">
+            <h1 className="text-4xl sm:text-5xl font-bold text-primary-900 dark:text-white leading-tight animate-fade-in-up relative mt-[-1.5rem] mb-2">
               <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent animate-gradient-x">
                 Projects
               </span>
@@ -278,7 +282,7 @@ const Projects: React.FC = () => {
         </div>
       </Section>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fadeInUp {
           from {
             opacity: 0;
