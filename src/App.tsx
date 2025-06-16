@@ -40,7 +40,7 @@ function App() {
               <Route path="/contact" element={<Contact />} />
             </Routes>
           </main>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </Router>
     </ThemeProvider>

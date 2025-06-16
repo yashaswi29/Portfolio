@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { 
   Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, 
   Container, Compass, Globe, Wrench, CloudCog, Rocket, Monitor, 
-  Cpu, PenSquare, HardDrive, Sun, Moon
+  Cpu, PenSquare, HardDrive 
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 // Technology Logo Component
 const TechLogo = ({ name, icon }) => (
-  <div className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">  
+  <div className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg transition-all duration-300 animate-fade-in-up hover:-translate-y-2">
     <div className="text-gray-600 dark:text-gray-300 mb-2">
       {icon}
     </div>
@@ -18,15 +17,15 @@ const TechLogo = ({ name, icon }) => (
   </div>
 );
 
-// Service Card Component
+// Service Card Component with subtle animation
 const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, gradientTo, iconColor }) => (
-  <div className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 border-t-4 ${borderColor} group`}>
-    <div className={`w-12 h-12 flex items-center justify-center bg-gradient-to-br ${gradientFrom} ${gradientTo} rounded-lg mb-4 group-hover:scale-110 transition-transform duration-300`}>
+  <div className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border-t-4 ${borderColor} animate-fade-in-up hover:-translate-y-2`}>
+    <div className={`w-12 h-12 flex items-center justify-center bg-gradient-to-br ${gradientFrom} ${gradientTo} rounded-lg mb-4`}>
       <div className={iconColor + " text-xl"}>
         {icon}
       </div>
     </div>
-    <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
+    <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
       {title}
     </h3>
     <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -36,21 +35,11 @@ const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, grad
 );
 
 const Home = () => {
-  // Default to dark mode
-  const [darkMode, setDarkMode] = useState(true); 
-
+  // Force dark mode on mount
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
+    document.documentElement.classList.add('dark');
+  }, []);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-  
   // Technology stack data
   const technologies = [
     { name: 'AWS', icon: <Cloud size={40} strokeWidth={1} /> },
@@ -116,18 +105,30 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-200 dark:bg-black transition-colors duration-300">
-      {/* Top Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-200/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-800 transition-colors duration-300">
+    <div>
+      {/* Hero Section */}
+      <div className="pt-12 pb-12 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo/Name */}
-            <div className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-              {`>`}
+          <div className="max-w-3xl">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight">
+              Yashaswi Tiwari
+            </h1>
+            
+            <p className="mt-4 text-xl text-gray-600 dark:text-gray-300">
+              Automating infrastructure, optimizing deployments, and ensuring reliability in cloud environments.
+            </p>
+            
+            {/* Projects Button */}
+            <div className="mt-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+              <button
+                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 hover:from-indigo-600 hover:via-purple-600 hover:to-blue-700 transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                View Projects
+                <ChevronRight size={16} className="ml-2" />
+              </button>
             </div>
             
-            {/* Social Links */}
-            <div className="flex items-center space-x-4">
+            <div className="mt-6 flex space-x-4">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
@@ -140,54 +141,6 @@ const Home = () => {
                   {link.icon}
                 </a>
               ))}
-              
-              {/* Theme Toggle */}
-              <button
-                onClick={toggleDarkMode}
-                className="p-2 rounded-lg bg-gray-300 dark:bg-gray-900 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition-all duration-200"
-                aria-label="Toggle theme"
-              >
-                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <div className="pt-32 pb-16 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight mb-6">
-              Yashaswi Tiwari
-            </h1>
-            
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-              Automating infrastructure, optimizing deployments, and ensuring reliability in cloud environments.
-            </p>
-            
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                to="/projects"
-                className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 hover:from-indigo-600 hover:via-purple-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-2xl transform hover:-translate-y-1"
-              >
-                <span className="relative z-10 flex items-center">
-                  View Projects
-                  <ChevronRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                </span>
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </Link>
-              
-              <Link
-                to="/about"
-                className="group inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl border-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500 hover:text-white dark:hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-lg transform hover:-translate-y-1"
-              >
-                <span className="flex items-center">
-                  Know Me More
-                  <div className="ml-2 w-2 h-2 bg-current rounded-full animate-pulse"></div>
-                </span>
-              </Link>
             </div>
           </div>
         </div>
@@ -216,7 +169,7 @@ const Home = () => {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
                 Technology Stack
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
                 {technologies.map((tech) => (
                   <TechLogo key={tech.name} name={tech.name} icon={tech.icon} />
                 ))}
@@ -243,7 +196,7 @@ const Home = () => {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
                 Technology Stack
               </h2>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {technologies.map((tech) => (
                   <TechLogo key={tech.name} name={tech.name} icon={tech.icon} />
                 ))}
