@@ -6,10 +6,15 @@ import { ThemeContext } from '../context/ThemeContext';
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, setTheme } = useContext(ThemeContext);
 
   const toggleMenu = () => setIsOpen(!isOpen);
-  
+
+  // Fix: Implement toggleTheme using setTheme from ThemeContext
+  const toggleTheme = () => {
+    setTheme(theme === 'dark' ? 'light' : 'dark');
+  };
+
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
@@ -44,23 +49,25 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-            <button 
+            {/* Theme Toggle Button */}
+            <button
               onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors duration-200"
-              aria-label="Toggle theme"
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle Theme"
             >
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} className="text-white" />}
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
           </div>
           
           {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden">
-            <button 
+            {/* Theme Toggle Button */}
+            <button
               onClick={toggleTheme}
-              className="p-2 mr-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors duration-200"
-              aria-label="Toggle theme"
+              className="p-2 mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle Theme"
             >
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} className="text-white" />}
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <button
               onClick={toggleMenu}

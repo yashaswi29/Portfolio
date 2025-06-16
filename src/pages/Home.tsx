@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { 
   Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, 
   Container, Compass, Globe, Wrench, CloudCog, Rocket, Monitor, 
-  Cpu, PenSquare, HardDrive, Sun, Moon
+  Cpu, PenSquare, HardDrive
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ThemeContext } from '../context/ThemeContext';
 
 // Technology Logo Component
 const TechLogo = ({ name, icon }) => (
@@ -34,23 +35,14 @@ const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, grad
     </p>
   </div>
 );
-
-const Home = () => {
-  // Default to dark mode
-  const [darkMode, setDarkMode] = useState(true); 
-
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
   
+const Home = () => {
+  // Use ThemeContext to toggle theme from here
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   // Technology stack data
   const technologies = [
     { name: 'AWS', icon: <Cloud size={40} strokeWidth={1} /> },
@@ -116,46 +108,12 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-200 dark:bg-black transition-colors duration-300">
-      {/* Top Navigation Bar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-200/80 dark:bg-black/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-800 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo/Name */}
-            <div className="text-xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">
-              {`>`}
-            </div>
-            
-            {/* Social Links */}
-            <div className="flex items-center space-x-4">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white transition-colors duration-200"
-                  aria-label={link.label}
-                >
-                  {link.icon}
-                </a>
-              ))}
-              
-              {/* Theme Toggle */}
-              <button
-                onClick={toggleDarkMode}
-                className="p-2 rounded-lg bg-gray-300 dark:bg-gray-900 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-800 transition-all duration-200"
-                aria-label="Toggle theme"
-              >
-                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div
+      className={`bg-white dark:bg-primary-900 pt-20 pb-24 transition-colors duration-300 relative z-10 min-h-screen overflow-hidden
+        animate-fade-in-page`}
+    >
       {/* Hero Section */}
-      <div className="pt-32 pb-16 transition-colors duration-300">
+      <div className="pt-05 pb-10 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight mb-6">
@@ -243,7 +201,7 @@ const Home = () => {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
                 Technology Stack
               </h2>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {technologies.map((tech) => (
                   <TechLogo key={tech.name} name={tech.name} icon={tech.icon} />
                 ))}
@@ -253,6 +211,33 @@ const Home = () => {
 
         </div>
       </div>
+      <style>
+        {`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in-page {
+          animation: fadeInPage 0.5s cubic-bezier(0.4,0,0.2,1) both;
+        }
+        @keyframes fadeInPage {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        `}
+      </style>
     </div>
   );
 };
