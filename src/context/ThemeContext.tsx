@@ -17,10 +17,11 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+
   const getInitialTheme = (): Theme => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('theme');
-      if (stored === 'light' || stored === 'dark') return stored;
+      if (stored === 'light') return 'light';
       return 'dark';
     }
     return 'dark';
