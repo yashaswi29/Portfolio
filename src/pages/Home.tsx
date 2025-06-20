@@ -37,10 +37,11 @@ const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, grad
 );
   
 const Home = () => {
-  // Use ThemeContext to toggle theme from here
-  const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
-    setIsVisible(true);
+    fetch('http://localhost:5000/api/pageview/home', {
+      method: 'GET',
+    });
   }, []);
 
   // Technology stack data
