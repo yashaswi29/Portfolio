@@ -1,4 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import { useEffect as useScrollEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 type Theme = 'light' | 'dark';
 
@@ -51,3 +53,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+
+export function ScrollToTop() {
+  const { pathname } = useLocation();
+  useScrollEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}

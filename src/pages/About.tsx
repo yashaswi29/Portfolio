@@ -12,6 +12,10 @@ const About: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     setIsVisible(true);
+    // Track page view for analytics
+    fetch('http://localhost:5000/api/pageview/home', {
+    method: 'GET',
+  });
   }, []);
 
   const socialLinks = [

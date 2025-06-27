@@ -12,6 +12,10 @@ const Projects: React.FC = () => {
 
   useEffect(() => {
     setIsVisible(true);
+
+    fetch('http://localhost:5000/api/pageview/home', {
+    method: 'GET',
+  });
   }, []);
 
   const homeLabTechnologies = [
