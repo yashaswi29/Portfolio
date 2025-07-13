@@ -13,7 +13,7 @@ const Projects: React.FC = () => {
   useEffect(() => {
     setIsVisible(true);
 
-    fetch('http://localhost:5000/api/pageview/home', {
+    fetch('http://yashaswi.cloud/api/pageview/home', {
     method: 'GET',
   });
   }, []);

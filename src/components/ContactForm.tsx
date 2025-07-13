@@ -20,7 +20,7 @@ const ContactForm: React.FC = () => {
     setStatus('loading');
     
     try {
-      const response = await axios.post('http://localhost:5000/api/contact', formData);
+      const response = await axios.post('http://yashaswi.cloud/api/contact', formData);
       if (response.data.success) {
         setStatus('success');
         setFormData({ name: '', email: '', message: '' });

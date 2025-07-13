@@ -13,7 +13,7 @@ const About: React.FC = () => {
   useEffect(() => {
     setIsVisible(true);
     // Track page view for analytics
-    fetch('http://localhost:5000/api/pageview/home', {
+    fetch('http://yashaswi.cloud/api/pageview/home', {
     method: 'GET',
   });
   }, []);
