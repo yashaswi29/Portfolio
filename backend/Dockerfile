@@ -5,5 +5,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install gunicorn
 COPY app.py .
 COPY data ./data
-EXPOSE 7002
-CMD ["gunicorn", "--bind", "0.0.0:7001", "app:app"]
+EXPOSE 7001
+CMD ["gunicorn", "--bind", "0.0.0.0:7001", "app:app"]
+
