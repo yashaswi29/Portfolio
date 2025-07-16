@@ -39,8 +39,10 @@ const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, grad
 const Home = () => {
 
   useEffect(() => {
-    fetch('http://yashaswi.cloud/api/pageview/home', {
-      method: 'GET',
+    fetch('https://yashaswi.cloud/api/analytics/visit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ section: 'about' })
     });
   }, []);
 
