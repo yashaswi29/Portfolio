@@ -6,4 +6,4 @@ RUN pip install gunicorn
 COPY app.py .
 COPY data ./data
 EXPOSE 7002
-CMD ["gunicorn", "--bind", "0.0.0:7002", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0:7001", "app:app"]
