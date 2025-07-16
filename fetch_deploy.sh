@@ -34,10 +34,10 @@ if [ -n "$EXISTING_BACKEND" ]; then
 fi
 
 echo "-----Starting new frontend container on port ${FRONTEND_PORT}-----"
-docker run -d -p ${FRONTEND_PORT}:80 "${FRONTEND_IMAGE}:latest"
+docker run -d -p ${FRONTEND_PORT}:7000 "${FRONTEND_IMAGE}:latest"
 
 echo "-----Starting new backend container on port ${BACKEND_PORT}-----"
-docker run -d -p ${BACKEND_PORT}:7002 "${BACKEND_IMAGE}:latest"
+docker run -d -p ${BACKEND_PORT}:7001 "${BACKEND_IMAGE}:latest"
 
 echo "-----Cleaning up old images-----"
 IMAGES_TO_KEEP=3
