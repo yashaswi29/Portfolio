@@ -46,10 +46,11 @@ clean_old_images() {
     IMAGE_NAME=$1
 
     OLD_TAGS=$(docker images "${IMAGE_NAME}" --format '{{.Tag}} {{.CreatedAt}}' | \
-               grep -v "^latest " | \
-               sort -k2 -r | \
-               tail -n +$((IMAGES_TO_KEEP + 1)) | \
-               awk '{print $1}')
+           grep -v -E "^latest|^${COMMIT_SHA}" | \
+           sort -k2 -r | \
+           tail -n +$((IMAGES_TO_KEEP + 1)) | \
+           awk '{print $1}')
+
 
     if [ -n "$OLD_TAGS" ]; then
         echo "Tags to remove for ${IMAGE_NAME}: $OLD_TAGS"
