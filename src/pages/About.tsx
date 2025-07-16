@@ -12,10 +12,14 @@ const About: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     setIsVisible(true);
-    // Track page view for analytics
-    fetch('http://localhost:5000/api/pageview/home', {
-    method: 'GET',
-  });
+      const start = performance.now();
+      const duration = performance.now() - start;
+
+    fetch('https://yashaswi.cloud/api/analytics/visit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ section: 'about' })
+    });
   }, []);
 
   const socialLinks = [
@@ -24,7 +28,6 @@ const About: React.FC = () => {
     { href: "https://hashnode.com/@yashaswiyeezy", icon: <PenSquare size={24} />, label: "Hashnode" }
   ];
 
-  // Add a toggle button for theme (optional, for About page)
   const toggleTheme = () => setTheme(isDarkMode ? 'light' : 'dark');
 
   return (
@@ -32,9 +35,7 @@ const About: React.FC = () => {
       className={`bg-white dark:bg-primary-900 relative min-h-screen overflow-hidden transition-colors duration-300 z-10
         animate-fade-in-page`}
     >
-      {/* Main Content */}
       <div className="pt-20">
-        {/* Animated Background */}
         <div className="fixed inset-0 -z-10 pointer-events-none">
           <div className={`absolute top-16 left-10 w-48 h-48 rounded-full blur-3xl animate-pulse ${isDarkMode ? 'bg-indigo-500/10' : 'bg-indigo-400/20'}`}></div>
           <div className={`absolute top-32 right-16 w-64 h-64 rounded-full blur-3xl animate-bounce ${isDarkMode ? 'bg-purple-500/8' : 'bg-purple-400/15'}`} style={{ animationDuration: '4s' }}></div>
@@ -44,7 +45,6 @@ const About: React.FC = () => {
           <div className="absolute top-1/2 right-1/4 w-1 h-1 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '3s' }}></div>
         </div>
 
-        {/* Fade-in transition for main content */}
         <div
           className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 transition-all duration-500 ease-out transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'

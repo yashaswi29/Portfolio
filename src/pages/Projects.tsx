@@ -4,18 +4,17 @@ import ProjectCard from '../components/ProjectCard';
 import { ThemeContext } from '../context/ThemeContext';
 
 const Projects: React.FC = () => {
-  // Use ThemeContext if you want to toggle theme from here
-  // const { theme, setTheme } = useContext(ThemeContext);
-
   const [showMoreTools, setShowMoreTools] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
 
-    fetch('http://localhost:5000/api/pageview/home', {
-    method: 'GET',
-  });
+    fetch('https://yashaswi.cloud/api/analytics/visit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ section: 'projects' })
+    });
   }, []);
 
   const homeLabTechnologies = [
@@ -52,14 +51,11 @@ const Projects: React.FC = () => {
 
   return (
     <div className={`animate-fade-in relative overflow-hidden bg-white dark:bg-primary-900 pt-20 pb-24 transition-colors duration-300 z-10 min-h-screen transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-      {/* Animated background elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
-        {/* Floating orbs */}
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-r from-indigo-400/20 to-purple-600/20 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-r from-blue-400/15 to-indigo-600/15 rounded-full blur-2xl animate-bounce" style={{ animationDuration: '4s' }}></div>
         <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-gradient-to-r from-gray-400/10 to-slate-600/10 rounded-full blur-lg animate-pulse" style={{ animationDelay: '2s' }}></div>
         
-        {/* Paper plane animation */}
         <div className="absolute top-32 left-0 w-full h-full">
           <svg 
             className="w-8 h-8 text-indigo-400/60 animate-fly-across" 
@@ -75,7 +71,6 @@ const Projects: React.FC = () => {
           </svg>
         </div>
         
-        {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gray-900/5 to-transparent">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
         </div>
@@ -114,12 +109,9 @@ const Projects: React.FC = () => {
             </button>
           </div>
 
-          {/* Featured Projects section with enhanced styling */}
           <div className={`mt-16 transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            {/* Animated separator line */}
             <div className="w-full h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent mb-8 animate-pulse"></div>
-            
-            {/* Featured Projects title and More Info button */}
+
             <div className="flex justify-between items-center mb-4 group">
               <h2 className="text-3xl font-bold text-primary-900 dark:text-white relative">
                 <span className="relative z-10">Featured Projects</span>

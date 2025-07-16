@@ -1,13 +1,9 @@
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
-import os
-import json
-import time
-import logging
-from datetime import datetime, timedelta
+import os, json, time, logging
+from datetime import datetime
 from functools import wraps
-from werkzeug.exceptions import BadRequest
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,55 +11,32 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app)
 
-REQUEST_COUNT = Counter(
-    'portfolio_requests_total', 
-    'Total HTTP requests', 
-    ['method', 'endpoint', 'status_code']
-)
-REQUEST_DURATION = Histogram(
-    'portfolio_request_duration_seconds', 
-    'HTTP request duration in seconds',
-    ['method', 'endpoint']
-)
-PAGE_VISITS = Counter(
-    'portfolio_page_visits_total', 
-    'Total visits to each section', 
-    ['section']
-)
-PAGE_LOAD_DURATION = Histogram(
-    'portfolio_page_load_duration_seconds', 
-    'Page load duration in seconds', 
-    ['section']
-)
-ACTIVE_CONNECTIONS = Gauge(
-    'portfolio_active_connections', 
-    'Number of active connections'
-)
-ERROR_COUNT = Counter(
-    'portfolio_errors_total', 
-    'Total errors by type', 
-    ['error_type']
-)
+
+REQUEST_COUNT = Counter('requests_total', 'Total HTTP requests', ['method', 'endpoint', 'status_code'])
+REQUEST_DURATION = Histogram('request_duration_seconds', 'HTTP request duration', ['method', 'endpoint'])
+PAGE_VISITS = Counter('page_visits_total', 'Visits by section', ['section'])
+PAGE_LOAD_DURATION = Histogram('page_load_duration_seconds', 'Page load duration', ['section'])
+ACTIVE_CONNECTIONS = Gauge('active_connections', 'Active HTTP connections')
+ERROR_COUNT = Counter('errors_total', 'Total errors by type', ['error_type'])
+
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
-CONTACTS_FILE = os.path.join(DATA_DIR, 'contacts.json')
 ANALYTICS_FILE = os.path.join(DATA_DIR, 'analytics.json')
 HEALTH_FILE = os.path.join(DATA_DIR, 'health.json')
-
 os.makedirs(DATA_DIR, exist_ok=True)
 
-def init_data_files():
+def init_files():
     files = {
-        CONTACTS_FILE: {"messages": []},
         ANALYTICS_FILE: {"visits": [], "performance": []},
         HEALTH_FILE: {"status": "healthy", "last_check": datetime.now().isoformat()}
     }
-    for file_path, default_data in files.items():
-        if not os.path.exists(file_path):
-            with open(file_path, 'w') as f:
-                json.dump(default_data, f, indent=2)
+    for path, data in files.items():
+        if not os.path.exists(path):
+            with open(path, 'w') as f:
+                json.dump(data, f, indent=2)
 
-init_data_files()
+init_files()
+
 
 @app.before_request
 def before_request():
@@ -74,226 +47,125 @@ def before_request():
 def after_request(response):
     try:
         duration = time.time() - request.start_time
-        REQUEST_COUNT.labels(
-            method=request.method,
-            endpoint=request.endpoint or request.path,
-            status_code=response.status_code
-        ).inc()
-        REQUEST_DURATION.labels(
-            method=request.method,
-            endpoint=request.endpoint or request.path
-        ).observe(duration)
+        REQUEST_COUNT.labels(request.method, request.path, response.status_code).inc()
+        REQUEST_DURATION.labels(request.method, request.path).observe(duration)
         ACTIVE_CONNECTIONS.dec()
     except Exception as e:
         ERROR_COUNT.labels(error_type=type(e).__name__).inc()
-        logger.error(f"Error in after_request: {e}")
+        logger.error(f"after_request error: {e}")
     return response
 
 @app.errorhandler(404)
-def not_found(error):
-    ERROR_COUNT.labels(error_type="not_found").inc()
-    return jsonify({"error": "Endpoint not found", "status": 404}), 404
+def handle_404(error):
+    ERROR_COUNT.labels("not_found").inc()
+    return jsonify({"error": "Not found"}), 404
 
 @app.errorhandler(500)
-def internal_error(error):
-    ERROR_COUNT.labels(error_type="internal_error").inc()
-    return jsonify({"error": "Internal server error", "status": 500}), 500
+def handle_500(error):
+    ERROR_COUNT.labels("internal_error").inc()
+    return jsonify({"error": "Internal server error"}), 500
 
-def validate_json(required_fields=None):
-    def decorator(f):
+def validate_json(fields):
+    def wrapper(f):
         @wraps(f)
-        def decorated_function(*args, **kwargs):
+        def inner(*args, **kwargs):
             if not request.is_json:
-                return jsonify({"error": "Request must be JSON"}), 400
+                return jsonify({"error": "JSON required"}), 400
             data = request.get_json()
-            if not data:
-                return jsonify({"error": "No JSON data provided"}), 400
-            if required_fields:
-                missing_fields = [field for field in required_fields if field not in data or not data[field]]
-                if missing_fields:
-                    return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
+            missing = [field for field in fields if field not in data]
+            if missing:
+                return jsonify({"error": f"Missing fields: {', '.join(missing)}"}), 400
             return f(*args, **kwargs)
-        return decorated_function
-    return decorator
+        return inner
+    return wrapper
 
+# Routes
 @app.route('/', methods=['GET'])
-def root():
+def index():
     return jsonify({
-        "message": "Portfolio Backend API (Flask)",
-        "version": "1.0.0",
-        "endpoints": {
-            "contact": "/api/contact",
-            "analytics": "/api/analytics/*",
-            "health": "/api/health",
-            "testing": "/api/test/*",
-            "metrics": "/metrics"
-        },
-        "timestamp": datetime.now().isoformat()
+        "message": "Portfolio Analytics Backend",
+        "endpoints": ["/api/analytics/visit", "/api/analytics/performance", "/api/analytics/summary", "/metrics"]
     })
-
-@app.route('/api/contact', methods=['POST'])
-@validate_json(['name', 'email', 'message'])
-def create_contact():
-    try:
-        data = request.get_json()
-        with open(CONTACTS_FILE, 'r') as f:
-            file_data = json.load(f)
-        contact_data = {
-            "name": data['name'],
-            "email": data['email'],
-            "message": data['message'],
-            "subject": data.get('subject'),
-            "timestamp": datetime.now().isoformat(),
-            "ip_address": request.remote_addr,
-            "user_agent": request.headers.get('User-Agent', 'unknown')
-        }
-        file_data["messages"].append(contact_data)
-        with open(CONTACTS_FILE, 'w') as f:
-            json.dump(file_data, f, indent=2)
-        logger.info(f"New contact message from {data['email']}")
-        return jsonify({"success": True, "message": "Contact message stored successfully"})
-    except Exception as e:
-        ERROR_COUNT.labels(error_type="contact_error").inc()
-        logger.error(f"Error storing contact: {e}")
-        return jsonify({"error": "Failed to store contact message"}), 500
-
-@app.route('/api/contact', methods=['GET'])
-def get_contacts():
-    try:
-        limit = request.args.get('limit', type=int)
-        offset = request.args.get('offset', default=0, type=int)
-        with open(CONTACTS_FILE, 'r') as f:
-            data = json.load(f)
-        messages = data.get("messages", [])
-        total = len(messages)
-        if limit:
-            messages = messages[offset:offset + limit]
-        return jsonify({
-            "messages": messages,
-            "total": total,
-            "limit": limit,
-            "offset": offset
-        })
-    except Exception as e:
-        logger.error(f"Error reading contacts: {e}")
-        return jsonify({"messages": [], "total": 0})
-
-@app.route('/api/contact/<int:contact_id>', methods=['DELETE'])
-def delete_contact(contact_id):
-    try:
-        with open(CONTACTS_FILE, 'r') as f:
-            data = json.load(f)
-        messages = data.get("messages", [])
-        if 0 <= contact_id < len(messages):
-            deleted_message = messages.pop(contact_id)
-            with open(CONTACTS_FILE, 'w') as f:
-                json.dump(data, f, indent=2)
-            return jsonify({"success": True, "deleted": deleted_message})
-        else:
-            return jsonify({"error": "Contact message not found"}), 404
-    except Exception as e:
-        logger.error(f"Error deleting contact: {e}")
-        return jsonify({"error": "Failed to delete contact message"}), 500
 
 @app.route('/api/analytics/visit', methods=['POST'])
 @validate_json(['section'])
-def track_visit():
+def visit():
     try:
-        data = request.get_json()
-        section = data['section']
+        section = request.json['section']
         PAGE_VISITS.labels(section=section).inc()
-        with open(ANALYTICS_FILE, 'r') as f:
-            file_data = json.load(f)
-        visit_data = {
+        visit = {
             "section": section,
-            "timestamp": data.get('timestamp', datetime.now().isoformat()),
-            "ip_address": request.remote_addr,
-            "user_agent": request.headers.get('User-Agent', 'unknown')
+            "timestamp": datetime.now().isoformat(),
+            "ip": request.remote_addr,
+            "user_agent": request.headers.get("User-Agent", "unknown")
         }
-        file_data["visits"].append(visit_data)
-        with open(ANALYTICS_FILE, 'w') as f:
-            json.dump(file_data, f, indent=2)
-        return jsonify({"success": True, "message": "Visit tracked successfully"})
+        with open(ANALYTICS_FILE, 'r+') as f:
+            data = json.load(f)
+            data["visits"].append(visit)
+            f.seek(0), json.dump(data, f, indent=2), f.truncate()
+        return jsonify({"message": "Visit tracked"}), 200
     except Exception as e:
-        ERROR_COUNT.labels(error_type="analytics_error").inc()
-        logger.error(f"Error tracking visit: {e}")
-        return jsonify({"error": "Failed to track visit"}), 500
+        ERROR_COUNT.labels("visit_error").inc()
+        logger.error(f"Visit tracking failed: {e}")
+        return jsonify({"error": "Tracking failed"}), 500
 
 @app.route('/api/analytics/performance', methods=['POST'])
 @validate_json(['section', 'duration'])
-def track_performance():
+def performance():
     try:
-        data = request.get_json()
-        section = data['section']
-        duration = float(data['duration'])
+        section = request.json['section']
+        duration = float(request.json['duration'])
         PAGE_LOAD_DURATION.labels(section=section).observe(duration)
-        with open(ANALYTICS_FILE, 'r') as f:
-            file_data = json.load(f)
-        perf_data = {
+        entry = {
             "section": section,
             "duration": duration,
-            "performance_metrics": data.get('performance_metrics', {}),
             "timestamp": datetime.now().isoformat()
         }
-        file_data["performance"].append(perf_data)
-        with open(ANALYTICS_FILE, 'w') as f:
-            json.dump(file_data, f, indent=2)
-        return jsonify({"success": True, "message": "Performance data tracked successfully"})
-    except (ValueError, TypeError) as e:
-        return jsonify({"error": "Invalid duration value"}), 400
+        with open(ANALYTICS_FILE, 'r+') as f:
+            data = json.load(f)
+            data["performance"].append(entry)
+            f.seek(0), json.dump(data, f, indent=2), f.truncate()
+        return jsonify({"message": "Performance tracked"}), 200
     except Exception as e:
-        ERROR_COUNT.labels(error_type="performance_error").inc()
-        logger.error(f"Error tracking performance: {e}")
-        return jsonify({"error": "Failed to track performance"}), 500
+        ERROR_COUNT.labels("perf_error").inc()
+        logger.error(f"Performance tracking failed: {e}")
+        return jsonify({"error": "Tracking failed"}), 500
 
 @app.route('/api/analytics/summary', methods=['GET'])
-def get_analytics_summary():
+def summary():
     try:
-        with open(ANALYTICS_FILE, 'r') as f:
+        with open(ANALYTICS_FILE) as f:
             data = json.load(f)
-        visits = data.get("visits", [])
-        performance = data.get("performance", [])
-        total_visits = len(visits)
-        sections_visited = len(set(visit["section"] for visit in visits))
-        avg_duration = sum(perf["duration"] for perf in performance) / len(performance) if performance else 0
-        return jsonify({
-            "total_visits": total_visits,
-            "sections_visited": sections_visited,
-            "avg_duration": avg_duration
-        })
+        visits = data["visits"]
+        performance = data["performance"]
+        summary = {
+            "total_visits": len(visits),
+            "sections_visited": list(set(v["section"] for v in visits)),
+            "avg_duration": round(sum(p["duration"] for p in performance) / len(performance), 2) if performance else 0
+        }
+        return jsonify(summary)
     except Exception as e:
-        logger.error(f"Error reading analytics summary: {e}")
-        return jsonify({})
+        logger.error(f"Summary error: {e}")
+        return jsonify({"error": "Summary failed"}), 500
 
-@app.route('/api/health', methods=['GET'])
-def health_check():
+@app.route('/metrics')
+def metrics():
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
+
+@app.route('/api/health')
+def health():
     try:
-        with open(HEALTH_FILE, 'r') as f:
-            health_data = json.load(f)
-        health_data["last_check"] = datetime.now().isoformat()
-        with open(HEALTH_FILE, 'w') as f:
-            json.dump(health_data, f, indent=2)
-        return jsonify(health_data)
+        with open(HEALTH_FILE, 'r+') as f:
+            health = json.load(f)
+            health["last_check"] = datetime.now().isoformat()
+            f.seek(0), json.dump(health, f, indent=2), f.truncate()
+        return jsonify(health)
     except Exception as e:
-        logger.error(f"Error reading health status: {e}")
-        return jsonify({"status": "unknown", "last_check": None})
-
-@app.route('/api/test/ping', methods=['GET'])
-def test_ping():
-    return jsonify({"message": "pong"})
+        return jsonify({"status": "unknown"}), 500
 
 @app.route('/api/test/echo', methods=['POST'])
-def test_echo():
-    return jsonify({"echo": request.get_json()})
-
-@app.route('/metrics', methods=['GET'])
-def metrics():
-    try:
-        return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
-    except Exception as e:
-        logger.error(f"Error generating metrics: {e}")
-        return jsonify({"error": "Failed to generate metrics"}), 500
+def echo():
+    return jsonify(request.get_json())
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
-
+    app.run(host='0.0.0.0', port=5001, debug=True)
