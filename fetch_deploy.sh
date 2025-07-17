@@ -3,6 +3,7 @@
 set -e
 
 git fetch origin
+git pull origin main
 git reset --hard origin/main
 
 FRONTEND_IMAGE="portfolio"
