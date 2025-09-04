@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: portfolio:latest
+    build:
+      context: .
+    ports:
+      - "7000:7000"
+    restart: unless-stopped
+    dockerfile: Dockerfile
+
+  backend:
+    image: backend:latest
+    build:
+      context: ./backend
+    ports:
+      - "7001:7001"
+    restart: unless-stopped
+    dockerfile: backend\Dockerfile
