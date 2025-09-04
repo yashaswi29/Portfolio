@@ -5,16 +5,16 @@ services:
     image: portfolio:latest
     build:
       context: .
+      dockerfile: Dockerfile
     ports:
-      - "7000:7000"
+      - "7000:80"   
     restart: unless-stopped
-    dockerfile: Dockerfile
 
   backend:
     image: backend:latest
     build:
       context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "7001:7001"
     restart: unless-stopped
-    dockerfile: backend\Dockerfile
