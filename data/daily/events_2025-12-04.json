@@ -1,0 +1,35 @@
+{
+  "date": "2025-12-04",
+  "events": [
+    {
+      "type": "page_visit",
+      "section": "home",
+      "timestamp": "2025-12-04T15:06:12",
+      "ip": "testclient",
+      "user_agent": "testclient"
+    },
+    {
+      "type": "page_visit",
+      "section": "home",
+      "timestamp": "2025-12-04T15:06:23",
+      "ip": "testclient",
+      "user_agent": "testclient"
+    },
+    {
+      "type": "page_performance",
+      "section": "home",
+      "duration": 0.5,
+      "timestamp": "2025-12-04T15:06:23",
+      "ip": "testclient",
+      "user_agent": "testclient"
+    },
+    {
+      "type": "click",
+      "section": "/home",
+      "target": "cta-button",
+      "timestamp": "2025-12-04T15:06:23",
+      "ip": "testclient",
+      "user_agent": "testclient"
+    }
+  ]
+}

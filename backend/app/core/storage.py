@@ -1,68 +1,74 @@
-import json
 import os
-import logging
-from datetime import datetime
-from typing import Dict, Any
+import json
+from datetime import datetime, date
+from typing import Any, Dict
 
-logger = logging.getLogger(__name__)
+DATA_DIR = os.path.join(os.getcwd(), "data")
+DAILY_DIR = os.path.join(DATA_DIR, "daily")
+ANALYTICS_FILE = os.path.join(DATA_DIR, "analytics.json")
+HEALTH_FILE = os.path.join(DATA_DIR, "health.json")
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data')
-ANALYTICS_FILE = os.path.join(DATA_DIR, 'analytics.json')
-HEALTH_FILE = os.path.join(DATA_DIR, 'health.json')
 
-def init_files():
-    os.makedirs(DATA_DIR, exist_ok=True)
-    files = {
-        ANALYTICS_FILE: {"visits": [], "performance": [], "events": []},
-        HEALTH_FILE: {"status": "healthy", "last_check": datetime.now().isoformat()}
-    }
-    for path, data in files.items():
-        if not os.path.exists(path):
-            try:
-                with open(path, 'w') as f:
-                    json.dump(data, f, indent=2)
-            except Exception as e:
-                logger.error(f"Failed to initialize file {path}: {e}")
-
-def read_json(file_path: str) -> Dict[str, Any]:
+def _read_json(path: str) -> Any:
     try:
-        with open(file_path, 'r') as f:
+        with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
-    except Exception as e:
-        logger.error(f"Failed to read {file_path}: {e}")
-        return {}
+    except FileNotFoundError:
+        return None
 
-def write_json(file_path: str, data: Dict[str, Any]):
-    try:
-        with open(file_path, 'r+') as f:
-            f.seek(0)
-            json.dump(data, f, indent=2)
-            f.truncate()
-    except Exception as e:
-        logger.error(f"Failed to write to {file_path}: {e}")
 
-def append_to_analytics(key: str, item: Dict[str, Any]):
-    try:
-        with open(ANALYTICS_FILE, 'r+') as f:
-            data = json.load(f)
-            if key not in data:
-                data[key] = []
-            data[key].append(item)
-            f.seek(0)
-            json.dump(data, f, indent=2)
-            f.truncate()
-    except Exception as e:
-        logger.error(f"Failed to append to analytics {key}: {e}")
+def _write_json(path: str, data: Any) -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
 
-def update_health():
-    try:
-        with open(HEALTH_FILE, 'r+') as f:
-            data = json.load(f)
-            data["last_check"] = datetime.now().isoformat()
-            f.seek(0)
-            json.dump(data, f, indent=2)
-            f.truncate()
-            return data
-    except Exception as e:
-        logger.error(f"Failed to update health: {e}")
-        return {"status": "unknown", "last_check": datetime.now().isoformat()}
+
+def init_files() -> None:
+    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(DAILY_DIR, exist_ok=True)
+
+    if not os.path.exists(ANALYTICS_FILE):
+        initial = {"visits": [], "performance": [], "events": []}
+        _write_json(ANALYTICS_FILE, initial)
+
+    if not os.path.exists(HEALTH_FILE):
+        _write_json(HEALTH_FILE, {"status": "healthy", "checked_at": datetime.now().isoformat()})
+
+
+def update_health() -> Dict[str, str]:
+    payload = {"status": "healthy", "checked_at": datetime.now().isoformat()}
+    _write_json(HEALTH_FILE, payload)
+    return payload
+
+
+def append_analytics(kind: str, obj: Dict[str, Any]) -> None:
+    data = _read_json(ANALYTICS_FILE) or {"visits": [], "performance": [], "events": []}
+    if kind not in data:
+        data[kind] = []
+    data[kind].append(obj)
+    _write_json(ANALYTICS_FILE, data)
+
+
+def _daily_filepath(target_date: date) -> str:
+    return os.path.join(DAILY_DIR, f"events_{target_date.isoformat()}.json")
+
+
+def append_daily_event(event: Dict[str, Any], target_date: date | None = None) -> None:
+    """
+    Append an event to the per-day JSON file under `data/daily/events_YYYY-MM-DD.json`.
+    The file will be created if it does not exist and will follow the schema:
+    {"date": "YYYY-MM-DD", "events": [ ... ]}
+    """
+    if target_date is None:
+        target_date = date.today()
+
+    path = _daily_filepath(target_date)
+
+    content = _read_json(path)
+    if content is None:
+        content = {"date": target_date.isoformat(), "events": []}
+
+    content.setdefault("events", []).append(event)
+    # Ensure parent directory exists (be robust if init_files wasn't run)
+    parent = os.path.dirname(path)
+    os.makedirs(parent, exist_ok=True)
+    _write_json(path, content)
