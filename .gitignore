@@ -35,7 +35,7 @@ debug.log
 .env.production.local
 
 # Backend data
-backend/data.json
+data
 
 # Coverage reports
 coverage
