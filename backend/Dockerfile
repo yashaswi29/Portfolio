@@ -1,9 +1,15 @@
 FROM python:3.13-slim
+
 WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install gunicorn
-COPY app.py .
-COPY data ./data
+
+COPY pyproject.toml .
+
+COPY app ./app
+
+RUN pip install --no-cache-dir .
+
+RUN mkdir -p data
+
 EXPOSE 7001
-CMD ["gunicorn", "--bind", "0.0.0.0:7001", "app:app"]
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7001"]
