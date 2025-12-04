@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { analytics } from './services/analytics';
 import Navbar from './components/Navbar';
 import HomeNavbar from './context/HomeNavbar';
 import Home from './pages/Home';
@@ -20,6 +21,16 @@ const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   );
 };
 
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    analytics.trackVisit(location.pathname);
+  }, [location]);
+
+  return null;
+}
+
 function App() {
   const [loading, setLoading] = useState(true);
 
@@ -39,6 +50,7 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
+        <RouteTracker />
         <LayoutWrapper>
           <Routes>
             <Route path="/" element={<Home />} />

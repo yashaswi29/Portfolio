@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { analytics } from '../services/analytics';
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -18,12 +19,18 @@ const ContactForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    
+
     try {
-      const response = await axios.post('http://yashaswi.cloud/api/contact', formData);
+      // Use relative URL to leverage proxy/domain
+      const response = await axios.post('/api/contact', formData);
       if (response.data.success) {
         setStatus('success');
         setFormData({ name: '', email: '', message: '' });
+        analytics.trackEvent({
+          event_type: 'contact_form_submit',
+          page: '/contact',
+          element_name: 'contact_form'
+        });
       } else {
         throw new Error(response.data.error || 'Failed to send message');
       }
@@ -35,8 +42,8 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
+    <form
+      onSubmit={handleSubmit}
       className="bg-white dark:bg-primary-800 p-6 rounded-lg shadow-sm transition-colors duration-300 animate-fade-in"
     >
       {status === 'success' ? (
@@ -69,7 +76,7 @@ const ContactForm: React.FC = () => {
               className="w-full px-3 py-2 border border-primary-300 dark:border-primary-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 bg-white dark:bg-primary-800 text-primary-900 dark:text-white transition-colors duration-200"
             />
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-primary-900 dark:text-white mb-1">
               Email
@@ -84,7 +91,7 @@ const ContactForm: React.FC = () => {
               className="w-full px-3 py-2 border border-primary-300 dark:border-primary-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 bg-white dark:bg-primary-800 text-primary-900 dark:text-white transition-colors duration-200"
             />
           </div>
-          
+
           <div className="mb-4">
             <label htmlFor="message" className="block text-sm font-medium text-primary-900 dark:text-white mb-1">
               Message
@@ -99,13 +106,13 @@ const ContactForm: React.FC = () => {
               className="w-full px-3 py-2 border border-primary-300 dark:border-primary-700 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 bg-white dark:bg-primary-800 text-primary-900 dark:text-white transition-colors duration-200"
             />
           </div>
-          
+
           {status === 'error' && (
             <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-md">
               <p>{errorMessage || 'Failed to send message. Please try again.'}</p>
             </div>
           )}
-          
+
           <button
             type="submit"
             disabled={status === 'loading'}

@@ -24,3 +24,5 @@ services:
     restart: unless-stopped
     networks:
       - portfolio_net
+    volumes:
+      - ./backend/data:/app/data
