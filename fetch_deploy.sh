@@ -1,84 +1,89 @@
-#!/bin/bash
 
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
-git fetch origin
-git reset --hard origin/main
+FRONTEND_IMAGE="docker.io/yashaswi29/portfolio:latest"
+BACKEND_IMAGE="docker.io/yashaswi29/backend:latest"
+KEEP_IMAGES=3
 
-FRONTEND_IMAGE="portfolio"
-BACKEND_IMAGE="backend"
-FRONTEND_PORT=7000
-BACKEND_PORT=7001
-COMMIT_SHA=$(git rev-parse --short HEAD)
+deploy_service() {
+  local IMAGE="$1"
+  local CONTAINER="$2"
+  local HOST_PORT="$3"
+  local CONTAINER_PORT="$4"
 
-echo "-----Building frontend image (${COMMIT_SHA})...-----"
-docker build -t "${FRONTEND_IMAGE}:${COMMIT_SHA}" -t "${FRONTEND_IMAGE}:latest" .
+  echo "▶ Deploying $CONTAINER ($IMAGE) on ${HOST_PORT}:${CONTAINER_PORT}"
 
-echo "-----Building backend image (${COMMIT_SHA})...-----"
-docker build -t "${BACKEND_IMAGE}:${COMMIT_SHA}" -t "${BACKEND_IMAGE}:latest" ./backend
+  local OLD_IMAGE_ID
+  OLD_IMAGE_ID=$(podman images --format "{{.ID}}" "$IMAGE" 2>/dev/null || true)
 
-echo "-----Stopping any existing containers...-----"
+  echo "  - Pulling image..."
+  podman pull "$IMAGE"
 
-EXISTING_FRONTEND=$(docker ps --format '{{.ID}} {{.Ports}}' | grep ":${FRONTEND_PORT}->" | awk '{print $1}')
-if [ -n "$EXISTING_FRONTEND" ]; then
-    echo "Stopping frontend container on port ${FRONTEND_PORT}"
-    docker stop "$EXISTING_FRONTEND"
-    docker rm "$EXISTING_FRONTEND"
-fi
+  local NEW_IMAGE_ID
+  NEW_IMAGE_ID=$(podman images --format "{{.ID}}" "$IMAGE")
 
-EXISTING_BACKEND=$(docker ps --format '{{.ID}} {{.Ports}}' | grep ":${BACKEND_PORT}->" | awk '{print $1}')
-if [ -n "$EXISTING_BACKEND" ]; then
-    echo "Stopping backend container on port ${BACKEND_PORT}"
-    docker stop "$EXISTING_BACKEND"
-    docker rm "$EXISTING_BACKEND"
-fi
+  if [[ -n "$OLD_IMAGE_ID" && "$OLD_IMAGE_ID" == "$NEW_IMAGE_ID" ]]; then
+    echo "  ✅ Image unchanged, skipping restart."
+    return
+  fi
 
-echo "-----Starting new frontend container on port ${FRONTEND_PORT}-----"
-docker run -d -p ${FRONTEND_PORT}:80 "${FRONTEND_IMAGE}:latest"
+  echo "  🆕 New image detected, restarting container..."
 
-echo "-----Starting new backend container on port ${BACKEND_PORT}-----"
-docker run -d -p ${BACKEND_PORT}:7002 "${BACKEND_IMAGE}:latest"
+  podman stop "$CONTAINER" 2>/dev/null || true
+  podman rm "$CONTAINER" 2>/dev/null || true
 
-echo "-----Cleaning up old images-----"
-IMAGES_TO_KEEP=3
+  podman run -d \
+    --name "$CONTAINER" \
+    -p "${HOST_PORT}:${CONTAINER_PORT}" \
+    --restart=unless-stopped \
+    "$IMAGE"
 
-clean_old_images() {
-    IMAGE_NAME=$1
-
-    OLD_TAGS=$(docker images "${IMAGE_NAME}" --format '{{.Tag}} {{.CreatedAt}}' | \
-               grep -v "^latest " | \
-               sort -k2 -r | \
-               tail -n +$((IMAGES_TO_KEEP + 1)) | \
-               awk '{print $1}')
-
-    if [ -n "$OLD_TAGS" ]; then
-        echo "Tags to remove for ${IMAGE_NAME}: $OLD_TAGS"
-
-        for tag in $OLD_TAGS; do
-            echo "Processing tag: $tag"
-
-            CONTAINERS=$(docker ps -a --filter "ancestor=${IMAGE_NAME}:${tag}" -q)
-            if [ -n "$CONTAINERS" ]; then
-                echo "Removing containers for ${IMAGE_NAME}:${tag}"
-                docker rm -f $CONTAINERS
-            fi
-
-            docker rmi "${IMAGE_NAME}:${tag}" 2>/dev/null || echo "Image ${IMAGE_NAME}:${tag} already removed"
-        done
-    else
-        echo "No old images to clean up for ${IMAGE_NAME}"
-    fi
+  echo "  ✅ $CONTAINER is running."
 }
 
-clean_old_images "${FRONTEND_IMAGE}"
-clean_old_images "${BACKEND_IMAGE}"
+clean_old_images() {
+  local IMAGE_REPO="$1"  # e.g. docker.io/yashaswi29/portfolio
+  local KEEP="$2"
 
-docker image prune -f > /dev/null
+  echo "▶ Cleaning old images for $IMAGE_REPO (keeping $KEEP newest)..."
 
-echo "-----Current images:-----"
-docker images "${FRONTEND_IMAGE}"
-docker images "${BACKEND_IMAGE}"
+  local OLD_TAGS
+  OLD_TAGS=$(podman images "$IMAGE_REPO" --format '{{.Repository}}:{{.Tag}} {{.Created}}' \
+    | sort -k2 -r \
+    | tail -n +$((KEEP + 1)) \
+    | awk '{print $1}')
 
-echo "Deployment complete!"
-echo "Frontend (${FRONTEND_IMAGE}:${COMMIT_SHA}) running on port ${FRONTEND_PORT}"
-echo "Backend (${BACKEND_IMAGE}:${COMMIT_SHA}) running on port ${BACKEND_PORT}"
+  if [[ -z "$OLD_TAGS" ]]; then
+    echo "  - Nothing to remove."
+    return
+  fi
+
+  for tag in $OLD_TAGS; do
+    echo "  - Removing $tag"
+    # Remove any stopped containers using this image
+    local CONTAINERS
+    CONTAINERS=$(podman ps -a --filter "ancestor=${tag}" -q)
+    if [[ -n "$CONTAINERS" ]]; then
+      podman rm -f $CONTAINERS || true
+    fi
+    podman rmi "$tag" 2>/dev/null || true
+  done
+}
+
+echo "===== Deploying portfolio stack ====="
+
+# Frontend: 7001 -> 80
+deploy_service "$FRONTEND_IMAGE" "portfolio" 7001 80
+
+# Backend: 7002 -> 7001
+deploy_service "$BACKEND_IMAGE" "backend" 7002 7001
+
+# Clean up old images (keep 3 newest per repo)
+clean_old_images "docker.io/yashaswi29/portfolio" "$KEEP_IMAGES"
+clean_old_images "docker.io/yashaswi29/backend" "$KEEP_IMAGES"
+
+echo "▶ Final containers:"
+podman ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+
+echo "✅ Deployment complete."
