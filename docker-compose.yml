@@ -1,0 +1,26 @@
+version: "3.9"
+
+networks:
+  portfolio_net:
+    external: true
+
+services:
+  frontend:
+    image: portfolio:latest
+    build:
+      context: .
+    ports:
+      - "7000:80"
+    restart: unless-stopped
+    networks:
+      - portfolio_net
+
+  backend:
+    image: backend:latest
+    build:
+      context: ./backend
+    ports:
+      - "7001:7001"
+    restart: unless-stopped
+    networks:
+      - portfolio_net
