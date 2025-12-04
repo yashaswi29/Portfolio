@@ -1,4 +1,29 @@
 {
-  "visits": [],
-  "performance": []
+  "visits": [
+    {
+      "section": "home",
+      "timestamp": "2025-12-04T12:49:59.072530",
+      "ip": "testclient",
+      "user_agent": "testclient"
+    }
+  ],
+  "performance": [
+    {
+      "section": "home",
+      "duration": 0.5,
+      "timestamp": "2025-12-04T12:49:59.082249"
+    }
+  ],
+  "events": [
+    {
+      "event_type": "click",
+      "element_id": "cta-button",
+      "element_name": null,
+      "page": "/home",
+      "section": null,
+      "ip": "testclient",
+      "user_agent": "testclient",
+      "timestamp": "2025-12-04T12:49:59.106581"
+    }
+  ]
 }

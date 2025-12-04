@@ -1,0 +1,25 @@
+[project]
+name = "portfolio-backend"
+version = "0.1.0"
+description = "Portfolio Analytics Backend"
+authors = [
+    {name = "Vikra", email = "vikra@example.com"},
+]
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+    "pydantic>=2.9.0",
+    "prometheus_client>=0.20.0",
+    "httpx>=0.27.0",
+]
+requires-python = ">=3.13"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
