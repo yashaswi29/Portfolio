@@ -1,0 +1,17 @@
+{
+	"ulid": "01KBF4MSWYPRBP4WF22YFJ3M78",
+	"minTime": 1764655209494,
+	"maxTime": 1764662400000,
+	"stats": {
+		"numSamples": 445440,
+		"numSeries": 928,
+		"numChunks": 3713
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01KBF4MSWYPRBP4WF22YFJ3M78"
+		]
+	},
+	"version": 1
+}
