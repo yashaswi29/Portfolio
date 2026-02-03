@@ -9,12 +9,6 @@ const Projects: React.FC = () => {
 
   useEffect(() => {
     setIsVisible(true);
-
-    fetch('https://yashaswi.cloud/api/analytics/visit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ section: 'projects' })
-    });
   }, []);
 
   const homeLabTechnologies = [
@@ -26,19 +20,19 @@ const Projects: React.FC = () => {
       title: 'Jenkins Migration Toolkit',
       description: 'Built a Python-based toolkit to automate Jenkins job, plugin, and configuration migration between servers using Jenkins CLI and JCasC. Reduced manual intervention in CI/CD environment transitions.',
       technologies: ['Jenkins', 'Python', 'JCasC', 'Shell Scripting', 'CI/CD'],
-      githubUrl: 'https://github.com/yashaswi29/Jenkins-Migration-Tool', 
+      githubUrl: 'https://github.com/yashaswi29/Jenkins-Migration-Tool',
     },
     {
       title: 'ChatApp with Real-Time CI/CD Pipeline',
       description: 'Developed a real-time chat application featuring dynamic rooms and seamless communication, backed by a robust CI/CD pipeline. The pipeline automates build, security scanning, containerization, and deployment, ensuring rapid and secure delivery on AWS EC2 instances. Additionally, wrote Terraform scripts to automate the infrastructure provisioning of the ChatApp on AWS.',
       technologies: ['Jenkins', 'Docker', 'OWASP', 'EC2', 'Terraform'],
-      githubUrl: 'https://github.com/yashaswi29/CICD-Realtime-ChatApp.git', 
+      githubUrl: 'https://github.com/yashaswi29/CICD-Realtime-ChatApp.git',
     },
     {
-    title: '11-Microservices CI/CD Pipeline System',
-    description: 'Built a production-grade CI/CD pipeline system for 11 independent microservices using Jenkins, Docker, and Kubernetes. Each microservice features its own isolated pipeline for building, testing, containerizing, and deploying, ensuring modular scalability and faster development cycles. Integrated security scans, parallelized deployments, and blue/green strategies enhance reliability and speed. The system also includes Terraform for infrastructure provisioning and Prometheus/Grafana for observability.',
-    technologies: ['Jenkins', 'Docker', 'Kubernetes', 'Python', 'Microservices'],
-    githubUrl: 'https://github.com/yashaswi29/11-Microservice-CICD.git',
+      title: '11-Microservices CI/CD Pipeline System',
+      description: 'Built a production-grade CI/CD pipeline system for 11 independent microservices using Jenkins, Docker, and Kubernetes. Each microservice features its own isolated pipeline for building, testing, containerizing, and deploying, ensuring modular scalability and faster development cycles. Integrated security scans, parallelized deployments, and blue/green strategies enhance reliability and speed. The system also includes Terraform for infrastructure provisioning and Prometheus/Grafana for observability.',
+      technologies: ['Jenkins', 'Docker', 'Kubernetes', 'Python', 'Microservices'],
+      githubUrl: 'https://github.com/yashaswi29/11-Microservice-CICD.git',
     }
   ];
 
@@ -55,22 +49,22 @@ const Projects: React.FC = () => {
         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-r from-indigo-400/20 to-purple-600/20 rounded-full blur-xl animate-pulse"></div>
         <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-r from-blue-400/15 to-indigo-600/15 rounded-full blur-2xl animate-bounce" style={{ animationDuration: '4s' }}></div>
         <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-gradient-to-r from-gray-400/10 to-slate-600/10 rounded-full blur-lg animate-pulse" style={{ animationDelay: '2s' }}></div>
-        
+
         <div className="absolute top-32 left-0 w-full h-full">
-          <svg 
-            className="w-8 h-8 text-indigo-400/60 animate-fly-across" 
-            fill="currentColor" 
+          <svg
+            className="w-8 h-8 text-indigo-400/60 animate-fly-across"
+            fill="currentColor"
             viewBox="0 0 24 24"
-            style={{ 
+            style={{
               animationDuration: '15s',
               animationIterationCount: 'infinite',
               animationTimingFunction: 'linear'
             }}
           >
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
           </svg>
         </div>
-        
+
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gray-900/5 to-transparent">
           <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
         </div>
@@ -124,7 +118,7 @@ const Projects: React.FC = () => {
               >
                 {/* Animated background shine */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                
+
                 <span className="text-lg font-semibold relative z-10">More Info</span>
                 <span className={`transition-all duration-500 relative z-10 ${showMoreTools ? 'rotate-180 scale-110' : 'rotate-0 scale-100'}`}>
                   <svg
@@ -157,15 +151,15 @@ const Projects: React.FC = () => {
             {/* Enhanced Behind the Scenes Tools card */}
             <div className={`w-full flex justify-center transition-all duration-700 ease-out transform
             ${showMoreTools
-              ? 'opacity-100 max-h-[1000px] mb-8 scale-100 translate-y-0'
-              : 'opacity-0 max-h-0 mb-0 scale-95 -translate-y-4 pointer-events-none'
-            } overflow-hidden`}
+                ? 'opacity-100 max-h-[1000px] mb-8 scale-100 translate-y-0'
+                : 'opacity-0 max-h-0 mb-0 scale-95 -translate-y-4 pointer-events-none'
+              } overflow-hidden`}
             >
               <div className="bg-gradient-to-br from-primary-50 via-indigo-50/50 to-purple-50/30 dark:from-primary-800 dark:via-indigo-900/50 dark:to-purple-900/30 text-primary-900 dark:text-primary-100 rounded-2xl p-8 shadow-2xl max-w-2xl text-sm w-full mx-4 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-700/50 relative overflow-hidden group">
                 {/* Animated background pattern */}
                 <div className="absolute inset-0 bg-grid-pattern opacity-5 group-hover:opacity-10 transition-opacity duration-500"></div>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
-                
+
                 <div className="relative z-10">
                   <h3 className="text-xl font-bold mb-3 text-indigo-700 dark:text-indigo-300 flex items-center gap-3">
                     <svg className="h-6 w-6 text-indigo-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -204,7 +198,7 @@ const Projects: React.FC = () => {
                 <div
                   key={index}
                   className={`transform transition-all duration-700 hover:scale-105 hover:-translate-y-2`}
-                  style={{ 
+                  style={{
                     animationDelay: `${index * 200}ms`,
                     animation: isVisible ? 'fadeInUp 0.8s ease-out forwards' : 'none'
                   }}
@@ -230,7 +224,7 @@ const Projects: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 backdrop-blur-lg rounded-3xl"></div>
             <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-indigo-400/30 via-purple-400/20 to-transparent rounded-full blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-400/20 via-indigo-400/10 to-transparent rounded-full blur-2xl group-hover:scale-110 transition-transform duration-1000"></div>
-            
+
             {/* Animated particles */}
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '0s' }}></div>
@@ -263,7 +257,7 @@ const Projects: React.FC = () => {
                     <span
                       key={idx}
                       className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full text-sm font-semibold text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 cursor-default"
-                      style={{ 
+                      style={{
                         animationDelay: `${idx * 100}ms`,
                         animation: 'fadeInScale 0.6s ease-out forwards'
                       }}

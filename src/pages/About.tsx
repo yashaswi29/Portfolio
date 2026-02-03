@@ -5,6 +5,8 @@ import {
 } from 'lucide-react';
 import { ThemeContext } from '../context/ThemeContext';
 
+import Terminal from '../components/Terminal';
+
 const About: React.FC = () => {
   const { theme, setTheme } = useContext(ThemeContext);
   const isDarkMode = theme === 'dark';
@@ -12,14 +14,8 @@ const About: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     setIsVisible(true);
-      const start = performance.now();
-      const duration = performance.now() - start;
-
-    fetch('https://yashaswi.cloud/api/analytics/visit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ section: 'about' })
-    });
+    const start = performance.now();
+    const duration = performance.now() - start;
   }, []);
 
   const socialLinks = [
@@ -46,20 +42,42 @@ const About: React.FC = () => {
         </div>
 
         <div
-          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 transition-all duration-500 ease-out transform ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-          }`}
+          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 transition-all duration-500 ease-out transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
         >
           {/* Hero Section */}
-          <div className="relative flex flex-col items-start mb-10 animate-slide-up" style={{ animationDelay: '0.1s', animationFillMode: 'both', marginTop: '-1.5rem' }}>
+          <div className="relative flex flex-col items-start mb-16 animate-slide-up" style={{ animationDelay: '0.1s', animationFillMode: 'both', marginTop: '-1.5rem' }}>
             <div className="absolute top-4 right-4 text-indigo-400/30"><Cloud size={40} /></div>
             <div className="absolute bottom-2 left-4 text-purple-400/30"><Code size={28} /></div>
             <h1 className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
               About Me
             </h1>
-            <p className={`text-2xl leading-relaxed max-w-4xl ${isDarkMode ? 'text-white' : 'text-gray-700'} mb-8`}>
-              Passionate Cloud Engineer building scalable, automated infrastructure with DevOps and transforming complex challenges into reliable systems.
-            </p>
+
+            <div className="grid lg:grid-cols-2 gap-12 w-full mt-4">
+              <div className="space-y-6">
+                <p className={`text-2xl leading-relaxed ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
+                  Passionate Cloud Engineer building scalable, automated infrastructure with DevOps and transforming complex challenges into reliable systems.
+                </p>
+                <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  I believe in the power of "Infrastructure as Code" and keeping systems "boring" (read: stable).
+                  When I'm not optimizing pipelines, I'm usually exploring new CNCF projects or trying to make my terminal look cooler.
+                </p>
+
+                {/* Tech/Skills Pills for density */}
+                <div className="flex flex-wrap gap-2 pt-4">
+                  {['Kubernetes', 'AWS', 'Terraform', 'Python', 'Go', 'Linux'].map(tech => (
+                    <span key={tech} className="px-3 py-1 rounded-full text-sm font-medium bg-indigo-50 border border-indigo-200 text-indigo-700 dark:bg-indigo-900/30 dark:border-indigo-700 dark:text-indigo-300">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Side: Terminal */}
+              <div className="h-full min-h-[400px]">
+                <Terminal className="h-full border-2 border-indigo-500/20 rounded-xl" />
+              </div>
+            </div>
           </div>
 
           {/* Journey Section */}
@@ -114,11 +132,10 @@ const About: React.FC = () => {
               </div>
               {/* Certifications Sidebar */}
               <div className="animate-slide-up" style={{ animationDelay: '1.0s', animationFillMode: 'both' }}>
-                <div className={`sticky top-8 p-8 rounded-3xl transition-all duration-500 group ${
-                  isDarkMode
-                    ? 'bg-gray-900/80 border border-gray-800 backdrop-blur-sm shadow-xl'
-                    : 'bg-white border border-gray-300 shadow-lg backdrop-blur-sm'
-                }`}>
+                <div className={`sticky top-8 p-8 rounded-3xl transition-all duration-500 group ${isDarkMode
+                  ? 'bg-gray-900/80 border border-gray-800 backdrop-blur-sm shadow-xl'
+                  : 'bg-white border border-gray-300 shadow-lg backdrop-blur-sm'
+                  }`}>
                   <div className="flex items-center gap-4 mb-8">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
                       <Award className="w-6 h-6 text-white" />

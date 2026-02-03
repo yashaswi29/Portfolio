@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { 
-  Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight, 
-  Container, Compass, Globe, Wrench, CloudCog, Rocket, Monitor, 
+import {
+  Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight,
+  Container, Compass, Globe, Wrench, CloudCog, Rocket, Monitor,
   Cpu, PenSquare, HardDrive
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -35,16 +35,8 @@ const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, grad
     </p>
   </div>
 );
-  
-const Home = () => {
 
-  useEffect(() => {
-    fetch('https://yashaswi.cloud/api/analytics/visit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ section: 'about' })
-    });
-  }, []);
+const Home = () => {
 
   // Technology stack data
   const technologies = [
@@ -122,11 +114,11 @@ const Home = () => {
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight mb-6">
               Yashaswi Tiwari
             </h1>
-            
+
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
               Automating infrastructure, optimizing deployments, and ensuring reliability in cloud environments.
             </p>
-            
+
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
@@ -139,7 +131,7 @@ const Home = () => {
                 </span>
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </Link>
-              
+
               <Link
                 to="/about"
                 className="group inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl border-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500 hover:text-white dark:hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-lg transform hover:-translate-y-1"
@@ -156,7 +148,7 @@ const Home = () => {
       {/* Main Content Sections */}
       <div className="px-4 sm:px-6 lg:px-8 pb-12">
         <div className="max-w-7xl mx-auto">
-          
+
           {/* Mobile Layout: What I Do first, then Technology Stack */}
           <div className="flex flex-col lg:hidden space-y-12">
             {/* What I Do Section - Mobile */}

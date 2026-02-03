@@ -1,14 +1,13 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, func
 from datetime import datetime
 from app.models.schemas import VisitEvent, PerformanceEvent, ClickEvent
-from app.core.storage import append_analytics, append_daily_event, _read_json
+from app.models.orm import AnalyticsEvent
+from app.core.database import get_db
 from app.core.metrics import PAGE_VISITS, PAGE_LOAD_DURATION
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
-
-
-def _now_iso() -> str:
-    return datetime.now().replace(microsecond=0).isoformat()
 
 
 def _client_info(request: Request) -> tuple[str, str]:
@@ -17,26 +16,26 @@ def _client_info(request: Request) -> tuple[str, str]:
         ip = forwarded.split(",")[0].strip()
     else:
         ip = request.client.host if request.client else "127.0.0.1"
-
     ua = request.headers.get("user-agent", "")
     return ip, ua
 
 
 @router.post("/visit")
-async def track_visit(request: Request, payload: VisitEvent):
+async def track_visit(request: Request, payload: VisitEvent, db: AsyncSession = Depends(get_db)):
     ip, ua = _client_info(request)
-    timestamp = payload.timestamp or _now_iso()
-
-    entry = {
-        "type": "page_visit",
-        "section": payload.section,
-        "timestamp": timestamp,
-        "ip": ip,
-        "user_agent": ua,
-    }
-
-    append_analytics("visits", entry)
-    append_daily_event(entry)
+    
+    # Create DB Record
+    event = AnalyticsEvent(
+        session_id=payload.session_id,
+        event_type="page_visit",
+        section=payload.section,
+        ip=ip,
+        user_agent=ua,
+        timestamp=datetime.now()
+    )
+    
+    db.add(event)
+    await db.commit()
 
     try:
         PAGE_VISITS.labels(section=payload.section).inc()
@@ -47,21 +46,21 @@ async def track_visit(request: Request, payload: VisitEvent):
 
 
 @router.post("/performance")
-async def track_performance(request: Request, payload: PerformanceEvent):
+async def track_performance(request: Request, payload: PerformanceEvent, db: AsyncSession = Depends(get_db)):
     ip, ua = _client_info(request)
-    timestamp = payload.timestamp or _now_iso()
 
-    entry = {
-        "type": "page_performance",
-        "section": payload.section,
-        "duration": payload.duration,
-        "timestamp": timestamp,
-        "ip": ip,
-        "user_agent": ua,
-    }
-
-    append_analytics("performance", entry)
-    append_daily_event(entry)
+    event = AnalyticsEvent(
+        session_id=payload.session_id,
+        event_type="page_performance",
+        section=payload.section,
+        duration=payload.duration,
+        ip=ip,
+        user_agent=ua,
+        timestamp=datetime.now()
+    )
+    
+    db.add(event)
+    await db.commit()
 
     try:
         PAGE_LOAD_DURATION.labels(section=payload.section).observe(float(payload.duration))
@@ -72,54 +71,36 @@ async def track_performance(request: Request, payload: PerformanceEvent):
 
 
 @router.post("/event")
-async def track_event(request: Request):
-    body = await request.json()
-    # allow flexible event payloads; map known fields
+async def track_event(request: Request, payload: ClickEvent, db: AsyncSession = Depends(get_db)):
     ip, ua = _client_info(request)
-    timestamp = body.get("timestamp") or _now_iso()
-
-    event_type = body.get("event_type") or body.get("type") or "event"
-    section = body.get("section") or body.get("page")
-    target = body.get("element_id") or body.get("element_name") or body.get("target")
-
-    entry = {
-        "type": event_type,
-        "section": section,
-        "target": target,
-        "timestamp": timestamp,
-        "ip": ip,
-        "user_agent": ua,
-    }
-
-    # include other metadata if present
-    extras = {k: v for k, v in body.items() if k not in {"event_type", "type", "section", "page", "element_id", "element_name", "target", "timestamp"}}
-    if extras:
-        entry["metadata"] = extras
-
-    append_analytics("events", entry)
-    append_daily_event(entry)
+    
+    event = AnalyticsEvent(
+        session_id=payload.session_id,
+        event_type=payload.event_type,
+        section=payload.page, 
+        target_element=f"{payload.element_name} ({payload.element_id})",
+        ip=ip,
+        user_agent=ua,
+        timestamp=datetime.now()
+    )
+    
+    db.add(event)
+    await db.commit()
 
     return {"status": "ok"}
 
 
 @router.get("/summary")
-async def summary():
-    data = _read_json("data/analytics.json") or {}
-    visits = data.get("visits", [])
-    performance = data.get("performance", [])
-    events = data.get("events", [])
-
-    total_visits = len(visits)
-    total_events = len(events)
-    avg_load = None
-    try:
-        if performance:
-            avg_load = sum([p.get("duration", 0) for p in performance]) / len(performance)
-    except Exception:
-        avg_load = None
-
+async def summary(db: AsyncSession = Depends(get_db)):
+    # Example complex query: Count unique sessions
+    result = await db.execute(select(func.count(func.distinct(AnalyticsEvent.session_id))))
+    total_sessions = result.scalar() or 0
+    
+    # Count total events
+    result = await db.execute(select(func.count(AnalyticsEvent.id)))
+    total_events = result.scalar() or 0
+    
     return {
-        "total_visits": total_visits,
-        "total_events": total_events,
-        "avg_load_duration": avg_load,
+        "total_sessions": total_sessions,
+        "total_events": total_events
     }

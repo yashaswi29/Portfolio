@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import analytics, health, metrics
 from app.core.middleware import MetricsMiddleware
-from app.core.storage import init_files
 import logging
 
 
@@ -12,10 +11,14 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="Portfolio Analytics Backend")
 
 
+from app.core.database import engine, Base
+
 @app.on_event("startup")
 async def startup_event():
-    init_files()
-    logger.info("Storage files initialized")
+    # In production, use Alembic. For this portfolio, auto-create tables.
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    logger.info("Database initialized")
 
 
 app.add_middleware(MetricsMiddleware)
