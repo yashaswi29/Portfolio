@@ -45,7 +45,6 @@ def test_metrics():
     print("Metrics check passed")
 
 if __name__ == "__main__":
-    # Ensure data dir exists for tests
     os.makedirs("data", exist_ok=True)
     
     try:

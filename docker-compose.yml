@@ -1,8 +1,6 @@
-version: "3.9"
-
 networks:
   portfolio_net:
-    external: true
+    driver: bridge
 
 services:
   frontend:
@@ -10,7 +8,9 @@ services:
     build:
       context: .
     ports:
-      - "7000:80"
+      - "7002:5173"
+    environment:
+      - BACKEND_URL=http://backend:7001
     restart: unless-stopped
     networks:
       - portfolio_net
@@ -22,5 +22,37 @@ services:
     ports:
       - "7001:7001"
     restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user:password@postgres:5432/portfolio_db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
     networks:
       - portfolio_net
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=portfolio_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - portfolio_net
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - portfolio_net
+
+volumes:
+  postgres_data:
+  redis_data:

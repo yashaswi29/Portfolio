@@ -1,34 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Award, GraduationCap, Briefcase, Cloud, Zap, Code,
-  Github, Linkedin, PenSquare, Sun, Moon
+  Award, GraduationCap, Briefcase, Cloud, Zap, Code
 } from 'lucide-react';
 import { ThemeContext } from '../context/ThemeContext';
+import { useTracker } from '../hooks/useTracker';
+
+import Terminal from '../components/Terminal';
 
 const About: React.FC = () => {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { trackEvent } = useTracker();
+  const { theme } = useContext(ThemeContext);
   const isDarkMode = theme === 'dark';
 
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     setIsVisible(true);
-      const start = performance.now();
-      const duration = performance.now() - start;
-
-    fetch('https://yashaswi.cloud/api/analytics/visit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ section: 'about' })
-    });
-  }, []);
-
-  const socialLinks = [
-    { href: "https://github.com/yashaswi29", icon: <Github size={24} />, label: "GitHub" },
-    { href: "https://in.linkedin.com/in/yashaswi-tiwari-5423211a8", icon: <Linkedin size={24} />, label: "LinkedIn" },
-    { href: "https://hashnode.com/@yashaswiyeezy", icon: <PenSquare size={24} />, label: "Hashnode" }
-  ];
-
-  const toggleTheme = () => setTheme(isDarkMode ? 'light' : 'dark');
+    trackEvent('ui', 'view', 'resume');
+  }, [trackEvent]);
 
   return (
     <div
@@ -46,30 +34,56 @@ const About: React.FC = () => {
         </div>
 
         <div
-          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 transition-all duration-500 ease-out transform ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-          }`}
+          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 transition-all duration-500 ease-out transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
         >
-          {/* Hero Section */}
-          <div className="relative flex flex-col items-start mb-10 animate-slide-up" style={{ animationDelay: '0.1s', animationFillMode: 'both', marginTop: '-1.5rem' }}>
+          <div className="relative flex flex-col items-start mb-16 animate-slide-up" style={{ animationDelay: '0.1s', animationFillMode: 'both', marginTop: '-1.5rem' }}>
             <div className="absolute top-4 right-4 text-indigo-400/30"><Cloud size={40} /></div>
             <div className="absolute bottom-2 left-4 text-purple-400/30"><Code size={28} /></div>
             <h1 className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-6">
               About Me
             </h1>
-            <p className={`text-2xl leading-relaxed max-w-4xl ${isDarkMode ? 'text-white' : 'text-gray-700'} mb-8`}>
-              Passionate Cloud Engineer building scalable, automated infrastructure with DevOps and transforming complex challenges into reliable systems.
-            </p>
-          </div>
 
-          {/* Journey Section */}
+            <div className="grid lg:grid-cols-2 gap-12 w-full mt-4">
+              <div className="space-y-6">
+                <p className={`text-2xl leading-relaxed ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
+                  Passionate Cloud Engineer building scalable, automated infrastructure with DevOps and transforming complex challenges into reliable systems.
+                </p>
+                <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                  I believe in the power of "Infrastructure as Code" and keeping systems "boring" (read: stable).
+                  When I'm not optimizing pipelines, I'm usually exploring new CNCF projects or trying to make my terminal look cooler.
+                </p>
+                <div className="flex flex-wrap gap-2 pt-4">
+                  {['Kubernetes', 'AWS', 'Terraform', 'Python', 'Go', 'Linux'].map(tech => (
+                    <span key={tech} className="px-3 py-1 rounded-full text-sm font-medium bg-indigo-50 border border-indigo-200 text-indigo-700 dark:bg-indigo-900/30 dark:border-indigo-700 dark:text-indigo-300">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="pt-6">
+                  <a
+                    href="https://drive.google.com/file/d/1jxUeh8PvNFWB3EXztM5SAsMo28Aywyno/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackEvent('ui', 'interaction', 'about_resume_click')}
+                    className="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02]"
+                  >
+                    🚀 View Full Resume
+                  </a>
+                </div>
+              </div>
+              <div className="h-full min-h-[400px]">
+                <Terminal className="h-full border-2 border-indigo-500/20 rounded-xl" />
+              </div>
+            </div>
+          </div>
           <div className="mb-16 mt-8">
             <h2 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent mb-12 animate-slide-up" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
               My Journey
             </h2>
             <div className="grid lg:grid-cols-3 gap-10">
               <div className="lg:col-span-2 space-y-8">
-                {/* Card 1 */}
                 <div className={`p-8 rounded-3xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] animate-slide-up ${isDarkMode ? 'bg-gray-900/80 border border-gray-800 hover:border-indigo-500/40 backdrop-blur-sm shadow-xl' : 'bg-white border border-gray-300 hover:border-indigo-400 shadow-lg backdrop-blur-sm'}`} style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
                   <div className="flex items-start gap-6">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center shrink-0 shadow-lg">
@@ -83,7 +97,6 @@ const About: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* Card 2 */}
                 <div className={`p-8 rounded-3xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] animate-slide-up ${isDarkMode ? 'bg-gray-900/80 border border-gray-800 hover:border-purple-500/40 backdrop-blur-sm shadow-xl' : 'bg-white border border-gray-300 hover:border-purple-400 shadow-lg backdrop-blur-sm'}`} style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
                   <div className="flex items-start gap-6">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-purple-500 to-blue-600 flex items-center justify-center shrink-0 shadow-lg">
@@ -97,7 +110,6 @@ const About: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* Card 3 */}
                 <div className={`p-8 rounded-3xl transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] animate-slide-up ${isDarkMode ? 'bg-gray-900/80 border border-gray-800 hover:border-blue-500/40 backdrop-blur-sm shadow-xl' : 'bg-white border border-gray-300 hover:border-blue-400 shadow-lg backdrop-blur-sm'}`} style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
                   <div className="flex items-start gap-6">
                     <div className="w-16 h-16 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-lg">
@@ -112,13 +124,11 @@ const About: React.FC = () => {
                   </div>
                 </div>
               </div>
-              {/* Certifications Sidebar */}
               <div className="animate-slide-up" style={{ animationDelay: '1.0s', animationFillMode: 'both' }}>
-                <div className={`sticky top-8 p-8 rounded-3xl transition-all duration-500 group ${
-                  isDarkMode
-                    ? 'bg-gray-900/80 border border-gray-800 backdrop-blur-sm shadow-xl'
-                    : 'bg-white border border-gray-300 shadow-lg backdrop-blur-sm'
-                }`}>
+                <div className={`sticky top-8 p-8 rounded-3xl transition-all duration-500 group ${isDarkMode
+                  ? 'bg-gray-900/80 border border-gray-800 backdrop-blur-sm shadow-xl'
+                  : 'bg-white border border-gray-300 shadow-lg backdrop-blur-sm'
+                  }`}>
                   <div className="flex items-center gap-4 mb-8">
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
                       <Award className="w-6 h-6 text-white" />
@@ -130,9 +140,7 @@ const About: React.FC = () => {
                     onClick={() => window.open('https://drive.google.com/file/d/1gJYyj4SALVCRm_5neRtWCPcBqp212gh8/view?usp=sharing', '_blank')}
                     title="View Certificate"
                   >
-                    {/* Blur overlay on hover */}
                     <div className="absolute inset-0 transition-all duration-300 pointer-events-none group-hover:backdrop-blur-sm group-hover:bg-black/30 rounded-2xl z-10"></div>
-                    {/* "View Certificate" text on hover */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 z-20 transition-opacity duration-300">
                       <span className="italic text-gray-700 dark:text-gray-200 text-base font-normal">View Certificate</span>
                     </div>
@@ -151,14 +159,11 @@ const About: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Experience & Education */}
           <div className="mb-16">
             <h2 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-12 animate-slide-up" style={{ animationDelay: '1.2s', animationFillMode: 'both' }}>
               Experience & Education
             </h2>
             <div className="grid lg:grid-cols-2 gap-12">
-              {/* Work Experience */}
               <div>
                 <div className="flex items-center gap-4 mb-8 animate-slide-up" style={{ animationDelay: '1.4s', animationFillMode: 'both' }}>
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
@@ -167,7 +172,6 @@ const About: React.FC = () => {
                   <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Work Experience</h3>
                 </div>
                 <div className="space-y-8">
-                  {/* Current Role */}
                   <div className="relative pl-10 border-l-4 border-indigo-400 animate-slide-up" style={{ animationDelay: '1.6s', animationFillMode: 'both' }}>
                     <div className="absolute -left-4 top-3 w-8 h-8 rounded-full bg-indigo-500 shadow-lg border-4 border-white dark:border-black"></div>
                     <div className={`p-6 rounded-2xl transition-all duration-500 hover:shadow-xl hover:scale-[1.02] ${isDarkMode ? 'bg-gray-900/80 border border-gray-800 backdrop-blur-sm shadow-lg' : 'bg-white border border-gray-300 shadow-md backdrop-blur-sm'}`}>
@@ -179,7 +183,6 @@ const About: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  {/* Previous Roles */}
                   <div className="relative pl-10 border-l-4 border-purple-400 animate-slide-up" style={{ animationDelay: '1.8s', animationFillMode: 'both' }}>
                     <div className="absolute -left-4 top-3 w-8 h-8 rounded-full bg-purple-500 shadow-lg border-4 border-white dark:border-black"></div>
                     <div className={`p-6 rounded-2xl transition-all duration-500 hover:shadow-xl hover:scale-[1.02] ${isDarkMode ? 'bg-gray-900/80 border border-gray-800 backdrop-blur-sm shadow-lg' : 'bg-white border border-gray-300 shadow-md backdrop-blur-sm'}`}>
@@ -204,7 +207,6 @@ const About: React.FC = () => {
                   </div>
                 </div>
               </div>
-              {/* Education */}
               <div>
                 <div className="flex items-center gap-4 mb-8 animate-slide-up" style={{ animationDelay: '2.2s', animationFillMode: 'both' }}>
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-purple-500 to-blue-600 flex items-center justify-center shadow-lg">
@@ -235,8 +237,6 @@ const About: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Animations */}
       <style>
         {`
         .animate-slide-up {

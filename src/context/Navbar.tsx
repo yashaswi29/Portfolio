@@ -18,7 +18,6 @@ const Navbar: React.FC = () => {
     { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' },
     { name: 'About', path: '/about' },
-    // { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -32,8 +31,6 @@ const Navbar: React.FC = () => {
               <code>&gt;</code>
             </Link>
           </div>
-          
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
@@ -48,7 +45,6 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 shadow"
@@ -57,10 +53,7 @@ const Navbar: React.FC = () => {
               {theme === 'dark' ? <Sun size={20} className="text-yellow-300" /> : <Moon size={20} className="text-indigo-700" />}
             </button>
           </div>
-          
-          {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden">
-            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               className="p-2 mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
@@ -79,8 +72,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      {/* Mobile Menu */}
       <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-primary-900 shadow-md">
           {navLinks.map((link) => (
