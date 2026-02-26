@@ -1,0 +1,45 @@
+{
+    "title": "Portfolio SRE & Engagement SLOs",
+    "panels": [
+        {
+            "title": "System Uptime (99.9% Target)",
+            "type": "stat",
+            "targets": [
+                {
+                    "expr": "sum(up{job=\"portfolio-backend\"}) / count(up{job=\"portfolio-backend\"}) * 100",
+                    "legendFormat": "Uptime %"
+                }
+            ]
+        },
+        {
+            "title": "High Intent Conversions",
+            "type": "timeseries",
+            "targets": [
+                {
+                    "expr": "rate(portfolio_high_intent_sessions[5m])",
+                    "legendFormat": "Conversions / sec"
+                }
+            ]
+        },
+        {
+            "title": "Terminal Commands Used",
+            "type": "barchart",
+            "targets": [
+                {
+                    "expr": "topk(5, sum by (command) (portfolio_terminal_usage_total))",
+                    "legendFormat": "{{command}}"
+                }
+            ]
+        },
+        {
+            "title": "Session Durations",
+            "type": "heatmap",
+            "targets": [
+                {
+                    "expr": "rate(portfolio_avg_session_duration_seconds_bucket[5m])",
+                    "format": "heatmap"
+                }
+            ]
+        }
+    ]
+}
