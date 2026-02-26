@@ -2,24 +2,28 @@ import React, { useState, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { ThemeContext } from '../context/ThemeContext';
+import { useTracker } from '../hooks/useTracker';
 
 const Navbar: React.FC = () => {
+  const { trackEvent } = useTracker();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { theme, setTheme } = useContext(ThemeContext);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  // Fix: Implement toggleTheme using setTheme from ThemeContext
+  const toggleMenu = () => {
+    trackEvent('ui', 'interaction', 'mobile_menu', { action: isOpen ? 'close' : 'open' });
+    setIsOpen(!isOpen);
+  };
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    trackEvent('ui', 'interaction', 'theme_toggle', { to: newTheme });
+    setTheme(newTheme);
   };
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' },
     { name: 'About', path: '/about' },
-    // { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -33,23 +37,19 @@ const Navbar: React.FC = () => {
               <code>&gt;</code>
             </Link>
           </div>
-          
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className={`font-medium transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-300 ${
-                  isActive(link.path) 
-                    ? 'text-black dark:text-white border-b-2 border-primary-800 dark:border-white' 
-                    : 'text-primary-600 dark:text-primary-300'
-                }`}
+                className={`font-medium transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-300 ${isActive(link.path)
+                  ? 'text-black dark:text-white border-b-2 border-primary-800 dark:border-white'
+                  : 'text-primary-600 dark:text-primary-300'
+                  }`}
               >
                 {link.name}
               </Link>
             ))}
-            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 shadow"
@@ -58,10 +58,7 @@ const Navbar: React.FC = () => {
               {theme === 'dark' ? <Sun size={20} className="text-yellow-300" /> : <Moon size={20} className="text-indigo-700" />}
             </button>
           </div>
-          
-          {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden">
-            {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               className="p-2 mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
@@ -80,19 +77,16 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      {/* Mobile Menu */}
       <div className={`md:hidden ${isOpen ? 'block' : 'hidden'}`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white dark:bg-primary-900 shadow-md">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
-              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
-                isActive(link.path) 
-                  ? 'bg-primary-100 dark:bg-primary-800 text-primary-900 dark:text-white' 
-                  : 'text-primary-600 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-800'
-              }`}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${isActive(link.path)
+                ? 'bg-primary-100 dark:bg-primary-800 text-primary-900 dark:text-white'
+                : 'text-primary-600 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-800'
+                }`}
               onClick={() => setIsOpen(false)}
             >
               {link.name}

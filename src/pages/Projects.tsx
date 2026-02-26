@@ -1,15 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Section from '../components/Section';
 import ProjectCard from '../components/ProjectCard';
-import { ThemeContext } from '../context/ThemeContext';
+import { useTracker } from '../hooks/useTracker';
 
 const Projects: React.FC = () => {
+  const { trackEvent } = useTracker();
   const [showMoreTools, setShowMoreTools] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
-  }, []);
+    trackEvent('project', 'view', 'projects_page');
+  }, [trackEvent]);
+
 
   const homeLabTechnologies = [
     'Debian', 'k3s', 'Airtel 100Mbps', 'Python Scripting',
@@ -72,7 +75,6 @@ const Projects: React.FC = () => {
 
       <div className="bg-white dark:bg-primary-900 pt-14 pb-20 transition-colors duration-300 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section with enhanced animations */}
           <div className={`max-w-3xl transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
             <h1 className="text-4xl sm:text-5xl font-bold text-primary-900 dark:text-white leading-tight animate-fade-in-up relative mt-[-1.5rem] mb-2">
               <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent animate-gradient-x">
@@ -116,7 +118,6 @@ const Projects: React.FC = () => {
                 onClick={() => setShowMoreTools(prev => !prev)}
                 aria-label="More Internal Tools Info"
               >
-                {/* Animated background shine */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
                 <span className="text-lg font-semibold relative z-10">More Info</span>
@@ -147,8 +148,6 @@ const Projects: React.FC = () => {
                 </span>
               </button>
             </div>
-
-            {/* Enhanced Behind the Scenes Tools card */}
             <div className={`w-full flex justify-center transition-all duration-700 ease-out transform
             ${showMoreTools
                 ? 'opacity-100 max-h-[1000px] mb-8 scale-100 translate-y-0'
@@ -156,7 +155,6 @@ const Projects: React.FC = () => {
               } overflow-hidden`}
             >
               <div className="bg-gradient-to-br from-primary-50 via-indigo-50/50 to-purple-50/30 dark:from-primary-800 dark:via-indigo-900/50 dark:to-purple-900/30 text-primary-900 dark:text-primary-100 rounded-2xl p-8 shadow-2xl max-w-2xl text-sm w-full mx-4 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-700/50 relative overflow-hidden group">
-                {/* Animated background pattern */}
                 <div className="absolute inset-0 bg-grid-pattern opacity-5 group-hover:opacity-10 transition-opacity duration-500"></div>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
 
@@ -191,8 +189,6 @@ const Projects: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Enhanced Project cards grid */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projects.map((project, index) => (
                 <div
@@ -215,17 +211,12 @@ const Projects: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Enhanced Upcoming Projects Section */}
       <Section title="Upcoming Projects" id="upcoming-projects">
         <div className="max-w-6xl mx-auto">
           <div className="relative bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#2563eb] rounded-3xl shadow-2xl overflow-hidden p-8 md:p-12 lg:p-16 transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl backdrop-blur-sm group">
-            {/* Enhanced background effects */}
             <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 backdrop-blur-lg rounded-3xl"></div>
             <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-indigo-400/30 via-purple-400/20 to-transparent rounded-full blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-400/20 via-indigo-400/10 to-transparent rounded-full blur-2xl group-hover:scale-110 transition-transform duration-1000"></div>
-
-            {/* Animated particles */}
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '0s' }}></div>
               <div className="absolute top-3/4 right-1/3 w-1 h-1 bg-indigo-300/40 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>

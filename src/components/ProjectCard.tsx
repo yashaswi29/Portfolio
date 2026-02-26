@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTracker } from '../hooks/useTracker';
 
 interface ProjectCardProps {
   title: string;
@@ -15,12 +16,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   technologies,
   githubUrl,
 }) => {
+  const { trackEvent } = useTracker();
   const [expanded, setExpanded] = useState(false);
 
   const isLong = description.length > MAX_DESCRIPTION_LENGTH;
   const displayDescription = expanded || !isLong
     ? description
     : description.slice(0, MAX_DESCRIPTION_LENGTH) + '...';
+
+  const handleReadMore = () => {
+    trackEvent('project', 'interaction', title, { action: expanded ? 'collapse' : 'expand' });
+    setExpanded((prev) => !prev);
+  };
+
+  const handleGithubClick = () => {
+    trackEvent('project', 'github_click', title, { url: githubUrl });
+  };
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-primary-800 rounded-xl shadow-lg p-6 transition-shadow duration-300 hover:shadow-2xl">
@@ -30,7 +41,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {isLong && (
           <button
             className="ml-2 text-indigo-600 dark:text-indigo-400 underline text-sm focus:outline-none"
-            onClick={() => setExpanded((prev) => !prev)}
+            onClick={handleReadMore}
             aria-expanded={expanded}
           >
             {expanded ? 'Show Less' : 'Read More'}
@@ -52,6 +63,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={handleGithubClick}
           className="text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
         >
           GitHub

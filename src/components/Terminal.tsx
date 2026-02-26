@@ -1,29 +1,28 @@
 import React, { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from 'react';
-
-// Configuration similar to webshell/config.json
+import { useTracker } from '../hooks/useTracker';
 const CONFIG = {
-    username: 'visitor',
-    hostname: 'yashaswi-io',
+    username: 'root',
+    hostname: 'sre-master-node',
     colors: {
-        background: '#0C0623',
-        foreground: '#F8DDE5',
+        background: '#0d1117', // Github Dark Dimmed
+        foreground: '#c9d1d9', // Github Light
         prompt: {
-            default: '#A5A7A7',
-            user: '#FE6BC9',
-            host: '#70FDFF',
-            input: '#FF7685'
+            default: '#8b949e',
+            user: '#58a6ff', // Blue
+            host: '#79c0ff', // Light Blue
+            input: '#c9d1d9'
         },
-        banner: '#FF9951',
-        commands: '#FD9BDB',
-        link: '#B6AAEE'
+        banner: '#7ee787', // Green
+        commands: '#f0883e', // Orange
+        link: '#a5d6ff' // Light Link Blue
     },
     commands: {
         help: 'List available commands',
-        whoami: 'Display user info',
-        about: 'About Yashaswi',
-        projects: 'View projects',
-        contact: 'Contact info',
-        clear: 'Clear terminal',
+        whoami: 'Display user context',
+        uptime: 'System uptime & load',
+        stack: 'View infrastructure stack',
+        deploy: 'Trigger deployment pipeline',
+        clear: 'Clear terminal buffer',
     }
 };
 
@@ -38,6 +37,7 @@ interface TerminalProps {
 }
 
 const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
+    const { trackEvent } = useTracker();
     const [input, setInput] = useState('');
     const [history, setHistory] = useState<HistoryItem[]>([
         {
@@ -71,15 +71,12 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
 
     const handleCommand = (cmd: string) => {
         const trimmedCmd = cmd.trim().toLowerCase();
-
-        // Add command to history (UI)
+        trackEvent('terminal', 'command_executed', trimmedCmd, { raw: cmd });
         const newHistory: HistoryItem[] = [...history, {
             type: 'command',
             content: cmd,
             prefix: `${CONFIG.username}@${CONFIG.hostname}:~$`
         }];
-
-        // Process command
         let output: JSX.Element | string = '';
 
         switch (trimmedCmd) {
@@ -100,47 +97,59 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
                 output = (
                     <div>
                         <p>User: {CONFIG.username}</p>
-                        <p>Role: Visitor</p>
-                        <p>Access Level: Read-Only</p>
+                        <p>Groups: sudo, docker, k8s-admin</p>
+                        <p>Shell: /bin/zsh</p>
                     </div>
                 );
                 break;
 
-            case 'about':
+            case 'uptime':
                 output = (
                     <div>
-                        <p className="mb-2">Cloud Engineer & DevOps Enthusiast.</p>
-                        <p>Passionate about building scalable infrastructure and automating everything.</p>
-                        <p className="mt-2 text-sm opacity-70">Hint: Check the graphical 'About' page for more colors.</p>
+                        <p> 10:00:00 up 999 days, 24 users, load average: 0.00, 0.01, 0.05</p>
+                        <p>System is healthy.</p>
                     </div>
                 );
                 break;
 
-            case 'projects':
+            case 'stack':
                 output = (
                     <div className="space-y-4">
                         <div>
-                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>Jenkins Migration Toolkit</p>
-                            <p className="text-sm">Python-based toolkit to automate Jenkins job & plugin migration.</p>
+                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>Compute & Orchestration</p>
+                            <p className="text-sm">Kubernetes, Docker, AWS EC2/EKS, Lambda</p>
                         </div>
                         <div>
-                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>ChatApp Analysis</p>
-                            <p className="text-sm">Real-time chat with robust CI/CD pipeline on AWS.</p>
+                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>IaC & CI/CD</p>
+                            <p className="text-sm">Terraform, Ansible, Jenkins, GitHub Actions, ArgoCD</p>
                         </div>
                         <div>
-                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>Microservices CI/CD</p>
-                            <p className="text-sm">Pipeline system for 11 independent microservices using K8s.</p>
+                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>Observability</p>
+                            <p className="text-sm">Prometheus, Grafana, ELK Stack, Datadog</p>
                         </div>
                     </div>
                 );
                 break;
 
+            case 'deploy':
+                output = (
+                    <div>
+                        <p className="text-yellow-400">⚠ Initiating deployment sequence...</p>
+                        <p>Loading configuration... <span className="text-green-400">Done</span></p>
+                        <p>Connecting to cluster... <span className="text-green-400">Connected</span></p>
+                        <p>Applying manifests... <span className="text-green-400">Applied</span></p>
+                        <p className="mt-2 text-green-400 font-bold">✔ Deployment successful! Application is live.</p>
+                        <p className="text-xs opacity-50 mt-1">(This is a simulation. No actual infrastructure was harmed.)</p>
+                    </div>
+                );
+                break;
+            case 'about':
+            case 'projects':
             case 'contact':
                 output = (
                     <div>
-                        <p>Email: <a href="mailto:yashaswitiwari2003@gmail.com" className="underline hover:brightness-125" style={{ color: CONFIG.colors.link }}>yashaswitiwari2003@gmail.com</a></p>
-                        <p>GitHub: <a href="https://github.com/yashaswi29" target="_blank" rel="noreferrer" className="underline hover:brightness-125" style={{ color: CONFIG.colors.link }}>github.com/yashaswi29</a></p>
-                        <p>LinkedIn: <a href="https://www.linkedin.com/in/yashaswi-tiwari-5423211a8/" target="_blank" rel="noreferrer" className="underline hover:brightness-125" style={{ color: CONFIG.colors.link }}>Search 'Yashaswi Tiwari'</a></p>
+                        <p>This command has been deprecated in v2.0.</p>
+                        <p>Please use <span style={{ color: CONFIG.colors.commands }}>'stack'</span> or <span style={{ color: CONFIG.colors.commands }}>'help'</span> to explore.</p>
                     </div>
                 );
                 break;
@@ -150,7 +159,6 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
                 return; // Early return to avoid adding "clear" output
 
             case '':
-                // Do nothing for empty input
                 output = '';
                 break;
 
@@ -237,8 +245,6 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
                             )}
                         </div>
                     ))}
-
-                    {/* Input Line */}
                     <div className="flex flex-row items-center mt-2">
                         <span className="mr-2 shrink-0 select-none">
                             <span style={{ color: CONFIG.colors.prompt.user }}>{CONFIG.username}</span>
@@ -261,7 +267,8 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
                     </div>
                 </div>
             </div>
-            );
+        </div>
+    );
 };
 
-            export default Terminal;
+export default Terminal;

@@ -6,7 +6,6 @@ import { Mail, MapPin, Github, Linkedin } from 'lucide-react';
 const Contact: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section */}
       <div className="bg-white dark:bg-primary-900 pt-20 pb-24 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
@@ -19,8 +18,6 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      {/* Contact Section */}
       <Section title="Contact Information">
         <div className="grid md:grid-cols-2 gap-8">
           <div>

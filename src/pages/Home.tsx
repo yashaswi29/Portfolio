@@ -1,15 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 import {
-  Server, Database, Cloud, Terminal, Github, Linkedin, ChevronRight,
+  Server, Database, Cloud, Terminal, ChevronRight,
   Container, Compass, Globe, Wrench, CloudCog, Rocket, Monitor,
-  Cpu, PenSquare, HardDrive
+  Cpu, HardDrive
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ThemeContext } from '../context/ThemeContext';
+import { useTracker } from '../hooks/useTracker';
 
-// Technology Logo Component
-const TechLogo = ({ name, icon }) => (
-  <div className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200">
+interface TechLogoProps {
+  name: string;
+  icon: React.ReactNode;
+  onHover?: () => void;
+}
+const TechLogo: React.FC<TechLogoProps> = ({ name, icon, onHover }) => (
+  <div
+    onMouseEnter={onHover}
+    className="flex flex-col items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-200"
+  >
     <div className="text-gray-600 dark:text-gray-300 mb-2">
       {icon}
     </div>
@@ -19,9 +26,21 @@ const TechLogo = ({ name, icon }) => (
   </div>
 );
 
-// Service Card Component
-const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, gradientTo, iconColor }) => (
-  <div className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 border-t-4 ${borderColor} group`}>
+interface ServiceCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  borderColor: string;
+  gradientFrom: string;
+  gradientTo: string;
+  iconColor: string;
+  onHover?: () => void;
+}
+const ServiceCard: React.FC<ServiceCardProps> = ({ icon, title, description, borderColor, gradientFrom, gradientTo, iconColor, onHover }) => (
+  <div
+    onMouseEnter={onHover}
+    className={`bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 border-t-4 ${borderColor} group`}
+  >
     <div className={`w-12 h-12 flex items-center justify-center bg-gradient-to-br ${gradientFrom} ${gradientTo} rounded-lg mb-4 group-hover:scale-110 transition-transform duration-300`}>
       <div className={iconColor + " text-xl"}>
         {icon}
@@ -37,8 +56,7 @@ const ServiceCard = ({ icon, title, description, borderColor, gradientFrom, grad
 );
 
 const Home = () => {
-
-  // Technology stack data
+  const { trackEvent } = useTracker();
   const technologies = [
     { name: 'AWS', icon: <Cloud size={40} strokeWidth={1} /> },
     { name: 'Azure', icon: <CloudCog size={40} strokeWidth={1} /> },
@@ -84,45 +102,28 @@ const Home = () => {
     }
   ];
 
-  const socialLinks = [
-    {
-      href: "https://github.com/yashaswi29",
-      icon: <Github size={24} />,
-      label: "GitHub"
-    },
-    {
-      href: "https://in.linkedin.com/in/yashaswi-tiwari-5423211a8",
-      icon: <Linkedin size={24} />,
-      label: "LinkedIn"
-    },
-    {
-      href: "https://hashnode.com/@yashaswiyeezy",
-      icon: <PenSquare size={24} />,
-      label: "Hashnode"
-    }
-  ];
-
   return (
     <div
       className={`bg-white dark:bg-primary-900 pt-20 pb-24 transition-colors duration-300 relative z-10 min-h-screen overflow-hidden
         animate-fade-in-page`}
     >
-      {/* Hero Section */}
       <div className="pt-10 pb-10 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent leading-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 bg-clip-text text-transparent leading-tight mb-6 animate-gradient-x">
+              <span className="block text-gray-900 dark:text-white text-2xl sm:text-3xl mb-2 font-mono">def role(self): return "SRE"</span>
               Yashaswi Tiwari
             </h1>
 
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-              Automating infrastructure, optimizing deployments, and ensuring reliability in cloud environments.
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed font-light">
+              Architecting <span className="font-semibold text-indigo-600 dark:text-indigo-400">Resilient Systems</span> & <span className="font-semibold text-emerald-600 dark:text-emerald-400">Automating Chaos</span>.
+              <br />
+              Cloud Native | DevOps | Infrastructure as Code
             </p>
-
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 to="/projects"
+                onClick={() => trackEvent('ui', 'hero_cta_click', 'view_projects')}
                 className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl text-white bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 hover:from-indigo-600 hover:via-purple-600 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-2xl transform hover:-translate-y-1"
               >
                 <span className="relative z-10 flex items-center">
@@ -134,6 +135,7 @@ const Home = () => {
 
               <Link
                 to="/about"
+                onClick={() => trackEvent('ui', 'hero_cta_click', 'know_me_more')}
                 className="group inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-xl border-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500 hover:text-white dark:hover:text-white transition-all duration-300 hover:scale-105 hover:shadow-lg transform hover:-translate-y-1"
               >
                 <span className="flex items-center">
@@ -145,59 +147,66 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {/* Main Content Sections */}
       <div className="px-4 sm:px-6 lg:px-8 pb-12">
         <div className="max-w-7xl mx-auto">
-
-          {/* Mobile Layout: What I Do first, then Technology Stack */}
           <div className="flex flex-col lg:hidden space-y-12">
-            {/* What I Do Section - Mobile */}
             <div>
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
                 What I Do
               </h2>
               <div className="grid gap-6">
                 {services.map((service, index) => (
-                  <ServiceCard key={index} {...service} />
+                  <ServiceCard
+                    key={index}
+                    {...service}
+                    onHover={() => trackEvent('ui', 'hover', `service_card_${service.title.toLowerCase().replace(/\s+/g, '_')}`)}
+                  />
                 ))}
               </div>
             </div>
-
-            {/* Technology Stack Section - Mobile */}
             <div>
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
                 Technology Stack
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {technologies.map((tech) => (
-                  <TechLogo key={tech.name} name={tech.name} icon={tech.icon} />
+                  <TechLogo
+                    key={tech.name}
+                    name={tech.name}
+                    icon={tech.icon}
+                    onHover={() => trackEvent('infra', 'hover', `tech_${tech.name.toLowerCase().replace(/\s+/g, '_')}`)}
+                  />
                 ))}
               </div>
             </div>
           </div>
-
-          {/* Desktop Layout: What I Do on left, Technology Stack on right */}
           <div className="hidden lg:flex gap-12">
-            {/* What I Do Section - Desktop */}
             <div className="flex-1">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
                 What I Do
               </h2>
               <div className="grid gap-6">
                 {services.map((service, index) => (
-                  <ServiceCard key={index} {...service} />
+                  <ServiceCard
+                    key={index}
+                    {...service}
+                    onHover={() => trackEvent('ui', 'hover', `service_card_${service.title.toLowerCase().replace(/\s+/g, '_')}`)}
+                  />
                 ))}
               </div>
             </div>
-
-            {/* Technology Stack Section - Desktop */}
             <div className="flex-1">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
                 Technology Stack
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 {technologies.map((tech) => (
-                  <TechLogo key={tech.name} name={tech.name} icon={tech.icon} />
+                  <TechLogo
+                    key={tech.name}
+                    name={tech.name}
+                    icon={tech.icon}
+                    onHover={() => trackEvent('infra', 'hover', `tech_${tech.name.toLowerCase().replace(/\s+/g, '_')}`)}
+                  />
                 ))}
               </div>
             </div>
