@@ -17,7 +17,6 @@ def _read_json(path: str) -> Any:
 
 
 def _write_json(path: str, data: Any) -> None:
-    # Atomic write to avoid partial writes (basic approach)
     temp_path = f"{path}.tmp"
     with open(temp_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
@@ -52,8 +51,6 @@ def save_session_event(session_id: str, event: Dict[str, Any]) -> None:
     """
     if not session_id:
         return  # explicit session_id required
-
-    # Sanitize session_id to prevent path traversal
     safe_session_id = "".join(c for c in session_id if c.isalnum() or c in "-_")
     path = os.path.join(SESSIONS_DIR, f"{safe_session_id}.json")
 

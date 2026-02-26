@@ -1,14 +1,12 @@
 import axios from 'axios';
 
 const STORAGE_KEY = 'portfolio_session_id';
-const API_BASE = 'https://yashaswi.cloud/api/analytics';
-
-// Generate a random session ID
+const API_BASE = import.meta.env.DEV
+    ? '/analytics'
+    : 'https://yashaswi.cloud/api/analytics';
 const generateSessionId = () => {
     return 'sess_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
 };
-
-// Get or create session ID
 const getSessionId = () => {
     let sessionId = sessionStorage.getItem(STORAGE_KEY);
     if (!sessionId) {
@@ -17,8 +15,6 @@ const getSessionId = () => {
     }
     return sessionId;
 };
-
-// Generic event sender
 const sendEvent = async (endpoint: string, data: any) => {
     try {
         const sessionId = getSessionId();

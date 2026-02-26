@@ -10,6 +10,8 @@ import Contact from './pages/Contact';
 import { ThemeProvider } from './context/ThemeContext';
 
 
+import { EngagementDetector } from './components/EngagementDetector';
+
 const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
@@ -17,6 +19,7 @@ const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-primary-900 transition-colors duration-300">
       <AnalyticsTracker />
+      <EngagementDetector />
       {isHomePage ? <HomeNavbar /> : <Navbar />}
       <main className="flex-grow">
         {children}
@@ -24,6 +27,7 @@ const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     </div>
   );
 };
+
 
 function App() {
   const [loading, setLoading] = useState(true);

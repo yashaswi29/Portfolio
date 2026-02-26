@@ -11,14 +11,25 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="Portfolio Analytics Backend")
 
 
-from app.core.database import engine, Base
+from app.core.database import engine
+from app.models.analytics import Base
+from app.worker.event_processor import start_worker
+import asyncio
+import os
+import redis.asyncio as aioredis # type: ignore
 
 @app.on_event("startup")
 async def startup_event():
-    # In production, use Alembic. For this portfolio, auto-create tables.
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     logger.info("Database initialized")
+    REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    try:
+        redis_client = await aioredis.from_url(REDIS_URL)
+        asyncio.create_task(start_worker(redis_client))
+        logger.info("Redis worker started")
+    except Exception as e:
+        logger.error(f"Failed to start Redis worker: {e}")
 
 
 app.add_middleware(MetricsMiddleware)

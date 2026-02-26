@@ -8,7 +8,6 @@ router = APIRouter(prefix="/api/health", tags=["health"])
 @router.get("")
 async def health_check(db: AsyncSession = Depends(get_db)):
     try:
-        # Ping the database
         await db.execute(text("SELECT 1"))
         return {"status": "healthy", "database": "connected"}
     except Exception as e:
