@@ -4,6 +4,7 @@ networks:
 
 services:
   frontend:
+    container_name: frontend
     image: portfolio:latest
     build:
       context: .
@@ -16,6 +17,7 @@ services:
       - portfolio_net
 
   backend:
+    container_name: backend
     image: backend:latest
     build:
       context: ./backend
@@ -32,6 +34,7 @@ services:
       - portfolio_net
 
   postgres:
+    container_name: postgres
     image: postgres:15-alpine
     restart: always
     environment:
@@ -44,6 +47,7 @@ services:
       - portfolio_net
 
   redis:
+    container_name: redis
     image: redis:7-alpine
     restart: always
     ports:
