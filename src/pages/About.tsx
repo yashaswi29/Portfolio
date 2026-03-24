@@ -8,7 +8,7 @@ const About = () => {
             {/* Hero Section */}
             <section className="relative w-full h-[70vh] min-h-[500px] mb-32 flex flex-col justify-end pb-24 overflow-hidden shadow-2xl border-b border-primary/10">
                 {/* Background Image Setup */}
-                <div 
+                <div
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-screen scale-105 transform origin-center"
                     style={{ backgroundImage: "url('/hero-night.jpg')" }}
                 ></div>
@@ -20,7 +20,7 @@ const About = () => {
                     <div className="max-w-4xl">
                         <span className="text-primary font-mono text-sm tracking-widest uppercase mb-6 block drop-shadow-md">Engineer Profile // 01</span>
                         <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter mb-8 leading-none bg-gradient-to-br from-on-surface via-primary to-on-surface-variant bg-clip-text text-transparent pb-4 drop-shadow-2xl">
-                            Building, Testing, <br/><span className="italic text-primary drop-shadow-[0_0_15px_rgba(0,80,125,0.8)]">Breaking.</span>
+                            Building, Testing, <br /><span className="italic text-primary drop-shadow-[0_0_15px_rgba(0,80,125,0.8)]">Breaking.</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-on-surface max-w-3xl leading-relaxed font-light drop-shadow-lg">
                             Engineering isn't a title; it's a practical curiosity. I focus on high-performance systems and automated infrastructure, driven by the need to understand exactly how the machine works under the hood.
