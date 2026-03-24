@@ -5,7 +5,7 @@ networks:
 services:
   frontend:
     container_name: frontend
-    image: portfolio:latest
+    image: yashaswi29/portfolio-frontend:latest
     build:
       context: .
     ports:
@@ -18,7 +18,7 @@ services:
 
   backend:
     container_name: backend
-    image: backend:latest
+    image: yashaswi29/portfolio-backend:latest
     build:
       context: ./backend
     ports:
@@ -28,8 +28,10 @@ services:
       - DATABASE_URL=postgresql+asyncpg://user:password@postgres:5432/portfolio_db
       - REDIS_URL=redis://redis:6379/0
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - portfolio_net
 
@@ -43,6 +45,11 @@ services:
       - POSTGRES_DB=portfolio_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d portfolio_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - portfolio_net
 
@@ -54,6 +61,11 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     networks:
       - portfolio_net
 
