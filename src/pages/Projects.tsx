@@ -1,335 +1,140 @@
-import React, { useState, useEffect } from 'react';
-import Section from '../components/Section';
-import ProjectCard from '../components/ProjectCard';
 import { useTracker } from '../hooks/useTracker';
+import { Link } from 'react-router-dom';
 
-const Projects: React.FC = () => {
-  const { trackEvent } = useTracker();
-  const [showMoreTools, setShowMoreTools] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+const Projects = () => {
+    const { trackEvent } = useTracker();
 
-  useEffect(() => {
-    setIsVisible(true);
-    trackEvent('project', 'view', 'projects_page');
-  }, [trackEvent]);
-
-
-  const homeLabTechnologies = [
-    'Debian', 'k3s', 'Airtel 100Mbps', 'Python Scripting',
-  ];
-
-  const projects = [
-    {
-      title: 'Jenkins Migration Toolkit',
-      description: 'Built a Python-based toolkit to automate Jenkins job, plugin, and configuration migration between servers using Jenkins CLI and JCasC. Reduced manual intervention in CI/CD environment transitions.',
-      technologies: ['Jenkins', 'Python', 'JCasC', 'Shell Scripting', 'CI/CD'],
-      githubUrl: 'https://github.com/yashaswi29/Jenkins-Migration-Tool',
-    },
-    {
-      title: 'ChatApp with Real-Time CI/CD Pipeline',
-      description: 'Developed a real-time chat application featuring dynamic rooms and seamless communication, backed by a robust CI/CD pipeline. The pipeline automates build, security scanning, containerization, and deployment, ensuring rapid and secure delivery on AWS EC2 instances. Additionally, wrote Terraform scripts to automate the infrastructure provisioning of the ChatApp on AWS.',
-      technologies: ['Jenkins', 'Docker', 'OWASP', 'EC2', 'Terraform'],
-      githubUrl: 'https://github.com/yashaswi29/CICD-Realtime-ChatApp.git',
-    },
-    {
-      title: '11-Microservices CI/CD Pipeline System',
-      description: 'Built a production-grade CI/CD pipeline system for 11 independent microservices using Jenkins, Docker, and Kubernetes. Each microservice features its own isolated pipeline for building, testing, containerizing, and deploying, ensuring modular scalability and faster development cycles. Integrated security scans, parallelized deployments, and blue/green strategies enhance reliability and speed. The system also includes Terraform for infrastructure provisioning and Prometheus/Grafana for observability.',
-      technologies: ['Jenkins', 'Docker', 'Kubernetes', 'Python', 'Microservices'],
-      githubUrl: 'https://github.com/yashaswi29/11-Microservice-CICD.git',
-    }
-  ];
-
-  const scrollToUpcoming = () => {
-    const el = document.getElementById('upcoming-projects');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  return (
-    <div className={`animate-fade-in relative overflow-hidden bg-white dark:bg-primary-900 pt-20 pb-24 transition-colors duration-300 z-10 min-h-screen transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-r from-indigo-400/20 to-purple-600/20 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-r from-blue-400/15 to-indigo-600/15 rounded-full blur-2xl animate-bounce" style={{ animationDuration: '4s' }}></div>
-        <div className="absolute top-1/2 left-3/4 w-24 h-24 bg-gradient-to-r from-gray-400/10 to-slate-600/10 rounded-full blur-lg animate-pulse" style={{ animationDelay: '2s' }}></div>
-
-        <div className="absolute top-32 left-0 w-full h-full">
-          <svg
-            className="w-8 h-8 text-indigo-400/60 animate-fly-across"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            style={{
-              animationDuration: '15s',
-              animationIterationCount: 'infinite',
-              animationTimingFunction: 'linear'
-            }}
-          >
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-          </svg>
-        </div>
-
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-gray-900/5 to-transparent">
-          <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
-        </div>
-      </div>
-
-      <div className="bg-white dark:bg-primary-900 pt-14 pb-20 transition-colors duration-300 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`max-w-3xl transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            <h1 className="text-4xl sm:text-5xl font-bold text-primary-900 dark:text-white leading-tight animate-fade-in-up relative mt-[-1.5rem] mb-2">
-              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-blue-600 bg-clip-text text-transparent animate-gradient-x">
-                Projects
-              </span>
-              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-blue-600/20 blur-lg opacity-30 animate-pulse"></div>
-            </h1>
-            <p className={`mt-6 text-xl text-primary-600 dark:text-primary-300 transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-              A collection of my work in cloud infrastructure, automation, and DevOps.
-            </p>
-            <button
-              onClick={scrollToUpcoming}
-              aria-label="Scroll to Upcoming Projects"
-              className={`mt-10 flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200 transition-all duration-500 hover:scale-105 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'} group`}
-              style={{ transitionDelay: '600ms' }}
-            >
-              <span className="text-lg font-semibold group-hover:animate-pulse">See Upcoming Projects</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 animate-bounce group-hover:animate-ping"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-          </div>
-
-          <div className={`mt-16 transform transition-all duration-1000 delay-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-            <div className="w-full h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent mb-8 animate-pulse"></div>
-
-            <div className="flex justify-between items-center mb-4 group">
-              <h2 className="text-3xl font-bold text-primary-900 dark:text-white relative">
-                <span className="relative z-10">Featured Projects</span>
-                <div className="absolute -inset-2 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"></div>
-              </h2>
-              <button
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-blue-600 text-white shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-400/50 group relative overflow-hidden"
-                onClick={() => setShowMoreTools(prev => !prev)}
-                aria-label="More Internal Tools Info"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-
-                <span className="text-lg font-semibold relative z-10">More Info</span>
-                <span className={`transition-all duration-500 relative z-10 ${showMoreTools ? 'rotate-180 scale-110' : 'rotate-0 scale-100'}`}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </span>
-                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 ml-1 relative z-10 group-hover:animate-spin">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 16v-4m0-4h.01" />
-                  </svg>
-                </span>
-              </button>
-            </div>
-            <div className={`w-full flex justify-center transition-all duration-700 ease-out transform
-            ${showMoreTools
-                ? 'opacity-100 max-h-[1000px] mb-8 scale-100 translate-y-0'
-                : 'opacity-0 max-h-0 mb-0 scale-95 -translate-y-4 pointer-events-none'
-              } overflow-hidden`}
-            >
-              <div className="bg-gradient-to-br from-primary-50 via-indigo-50/50 to-purple-50/30 dark:from-primary-800 dark:via-indigo-900/50 dark:to-purple-900/30 text-primary-900 dark:text-primary-100 rounded-2xl p-8 shadow-2xl max-w-2xl text-sm w-full mx-4 backdrop-blur-sm border border-indigo-200/50 dark:border-indigo-700/50 relative overflow-hidden group">
-                <div className="absolute inset-0 bg-grid-pattern opacity-5 group-hover:opacity-10 transition-opacity duration-500"></div>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-indigo-400/20 to-transparent rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000"></div>
-
-                <div className="relative z-10">
-                  <h3 className="text-xl font-bold mb-3 text-indigo-700 dark:text-indigo-300 flex items-center gap-3">
-                    <svg className="h-6 w-6 text-indigo-500 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    Behind the Scenes Tools
-                    <div className="flex-1 h-px bg-gradient-to-r from-indigo-300 to-transparent"></div>
-                  </h3>
-                  <p className="mb-4 leading-relaxed">
-                    Beyond these featured projects, I've built several internal DevOps tools that streamline deployments, reduce overhead, and optimize cost across bare-metal and cloud environments. These tools enable:
-                  </p>
-                  <ul className="space-y-2 mb-4">
-                    {[
-                      'Automated service bootstrapping across multiple VMs and nodes',
-                      'Custom deployment agents on bare-metal servers',
-                      'CI/CD optimizations for non-cloud environments',
-                      'Dynamic configuration management using Python & shell scripting',
-                      'End-to-end observability and recovery pipelines with minimal cost'
-                    ].map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-3 group/item hover:translate-x-2 transition-transform duration-300">
-                        <span className="w-2 h-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full mt-2 flex-shrink-0 group-hover/item:animate-ping"></span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="italic text-indigo-600 dark:text-indigo-400 font-medium border-l-2 border-indigo-300 pl-4">
-                    These efforts are the backbone of my DevOps journey — building scalable systems where most wouldn't look.
-                  </p>
+    return (
+        <>
+            {/* Hero Section */}
+            <header className="relative pt-32 pb-24 px-8 overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background -z-10"></div>
+                <div className="absolute inset-0 technical-grid opacity-50 -z-10"></div>
+                <div className="max-w-7xl mx-auto">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-surface-container-high rounded-full mb-8 shadow-sm animate-fade-in-up">
+                        <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                        <span className="text-xs font-label uppercase tracking-widest text-on-surface-variant font-bold">Status: Live Environment</span>
+                    </div>
+                    <h1 className="font-headline text-5xl md:text-7xl lg:text-[5rem] font-bold tracking-tight text-on-surface mb-6 max-w-4xl leading-[1.1] animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+                        The Lab: <br /><span className="text-primary italic drop-shadow-sm">Building, Breaking, and Fixing.</span>
+                    </h1>
+                    <p className="font-body text-xl md:text-2xl text-on-surface-variant max-w-2xl leading-relaxed animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                        A collection of experiments, self-hosted infrastructure, and the pursuit of <span className="text-on-surface font-semibold underline decoration-primary-fixed-dim decoration-4 underline-offset-4">automating chaos</span>.
+                    </p>
                 </div>
-              </div>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project, index) => (
-                <div
-                  key={index}
-                  className={`transform transition-all duration-700 hover:scale-105 hover:-translate-y-2`}
-                  style={{
-                    animationDelay: `${index * 200}ms`,
-                    animation: isVisible ? 'fadeInUp 0.8s ease-out forwards' : 'none'
-                  }}
-                >
-                  <ProjectCard
-                    title={project.title}
-                    description={project.description}
-                    technologies={project.technologies}
-                    githubUrl={project.githubUrl}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <Section title="Upcoming Projects" id="upcoming-projects">
-        <div className="max-w-6xl mx-auto">
-          <div className="relative bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#2563eb] rounded-3xl shadow-2xl overflow-hidden p-8 md:p-12 lg:p-16 transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl backdrop-blur-sm group">
-            <div className="absolute inset-0 bg-gradient-to-r from-white/5 via-transparent to-white/5 backdrop-blur-lg rounded-3xl"></div>
-            <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-indigo-400/30 via-purple-400/20 to-transparent rounded-full blur-3xl group-hover:scale-125 transition-transform duration-1000"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-400/20 via-indigo-400/10 to-transparent rounded-full blur-2xl group-hover:scale-110 transition-transform duration-1000"></div>
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/30 rounded-full animate-ping" style={{ animationDelay: '0s' }}></div>
-              <div className="absolute top-3/4 right-1/3 w-1 h-1 bg-indigo-300/40 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-              <div className="absolute top-1/2 left-3/4 w-1.5 h-1.5 bg-blue-300/30 rounded-full animate-ping" style={{ animationDelay: '2s' }}></div>
-            </div>
+            </header>
 
-            <div className="relative z-10 flex flex-col md:flex-row gap-12 items-center md:items-start">
-              <div className="md:flex-1 text-white">
-                <h2 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight bg-gradient-to-r from-white via-blue-100 to-indigo-100 bg-clip-text text-transparent">
-                  HomeLab Kubernetes &<br /> Cloud Storage Cluster
-                </h2>
-                <p className="text-lg md:text-xl leading-relaxed font-light text-blue-100/90 space-y-4">
-                  <span className="block">This website you're browsing is hosted on my personal home cluster running in my room, powered by a simple Airtel 100 Mbps internet connection.</span>
-                  <span className="block">The project focuses on mastering Kubernetes orchestration with k3s, managing cloud storage to cut down on Google Drive costs, and pushing limits to understand real-world challenges like 99% availability and fault tolerance — all hands-on.</span>
-                  <span className="block">This lab is my experimental playground for advanced cloud-native tech, infrastructure automation, and observability.</span>
-                </p>
-              </div>
+            <main className="max-w-7xl mx-auto px-8 py-12 space-y-32">
+                {/* Section: The Foundation */}
+                <section id="foundation">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                        <div className="lg:col-span-4 sticky top-24">
+                            <h2 className="font-headline text-sm uppercase tracking-[0.3em] text-primary font-bold mb-2">Base Infrastructure</h2>
+                            <h3 className="font-headline text-4xl font-bold tracking-tight mb-4">The Foundation</h3>
+                            <p className="text-on-surface-variant leading-relaxed mb-6 font-light">
+                                Every system needs a solid base. My work starts with a physical headless Debian 13 server—the silent engine behind this very portfolio.
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                <span className="bg-surface-container px-3 py-1.5 rounded-full text-[10px] uppercase tracking-tighter font-bold flex items-center gap-1.5 border border-outline-variant/10 shadow-sm">
+                                    <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> DEBIAN 13
+                                </span>
+                                <span className="bg-surface-container px-3 py-1.5 rounded-full text-[10px] uppercase tracking-tighter font-bold flex items-center gap-1.5 border border-outline-variant/10 shadow-sm">
+                                    <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> HEADLESS
+                                </span>
+                                <span className="bg-surface-container px-3 py-1.5 rounded-full text-[10px] uppercase tracking-tighter font-bold flex items-center gap-1.5 border border-outline-variant/10 shadow-sm">
+                                    <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> SELF-HOSTED
+                                </span>
+                            </div>
+                        </div>
+                        <div className="lg:col-span-8">
+                            <div className="bg-surface-container-lowest p-8 md:p-12 relative overflow-hidden group rounded-3xl border border-outline-variant/10 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-500"></div>
+                                <div className="relative z-10 flex flex-col md:flex-row gap-10 items-center">
+                                    <div className="flex-1">
+                                        <h4 className="font-headline text-2xl font-bold mb-4">Bare Metal Homelab</h4>
+                                        <p className="text-on-surface-variant mb-4 text-sm leading-relaxed">
+                                            Moving away from managed services to understand the full stack. This server manages my personal cloud, CI/CD runners, and secure networking via WireGuard. It is the playground where chaos is intentionally introduced and systematically resolved.
+                                        </p>
+                                        <p className="text-on-surface-variant mb-6 text-sm leading-relaxed">
+                                            This lab is my experimental playground for infrastructure automation, managing cloud storage to cut down on costs, and pushing limits to understand real-world challenges like 99% availability and fault tolerance — all hands-on.
+                                        </p>
+                                        <div className="space-y-3 border-l-2 border-primary/30 pl-4">
+                                            <div className="text-xs font-mono text-primary font-bold">UPTIME: 99.98%</div>
+                                            <div className="text-xs font-mono text-on-surface-variant uppercase tracking-widest">OS: Debian GNU/Linux 13 (trixie)</div>
+                                            <div className="text-xs font-mono text-on-surface-variant uppercase tracking-widest">Kernel: 6.1.0-amd64</div>
+                                        </div>
+                                    </div>
+                                    <div className="w-full md:w-64 h-64 bg-slate-900 rounded-2xl overflow-hidden flex items-center justify-center relative shadow-[0_0_20px_rgba(0,0,0,0.5)] border border-slate-700">
+                                        <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-br from-transparent to-slate-950/80"></div>
+                                        <span className="material-symbols-outlined text-6xl text-sky-500/30 scale-[2] group-hover:text-primary transition-colors duration-500">terminal</span>
+                                        <div className="absolute bottom-4 left-4 right-4 bg-slate-800/90 p-3 rounded-lg text-xs font-mono text-sky-400 border border-slate-700 shadow-inner flex items-center gap-2">
+                                            <span className="text-slate-500">$</span> systemctl status portfolio <span className="w-1.5 h-4 bg-primary animate-pulse ml-auto"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-              <div className="md:w-80 w-full flex flex-col items-center md:items-start">
-                <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-                  <svg className="w-6 h-6 text-indigo-300 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                  Tech Stack
-                </h3>
-                <div className="flex flex-wrap gap-3">
-                  {homeLabTechnologies.map((tech, idx) => (
-                    <span
-                      key={idx}
-                      className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full text-sm font-semibold text-white backdrop-blur-sm border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 cursor-default"
-                      style={{
-                        animationDelay: `${idx * 100}ms`,
-                        animation: 'fadeInScale 0.6s ease-out forwards'
-                      }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
+                {/* Section: Technical Proofs */}
+                <section className="space-y-16" id="proofs">
+                    <div className="flex flex-col md:flex-row justify-between items-end gap-6 border-b border-primary/10 pb-8">
+                        <div>
+                            <h2 className="font-headline text-sm uppercase tracking-[0.3em] text-primary font-bold mb-2">Artifacts</h2>
+                            <h3 className="font-headline text-4xl font-bold tracking-tight">Technical Proofs</h3>
+                            <p className="text-on-surface-variant mt-2 font-light">Turning manual work into predictable systems.</p>
+                        </div>
+                        <div className="text-xs font-label uppercase tracking-widest font-bold text-outline">
+                            Directory: 02 Units
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Project 1 */}
+                        <div className="bg-surface-container-lowest p-8 md:p-12 hover:bg-white transition-all duration-500 rounded-3xl shadow-md hover:shadow-2xl border border-outline-variant/10 hover:-translate-y-2 group">
+                            <h4 className="font-headline text-3xl font-bold mb-6 text-on-surface">Jenkins Migration Toolkit</h4>
+                            <p className="text-on-surface-variant mb-8 leading-relaxed text-[15px] font-light">
+                                Jenkins Migration Toolkit is a DevOps project built to make it easier to move Jenkins jobs, plugins, and server configurations from one Jenkins server to another. Instead of manually recreating jobs and reinstalling plugins, this toolkit uses Python scripts, Jenkins CLI, and shell scripts to automate the migration process. It helps reduce errors, saves time, and makes the transition between Jenkins environments much smoother. <span className="text-primary hover:underline cursor-pointer"></span>
+                            </p>
+                            <div className="flex flex-wrap gap-2 mb-10">
+                                {['Jenkins', 'Python', 'JCasC', 'Shell Scripting', 'CI/CD'].map((tag) => (
+                                    <span key={tag} className="px-4 py-1.5 bg-surface-container-low text-xs font-bold text-on-surface-variant rounded-full border border-outline-variant/10 shadow-sm leading-tight block">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                            <Link to="#" className="inline-flex items-center text-sm font-bold tracking-wide text-[#5D5FEF] hover:text-primary transition-all" onClick={() => trackEvent('ui', 'project_click', 'jenkins_toolkit')}>
+                                GitHub
+                            </Link>
+                        </div>
+                        {/* Project 2 */}
+                        <div className="bg-surface-container-lowest p-8 md:p-12 hover:bg-white transition-all duration-500 rounded-3xl shadow-md hover:shadow-2xl border border-outline-variant/10 hover:-translate-y-2 group">
+                            <h4 className="font-headline text-3xl font-bold mb-6 text-on-surface">Data Platform Automation</h4>
+                            <p className="text-on-surface-variant mb-6 leading-relaxed text-[15px] font-light">
+                                Engineered a Python-based automated backup pipeline for K3s that orchestrates Neo4j and PostgreSQL dumps and syncs them to Azure Blob Storage, ensuring overall data recoverability.
+                            </p>
+                            <ul className="text-on-surface-variant mb-8 leading-relaxed text-[15px] font-light space-y-2 list-disc ml-4">
+                                <li>Completed the end-to-end migration of a complex NoSQL content platform from Azure Cosmos DB to Neo4j, transforming document-centric data into a relationship-driven graph model spanning 7 types of entities.</li>
+                                <li>Automated infrastructure setup with Terraform to avoid environment drift and keep development and production environments synchronized.</li>
+                            </ul>
+                            <div className="flex flex-wrap gap-2 mb-10">
+                                {['Python', 'Neo4j', 'PostgreSQL', 'Azure', 'Terraform', 'Cosmos DB'].map((tag) => (
+                                    <span key={tag} className="px-4 py-1.5 bg-surface-container-low text-xs font-bold text-on-surface-variant rounded-full border border-outline-variant/10 shadow-sm leading-tight block">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                            <Link to="#" className="inline-flex items-center text-sm font-bold tracking-wide text-[#5D5FEF] hover:text-primary transition-all" onClick={() => trackEvent('ui', 'project_click', 'data_platform_automation')}>
+                            </Link>
+                        </div>
+                    </div>
+                </section>
 
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.8) translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-        
-        @keyframes fly-across {
-          0% {
-            transform: translateX(-100px) translateY(0px) rotate(-15deg);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateX(calc(100vw + 100px)) translateY(-50px) rotate(-15deg);
-            opacity: 0;
-          }
-        }
-        
-        @keyframes gradient-x {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-        
-        .animate-fly-across {
-          animation: fly-across 15s linear infinite;
-        }
-        
-        .animate-gradient-x {
-          background-size: 200% 200%;
-          animation: gradient-x 3s ease infinite;
-        }
-        
-        .bg-grid-pattern {
-          background-image: 
-            linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-          background-size: 20px 20px;
-        }
-      `}</style>
-    </div>
-  );
+
+            </main>
+        </>
+    );
 };
 
 export default Projects;
