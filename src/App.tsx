@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import HomeNavbar from './context/HomeNavbar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -9,21 +7,20 @@ import Projects from './pages/Projects';
 import Contact from './pages/Contact';
 import { ThemeProvider } from './context/ThemeContext';
 
-
 import { EngagementDetector } from './components/EngagementDetector';
+import SystemNavbar from './components/SystemNavbar';
+import Footer from './components/Footer';
 
 const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
-
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-primary-900 transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-surface font-body text-on-surface">
       <AnalyticsTracker />
       <EngagementDetector />
-      {isHomePage ? <HomeNavbar /> : <Navbar />}
-      <main className="flex-grow">
+      <SystemNavbar />
+      <main className="flex-grow w-full">
         {children}
       </main>
+      <Footer />
     </div>
   );
 };
