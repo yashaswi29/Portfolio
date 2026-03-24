@@ -10,6 +10,7 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
+    allowedHosts: ['www.yashaswi.space', 'yashaswi.space'],
     proxy: {
       '/api': {
         target: backendUrl,
