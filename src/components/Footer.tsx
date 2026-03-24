@@ -1,48 +1,29 @@
 import React from 'react';
-import { Github, Linkedin, Mail } from 'lucide-react';
 
 const Footer: React.FC = () => {
-  return (
-    <footer className="bg-white dark:bg-primary-900 border-t border-primary-100 dark:border-primary-800 py-8 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center md:flex-row md:justify-between">
-          <div className="mb-4 md:mb-0">
-            <p className="text-primary-600 dark:text-primary-300 font-mono text-sm">
-              &copy; {new Date().getFullYear()} • Built with React & Python
-            </p>
-          </div>
-          
-          <div className="flex space-x-6">
-            <a 
-              href="https://github.com/yashaswi29" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-white transition-colors duration-200"
-              aria-label="GitHub"
-            >
-              <Github size={20} />
-            </a>
-            <a 
-              href="https://www.linkedin.com/in/yashaswi-tiwari-5423211a8/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-white transition-colors duration-200"
-              aria-label="LinkedIn"
-            >
-              <Linkedin size={20} />
-            </a>
-            <a 
-              href="mailto:yashaswitiwari2003@gmail.com" 
-              className="text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-white transition-colors duration-200"
-              aria-label="Email"
-            >
-              <Mail size={20} />
-            </a>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
+    return (
+        <footer className="w-full py-12 border-t border-slate-200 bg-slate-100">
+            <div className="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-6">
+                <div className="text-lg font-bold text-slate-900 font-headline uppercase tracking-tighter">
+                    yashaswi tiwari
+                </div>
+                <div className="font-label text-[10px] tracking-widest uppercase text-slate-500">
+                    © 2026. BUILT FOR SCALE.
+                </div>
+                <div className="flex gap-6">
+                    <a className="text-slate-400 hover:text-sky-500 transition-colors" href="https://github.com/yashaswi29" target="_blank" rel="noreferrer">
+                        <span className="material-symbols-outlined">terminal</span>
+                    </a>
+                    <a className="text-slate-400 hover:text-sky-500 transition-colors" href="https://hashnode.com/@yashaswiyeezy" target="_blank" rel="noreferrer">
+                        <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>code</span>
+                    </a>
+                    <a className="text-slate-400 hover:text-sky-500 transition-colors" href="mailto:yashaswi@example.com">
+                        <span className="material-symbols-outlined">mail</span>
+                    </a>
+                </div>
+            </div>
+        </footer>
+    );
 };
 
 export default Footer;
