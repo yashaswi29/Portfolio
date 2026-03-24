@@ -4,13 +4,22 @@ import { useEffect, useCallback } from 'react';
 export const useTracker = () => {
     useEffect(() => {
         if (!localStorage.getItem('session_id')) {
-            const uuid = typeof crypto !== 'undefined' && crypto.randomUUID 
-                ? crypto.randomUUID() 
-                : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-                    const r = Math.random() * 16 | 0;
-                    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                    return v.toString(16);
-                });
+            let uuid: string;
+            
+            try {
+                if (typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID) {
+                    uuid = window.crypto.randomUUID();
+                } else {
+                    uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                        const r = Math.random() * 16 | 0;
+                        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+            } catch (e) {
+                uuid = 'sess_' + Math.random().toString(36).substring(2, 10);
+            }
+            
             localStorage.setItem('session_id', uuid);
         }
     }, []);
