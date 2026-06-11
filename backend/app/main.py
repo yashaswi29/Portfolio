@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import analytics, health, metrics
+from app.routers import analytics, health, metrics, contact
 from app.core.middleware import MetricsMiddleware
 import logging
 
@@ -44,6 +44,7 @@ app.add_middleware(
 app.include_router(analytics.router)
 app.include_router(health.router)
 app.include_router(metrics.router)
+app.include_router(contact.router)
 
 @app.get("/")
 async def root():
@@ -54,6 +55,7 @@ async def root():
             "/api/analytics/performance",
             "/api/analytics/event",
             "/api/analytics/summary",
+            "/api/contact",
             "/api/health",
             "/metrics"
         ]
