@@ -16,7 +16,7 @@ export const useTracker = () => {
                         return v.toString(16);
                     });
                 }
-            } catch (e) {
+            } catch {
                 uuid = 'sess_' + Math.random().toString(36).substring(2, 10);
             }
             
