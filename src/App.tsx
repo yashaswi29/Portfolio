@@ -1,33 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import HomeNavbar from './context/HomeNavbar';
+import Footer from './components/Footer';
 import AnalyticsTracker from './components/AnalyticsTracker';
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
 import Contact from './pages/Contact';
-import { ThemeProvider } from './context/ThemeContext';
-
-
-import { EngagementDetector } from './components/EngagementDetector';
+import { ThemeProvider, ScrollToTop } from './context/ThemeContext';
 
 const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
-
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-primary-900 transition-colors duration-300">
       <AnalyticsTracker />
-      <EngagementDetector />
-      {isHomePage ? <HomeNavbar /> : <Navbar />}
+      <Navbar />
       <main className="flex-grow">
         {children}
       </main>
+      <Footer />
     </div>
   );
 };
-
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -39,8 +32,8 @@ function App() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="w-16 h-16 border-4 border-primary-900 border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen bg-primary-900">
+        <div className="w-12 h-12 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -48,6 +41,7 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
+        <ScrollToTop />
         <LayoutWrapper>
           <Routes>
             <Route path="/" element={<Home />} />
