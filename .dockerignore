@@ -3,5 +3,4 @@ dist
 .git
 .DS_Store
 backend
-webshell
 coverage
