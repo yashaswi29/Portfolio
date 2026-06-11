@@ -6,6 +6,17 @@ from typing import Any, Dict
 DATA_DIR = os.path.join(os.getcwd(), "data")
 SESSIONS_DIR = os.path.join(DATA_DIR, "sessions")
 HEALTH_FILE = os.path.join(DATA_DIR, "health.json")
+CONTACTS_FILE = os.path.join(DATA_DIR, "contacts.json")
+
+
+def save_contact_message(message: Dict[str, Any]) -> None:
+    """Append a contact-form submission to data/contacts.json."""
+    os.makedirs(DATA_DIR, exist_ok=True)
+    data = _read_json(CONTACTS_FILE)
+    if not isinstance(data, dict) or not isinstance(data.get("messages"), list):
+        data = {"messages": []}
+    data["messages"].append(message)
+    _write_json(CONTACTS_FILE, data)
 
 
 def _read_json(path: str) -> Any:
