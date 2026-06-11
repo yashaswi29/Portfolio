@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef, KeyboardEvent, ChangeEvent } from 'react';
 import { useTracker } from '../hooks/useTracker';
 const CONFIG = {
-    username: 'root',
-    hostname: 'sre-master-node',
+    username: 'yashaswi',
+    hostname: 'homelab',
     colors: {
-        background: '#0d1117', // Github Dark Dimmed
-        foreground: '#c9d1d9', // Github Light
+        background: '#1E1E1E', // Card surface
+        foreground: '#F8F8F8', // Text
         prompt: {
-            default: '#8b949e',
-            user: '#58a6ff', // Blue
-            host: '#79c0ff', // Light Blue
-            input: '#c9d1d9'
+            default: '#a3a3a3',
+            user: '#F59E0B', // Secondary accent (amber)
+            host: '#D97706', // Primary accent (amber)
+            input: '#F8F8F8'
         },
-        banner: '#7ee787', // Green
-        commands: '#f0883e', // Orange
-        link: '#a5d6ff' // Light Link Blue
+        banner: '#D97706', // Primary accent
+        commands: '#F59E0B', // Secondary accent
+        link: '#fdba74' // Light amber
     },
     commands: {
         help: 'List available commands',
@@ -124,8 +124,12 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
                             <p className="text-sm">Terraform, Ansible, Jenkins, GitHub Actions, ArgoCD</p>
                         </div>
                         <div>
-                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>Observability</p>
-                            <p className="text-sm">Prometheus, Grafana, ELK Stack, Datadog</p>
+                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>Backend & Data</p>
+                            <p className="text-sm">Python, FastAPI, PostgreSQL, Redis, DB migrations, pgvector</p>
+                        </div>
+                        <div>
+                            <p className="font-bold underline mb-1" style={{ color: CONFIG.colors.link }}>Observability & AI</p>
+                            <p className="text-sm">Prometheus, Grafana, Ollama, local-first LLM pipelines</p>
                         </div>
                     </div>
                 );
@@ -224,7 +228,7 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
         >
             <div
                 ref={scrollRef}
-                className="h-full overflow-y-auto w-full scrollbar-thin scrollbar-thumb-indigo-500 scrollbar-track-transparent pr-2 flex flex-col"
+                className="h-full overflow-y-auto w-full pr-2 flex flex-col"
                 onClick={() => inputRef.current?.focus()}
             >
                 <div className="flex-grow">
@@ -258,7 +262,7 @@ const Terminal: React.FC<TerminalProps> = ({ className = "" }) => {
                             value={input}
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
-                            className="flex-grow bg-transparent border-none outline-none caret-indigo-400"
+                            className="flex-grow bg-transparent border-none outline-none caret-amber-500"
                             style={{ color: CONFIG.colors.prompt.input }}
                             autoFocus
                             spellCheck={false}
