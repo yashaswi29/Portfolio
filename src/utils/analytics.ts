@@ -15,7 +15,7 @@ const getSessionId = () => {
     }
     return sessionId;
 };
-const sendEvent = async (endpoint: string, data: any) => {
+const sendEvent = async (endpoint: string, data: Record<string, unknown>) => {
     try {
         const sessionId = getSessionId();
         await axios.post(`${API_BASE}${endpoint}`, {
