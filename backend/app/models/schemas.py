@@ -28,3 +28,8 @@ class ClickEvent(BaseModel):
 class HealthStatus(BaseModel):
     status: str
     last_check: str
+
+class ContactMessage(BaseModel):
+    name: str = Field(..., min_length=1, max_length=120)
+    email: str = Field(..., min_length=3, max_length=200)
+    message: str = Field(..., min_length=1, max_length=5000)
