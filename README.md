@@ -1,101 +1,136 @@
-#  Portfolio Hosting Pipeline (Bare-Metal x DevOps)
+# Portfolio — Cloud DevOps Engineer
 
 > _“If you can't host your portfolio yourself, do you even DevOps?”_ — Me
 
----
+A full-stack personal portfolio, self-hosted on bare metal from my room over a plain
+home internet connection. Not a static page on someone else's CDN — a real frontend,
+a real API, real telemetry, and a real deployment pipeline that I own end to end.
 
-###  Host Machine
+**Live:** [yashaswi.cloud](https://yashaswi.cloud)
 
-- **CPU:** Intel i5 10th Gen (F-series, no integrated-GPU)
-- **RAM:** 16GB DDR4
-- **GPU:** (1GB DDR3 – only for display out)
-- **Disk:** 500GB SSD
-- **OS:** Debian 11 (bullseye)
-- **Network:** Airtel 100Mbps (static IP)
-
----
-
-###  App Stack
-
-- **Frontend:** React + Vite  
-- **Backend:** Static content for now, Python API incoming  
-- **Package Manager:** npm  
-- **Build tool:** Vite (`npm run build` spits out `/dist`)  
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-3-38BDF8?logo=tailwindcss&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?logo=prometheus&logoColor=white)
 
 ---
 
-### 🏠 Local Access
+## What's in here
 
-Running locally using Docker:
+- **Frontend** — React + TypeScript + Vite + Tailwind, with a dark-first terminal/amber
+  theme, a light toggle, and an interactive in-browser terminal.
+- **Backend** — FastAPI (async SQLAlchemy + PostgreSQL + Redis) serving first-party
+  analytics, a contact endpoint, and health/metrics for probes.
+- **Observability** — Prometheus + Grafana scraping custom app metrics.
+- **Deployment** — Dockerized, served behind nginx + Cloudflare, redeployed by a cron pull.
 
-```bash
-docker build -t portfolio .
-docker run -d -p 7000:80 portfolio
+---
+
+## Stack
+
+| Layer          | Tech                                                                 |
+| -------------- | -------------------------------------------------------------------- |
+| Frontend       | React 18, TypeScript, Vite, Tailwind CSS, React Router               |
+| Backend        | Python, FastAPI, SQLAlchemy (async), `asyncpg`, Pydantic             |
+| Data           | PostgreSQL, Redis (event queue + background worker)                  |
+| Observability  | Prometheus, Grafana                                                  |
+| Infra          | Docker, docker-compose, nginx reverse proxy, Cloudflare proxy + TLS  |
+
+---
+
+## Features
+
+- **First-party analytics** — `AnalyticsTracker` records page visits, time-on-page, and
+  click events; the API queues them through Redis to a background worker and into Postgres.
+- **Contact form** — `POST /api/contact` validates and persists messages server-side.
+- **Interactive terminal** — a mock shell on the About page (`help`, `whoami`, `stack`,
+  `deploy`, …).
+- **Prometheus metrics** — `PAGE_VISITS` counter and `PAGE_LOAD_DURATION` histogram on
+  `/metrics`, plus a `/api/health` DB-ping for container/k8s probes.
+
+---
+
+## Project layout
+
+```
+.
+├── src/                  # React frontend (pages, components, hooks, theme)
+├── backend/              # FastAPI app (routers, models, core, worker)
+│   └── app/
+│       ├── routers/      # analytics · contact · health · metrics
+│       ├── core/         # database · redis · storage · metrics · middleware
+│       └── worker/       # Redis event processor
+├── infra/                # monitoring (Prometheus/Grafana) + db compose, deploy scripts
+├── Dockerfile            # frontend image
+├── nginx.conf            # SPA reverse-proxy config
+└── docker-compose.yml
 ```
 
-Accessible at: `http://192.168.1.3:7000` (yes, hardcoded, it's my homeserver)
+---
+
+## Run it locally
+
+**Frontend**
+
+```bash
+npm install
+npm run dev          # http://localhost:5173
+```
+
+**Backend** (needs Postgres + Redis; defaults to localhost)
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 7001
+```
+
+Vite proxies `/api` → `http://localhost:7001`, so the frontend talks to the local API
+out of the box.
+
+**Everything in Docker**
+
+```bash
+docker compose up --build
+```
 
 ---
 
-###  Public Access (Nginx Reverse Proxy + Cloudflare Proxy)
+## Where it runs
 
-- Running an **nginx reverse proxy** on host (port 80/443)
-- Reverse proxies traffic to Docker container (`localhost:7000`)
-- **Cloudflare DNS** in proxy mode to mask IP and add HTTPS
-- traditional reverse proxy + certbot
-
-
----
-
-
-# Automated Deployment: Cron + Shell + Brute Force Elegance
-
-> _“If it ain’t automated, it ain’t DevOps.”_ — Also me
+| | |
+| --- | --- |
+| **Host** | Intel i5 10th gen · 16 GB DDR4 · 500 GB SSD |
+| **OS** | Debian 13 (trixie) |
+| **Network** | Airtel 100 Mbps, static IP |
+| **Edge** | nginx reverse proxy (80/443) → Docker container, fronted by Cloudflare for TLS + IP masking |
 
 ---
 
-### Script: `fetch_deploy.sh`
+## Automated deployment
 
-This tiny beast handles fetching the latest code and rebuilding the container.
-
----
-
-###  Cron Job Setup
-
-Crontab entry to run the script every 2 minutes:
+A small `fetch_deploy.sh` pulls the latest code and rebuilds the container; a cron entry
+runs it on a short interval and logs each build:
 
 ```cron
-*/2 * * * * /home/$USER/Dev/Portfolio/fetch_deploy.sh
+*/2 * * * * /home/$USER/Dev/Portfolio/fetch_deploy.sh >> cron.log 2>&1
 ```
 
-Edit with:
-```bash
-crontab -e
-```
+> _“If it ain't automated, it ain't DevOps.”_ — Also me
+
+### Roadmap
+
+- [x] Python backend (analytics + contact API)
+- [x] Monitoring + Grafana dashboards
+- [ ] Migrate the homelab to k3s (Kubernetes) + self-hosted storage
+- [ ] Push notification on deploy
+- [ ] Validate build before restart + auto-retry on failure
 
 ---
 
-### Logging
-
-Logs are appended to a simple `cron.log`:
-
-Useful for timestamping builds and debugging silent failures.
-
----
-
-
-###  What's Next in Line?
-
-- [ ] Add Python backend (REST API for contact form)
-- [ ] Monitoring + Grafana dashboards
-- [ ] Add push EMAIL notification on deploy
-- [ ] Validate build before restart
-- [ ] Auto-retry on failure
-
----
-
-No PM2 required right now, because static site + nginx = good enough. Might switch to full Node server when backend matures.
-
----
-
-- _— Yashaswi Tiwari, Bare-metal believer
+_— Yashaswi Tiwari · bare-metal believer_
