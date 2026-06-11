@@ -27,6 +27,8 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://user:password@postgres:5432/portfolio_db
       - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - backend_data:/app/data
     depends_on:
       postgres:
         condition: service_healthy
@@ -72,3 +74,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  backend_data:
