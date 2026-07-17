@@ -32,11 +32,26 @@ async def startup_event():
         logger.error(f"Failed to start Redis worker: {e}")
 
 
+# Lock CORS to the portfolio's own domains. Override with a comma-separated
+# CORS_ALLOW_ORIGINS env var (e.g. to add a preview/staging domain).
+_default_origins = [
+    "https://yashaswi.space",
+    "https://www.yashaswi.space",
+    "http://localhost:5173",
+    "http://localhost:7002",
+]
+_env_origins = os.getenv("CORS_ALLOW_ORIGINS", "")
+ALLOWED_ORIGINS = (
+    [o.strip() for o in _env_origins.split(",") if o.strip()]
+    if _env_origins
+    else _default_origins
+)
+
 app.add_middleware(MetricsMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
-    allow_credentials=True,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

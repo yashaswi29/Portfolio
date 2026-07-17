@@ -27,6 +27,14 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://user:password@postgres:5432/portfolio_db
       - REDIS_URL=redis://redis:6379/0
+      # Contact-form email notifications (values come from the host env / .env;
+      # nothing is committed). Leave unset to disable email (form still logs to file).
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - CONTACT_NOTIFY_TO=${CONTACT_NOTIFY_TO:-}
+      - CONTACT_NOTIFY_FROM=${CONTACT_NOTIFY_FROM:-}
     volumes:
       - backend_data:/app/data
     depends_on:
