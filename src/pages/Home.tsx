@@ -102,7 +102,7 @@ const Home = () => {
               Yashaswi Tiwari
             </h1>
             <p className="font-mono text-xl sm:text-2xl md:text-3xl text-gradient-accent font-bold mb-6">
-              Cloud DevOps Engineer
+              SDE · Cloud &amp; DevOps
             </p>
 
             <p className="text-lg md:text-xl text-primary-600 dark:text-primary-300 mb-8 max-w-2xl mx-auto leading-relaxed">

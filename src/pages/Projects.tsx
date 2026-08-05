@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Database, Layers, Network, Sparkles, Route, BookOpen, Server } from 'lucide-react';
+import {
+  Database, Layers, Network, Sparkles, Server, Cpu, ShieldCheck,
+  Target, Activity, Lock, Cloud, Archive, Thermometer, Gauge,
+} from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
 import { useTracker } from '../hooks/useTracker';
 
@@ -13,22 +16,94 @@ const Projects: React.FC = () => {
     trackEvent('project', 'view', 'projects_page');
   }, [trackEvent]);
 
-  const homeLabTechnologies = ['Debian', 'k3s', 'Airtel 100Mbps', 'Python Scripting'];
+  /* ---- featured: personal knowledge & planning engine (unreleased) ---- */
+  const engineTech = [
+    'Python', 'FastAPI', 'arq', 'PostgreSQL 17', 'pgvector', 'Redis', 'Ollama', 'Docker', 'GitHub Actions',
+  ];
 
-  const jarvisTech = ['Python', 'FastAPI', 'PostgreSQL 17', 'pgvector', 'Redis / arq', 'Ollama', 'Docker'];
-  const jarvisHighlights = [
-    { icon: <Route size={18} />, label: 'Learning-path generation: turns your own material into ordered paths with prerequisites and difficulty ratings.' },
-    { icon: <BookOpen size={18} />, label: 'On-demand "Explain This" teaching modes and an execution planner — with graceful degradation for slow local models.' },
-    { icon: <Database size={18} />, label: 'Hybrid retrieval: Postgres full-text (tsvector + GIN) fused with pgvector cosine similarity via Reciprocal Rank Fusion.' },
-    { icon: <Layers size={18} />, label: 'Multi-format ingestion (HTML, PDF, Word, Excel, image OCR) feeding a concept knowledge graph + 1024-dim embeddings, off the request path.' },
+  const engineMetrics = [
+    { value: '22k', label: 'lines of Python' },
+    { value: '448', label: 'commits / ~10 wks' },
+    { value: '18', label: 'table schema' },
+    { value: '471 MB', label: 'shipped image' },
+    { value: '1.00', label: 'hit@1 after tuning' },
+  ];
+
+  const engineHighlights = [
+    {
+      icon: <Database size={18} />,
+      title: 'Hybrid retrieval, tuned by measurement',
+      body: 'Postgres native full-text search (generated tsvector column + GIN index, ts_rank_cd) fused with pgvector cosine-kNN through weighted, query-adaptive Reciprocal Rank Fusion. Diagnosed that unweighted RRF let weak two-arm documents outrank the dense #1 — retuned k from 60 to 10 with dense-dominant weights: hit@1 0.93 → 1.00, MRR 0.957 → 1.000.',
+    },
+    {
+      icon: <Target size={18} />,
+      title: 'A retrieval eval that can fail the build',
+      body: 'A 20-query gold set scoring hit@{1,3,5} and MRR@10 across lexical, semantic, and hybrid arms — run as a regression gate before and after every retrieval change. Includes a staleness guard that aborts outright rather than reporting confident zeros over an emptied corpus.',
+    },
+    {
+      icon: <ShieldCheck size={18} />,
+      title: 'Evidence-bound by architecture',
+      body: 'Deterministic engines decide; the LLM only phrases. Every generated sentence is typed — observation, derived fact, labeled hypothesis, or unknown — and must resolve back to its source. The model may compress evidence, never expand it. Take the model away and only the wording disappears.',
+    },
+    {
+      icon: <Cpu size={18} />,
+      title: 'Fully local inference, on a CPU',
+      body: 'Ollama on the host (gemma3:4b + qwen3-embedding:0.6b) running CPU-only on an i5-10400F with no GPU — zero external API cost and no data leaving the box. Async work is budgeted around a real ~5.4 tok/s generation ceiling instead of pretending latency is free.',
+    },
+    {
+      icon: <Layers size={18} />,
+      title: 'Built like a service, not a script',
+      body: '22 route modules, 33 service modules, and 15 repositories over an 18-table Postgres schema, with arq workers handling everything off the request path. Ships through GitHub Actions behind an auth-gated API and a multi-tenant schema; admin UIs are bound to loopback only.',
+    },
+  ];
+
+  /* ---- featured: homelab infra & observability ---- */
+  const homeLabTech = [
+    'Debian 13', 'Docker Compose', 'Prometheus', 'Grafana', 'cAdvisor', 'node-exporter', 'Cloudflare Tunnel', 'systemd / udev',
+  ];
+
+  const homeLabMetrics = [
+    { value: '14', label: 'containers' },
+    { value: '4', label: 'compose projects' },
+    { value: '15s', label: 'scrape interval' },
+    { value: '30d', label: 'TSDB retention' },
+    { value: '0', label: 'inbound ports open' },
+  ];
+
+  const homeLabHighlights = [
+    {
+      icon: <Activity size={18} />,
+      title: 'Observability built from parts, not a bundle',
+      body: 'Prometheus + Grafana + cAdvisor + node-exporter assembled from scratch — 15s scrape, 30-day retention, --web.enable-lifecycle for hot config reloads. cAdvisor reads cgroups directly for per-container CPU/RAM/net/disk across every Compose project regardless of network; node-exporter runs pid: host with /proc, /sys and / bind-mounted for host CPU, memory, disk and hwmon thermals.',
+    },
+    {
+      icon: <Gauge size={18} />,
+      title: 'Cardinality is a cost, so it got tuned',
+      body: 'Excluded overlay and tmpfs mount points from filesystem metrics, keeping fourteen containers’ worth of ephemeral mounts out of the series database instead of letting the TSDB quietly fill with noise.',
+    },
+    {
+      icon: <Lock size={18} />,
+      title: 'Hardened after auditing my own box',
+      body: 'A self-run security audit found unauthenticated endpoints exposed to the LAN. Every service is now bound to 127.0.0.1, admin and metrics UIs are reachable only over an SSH port-forward, and Grafana anonymous auth is off.',
+    },
+    {
+      icon: <Cloud size={18} />,
+      title: 'Public without being exposed',
+      body: 'Ingress runs entirely over a Cloudflare Tunnel — outbound-only, no inbound ports open on the router, no reverse proxy to patch and no origin IP to find.',
+    },
+    {
+      icon: <Archive size={18} />,
+      title: 'Backups that fire on their own',
+      body: 'A udev rule triggers on backup-drive attach and hands off to a systemd service/timer pair for photo sync; Postgres takes a nightly pg_dump to a separate library path. The photo library runs in external-library mode with its 50 GB source dump mounted read-only.',
+    },
+    {
+      icon: <Thermometer size={18} />,
+      title: 'Debugged a dead end, then designed around it',
+      body: 'Chased an unusable GPU path — an F-series CPU with no iGPU and a driver-abandoned GT218 — and re-architected the whole stack CPU-only, with no CUDA, QuickSync or VAAPI dependency anywhere.',
+    },
   ];
 
   const projects = [
-    {
-      title: 'Jarvis — Local-First AI Learning Pathway',
-      description: 'A self-hosted AI study companion that turns your saved links, PDFs, and notes into guided learning paths — generating prerequisites, difficulty ratings, a concept knowledge graph, and step-by-step paths, with on-demand "Explain This" teaching modes. Hybrid semantic + keyword retrieval runs entirely over locally-run LLMs — no cloud API cost or keys.',
-      technologies: ['Python', 'FastAPI', 'PostgreSQL', 'pgvector', 'Ollama', 'Docker'],
-    },
     {
       title: 'Jenkins Migration Toolkit',
       description: 'Built a Python-based toolkit to automate Jenkins job, plugin, and configuration migration between servers using Jenkins CLI and JCasC. Reduced manual intervention in CI/CD environment transitions.',
@@ -48,6 +123,31 @@ const Projects: React.FC = () => {
       githubUrl: 'https://github.com/yashaswi29/11-Microservice-CICD.git',
     },
   ];
+
+  const metricStrip = (metrics: { value: string; label: string }[]) => (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-accent/20 border border-accent/20 rounded-lg overflow-hidden mb-8">
+      {metrics.map((m, i) => (
+        <div key={i} className="bg-primary-900/60 px-4 py-3">
+          <div className="font-mono text-lg font-bold text-accent leading-none mb-1.5">{m.value}</div>
+          <div className="font-mono text-[11px] text-primary-400 leading-tight">{m.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const highlightList = (items: { icon: React.ReactNode; title: string; body: string }[]) => (
+    <ul className="space-y-5">
+      {items.map((h, i) => (
+        <li key={i} className="flex items-start gap-3.5">
+          <span className="text-accent mt-0.5 shrink-0">{h.icon}</span>
+          <div>
+            <div className="font-mono text-sm font-semibold text-[#F8F8F8] mb-1">{h.title}</div>
+            <p className="text-sm leading-relaxed text-primary-300">{h.body}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
 
   return (
     <div
@@ -73,63 +173,70 @@ const Projects: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Featured (Jarvis + HomeLab, back to back) */}
         <h2 className="font-mono text-2xl font-bold text-primary-900 dark:text-[#F8F8F8] mb-6 flex items-center gap-3">
           <Sparkles className="w-6 h-6 text-accent" /> featured
         </h2>
 
         <div className="space-y-8">
-          {/* Jarvis */}
+          {/* Personal knowledge & planning engine */}
           <div className="relative rounded-2xl border border-accent/30 bg-gradient-to-br from-primary-800 via-primary-800 to-primary-950 overflow-hidden glow-accent">
             <div className="absolute top-0 right-0 w-72 h-72 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10 grid lg:grid-cols-5 gap-10 p-8 md:p-12">
               {/* Left: narrative */}
               <div className="lg:col-span-3">
                 <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <p className="font-mono text-xs text-accent">~/projects/jarvis · solo full-stack</p>
+                  <p className="font-mono text-xs text-accent">~/projects/private · solo full-stack</p>
                   <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-accent/15 border border-accent/30 text-accent">
-                    ● yet to be released · still working on it
+                    ● unreleased · in daily use
                   </span>
                 </div>
                 <h3 className="font-mono text-2xl md:text-3xl font-bold text-[#F8F8F8] mb-4">
-                  Local-First AI Learning Pathway
+                  Personal Knowledge &amp; Planning Engine
                 </h3>
-                <p className="text-primary-200 leading-relaxed mb-6">
-                  A self-hosted study companion that turns the links, PDFs, and notes you save into
-                  <span className="text-accent"> guided learning paths</span> — it figures out prerequisites,
-                  rates difficulty, builds a concept graph, and teaches on demand. Everything runs on locally-run
-                  LLMs with formal ADRs behind the design. No cloud API cost or keys.
-                </p>
-                <ul className="space-y-3">
-                  {jarvisHighlights.map((h, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-primary-200">
-                      <span className="text-accent mt-0.5 shrink-0">{h.icon}</span>
-                      <span>{h.label}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="text-primary-200 leading-relaxed space-y-3 mb-8">
+                  <p>
+                    A private system that reads what I save, keeps track of what I'm actually working
+                    toward, and answers one question well:
+                    <span className="text-accent"> what deserves my attention today, and why?</span>
+                  </p>
+                  <p className="text-primary-300">
+                    Still unreleased, and deliberately so — the interesting part isn't the idea, it's
+                    what it takes to make a system like this honest enough to trust. Everything below is
+                    the engineering underneath it.
+                  </p>
+                </div>
+
+                {metricStrip(engineMetrics)}
+                {highlightList(engineHighlights)}
               </div>
 
               {/* Right: stack + skills */}
               <div className="lg:col-span-2 lg:border-l lg:border-accent/20 lg:pl-10">
-                <h4 className="font-mono text-sm font-semibold text-accent mb-4 flex items-center gap-2">
-                  <Network size={16} /> stack
-                </h4>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {jarvisTech.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="font-mono text-xs px-3 py-1.5 rounded bg-accent/10 border border-accent/25 text-accent-200"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                <div className="lg:sticky lg:top-24">
+                  <h4 className="font-mono text-sm font-semibold text-accent mb-4 flex items-center gap-2">
+                    <Network size={16} /> stack
+                  </h4>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {engineTech.map((tech, i) => (
+                      <span
+                        key={i}
+                        className="font-mono text-xs px-3 py-1.5 rounded bg-accent/10 border border-accent/25 text-accent-200"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">skills demonstrated</h4>
+                  <p className="font-mono text-xs leading-relaxed text-primary-300 mb-8">
+                    async API design · hybrid vector / full-text retrieval · RRF ranking &amp; eval methodology ·
+                    background workers (arq) · schema design · local LLM inference · multi-tenancy ·
+                    CI/CD · Docker Compose
+                  </p>
+                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">the discipline</h4>
+                  <p className="text-xs leading-relaxed text-primary-300 border-l-2 border-accent/40 pl-4">
+                    It's allowed to be incomplete. It is not allowed to be misleading.
+                  </p>
                 </div>
-                <h4 className="font-mono text-sm font-semibold text-accent mb-3">skills demonstrated</h4>
-                <p className="font-mono text-xs leading-relaxed text-primary-300">
-                  async API design · vector / hybrid retrieval · full-text search · background workers (arq) ·
-                  LLM integration (Ollama) · RAG · learning-path &amp; teaching pipelines · system design / ADRs · Docker Compose
-                </p>
               </div>
             </div>
           </div>
@@ -141,44 +248,59 @@ const Projects: React.FC = () => {
               {/* Left: narrative */}
               <div className="lg:col-span-3">
                 <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <p className="font-mono text-xs text-accent">~/infra/homelab · bare metal</p>
+                  <p className="font-mono text-xs text-accent">~/infra/homelab · debian 13 bare metal</p>
                   <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-accent/15 border border-accent/30 text-accent">
-                    ● live · hosts this site
+                    ● live · serving this page
                   </span>
                 </div>
                 <h3 className="font-mono text-2xl md:text-3xl font-bold text-[#F8F8F8] mb-4">
-                  HomeLab Kubernetes &amp; Cloud Storage Cluster
+                  Self-Hosted Infrastructure &amp; Observability
                 </h3>
-                <div className="text-primary-200 leading-relaxed space-y-3">
-                  <p>The site you're reading is served from my personal home cluster over a plain Airtel 100&nbsp;Mbps line.</p>
+                <div className="text-primary-200 leading-relaxed space-y-3 mb-8">
                   <p>
-                    It's a hands-on lab for <span className="text-accent">k3s orchestration</span>, self-hosted cloud
-                    storage to cut Google Drive costs, and chasing real-world 99% availability and fault tolerance —
-                    my playground for cloud-native infra, automation, and observability.
+                    One Debian 13 box — i5-10400F, 16 GB, 500 GB NVMe — running{' '}
+                    <span className="text-accent">14 containers across 4 Compose projects</span>: this site,
+                    a RAG application, a self-hosted photo library, and the monitoring stack watching all of
+                    it. Docker's data root sits off the system path so a full disk never takes the OS down
+                    with it.
+                  </p>
+                  <p className="text-primary-300">
+                    It's a real production environment on commodity hardware, which means the failures are
+                    real too — and so are the fixes.
                   </p>
                 </div>
+
+                {metricStrip(homeLabMetrics)}
+                {highlightList(homeLabHighlights)}
               </div>
 
               {/* Right: stack */}
               <div className="lg:col-span-2 lg:border-l lg:border-accent/20 lg:pl-10">
-                <h4 className="font-mono text-sm font-semibold text-accent mb-4 flex items-center gap-2">
-                  <Server size={16} /> stack
-                </h4>
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {homeLabTechnologies.map((tech, i) => (
-                    <span
-                      key={i}
-                      className="font-mono text-xs px-3 py-1.5 rounded bg-accent/10 border border-accent/25 text-accent-200"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                <div className="lg:sticky lg:top-24">
+                  <h4 className="font-mono text-sm font-semibold text-accent mb-4 flex items-center gap-2">
+                    <Server size={16} /> stack
+                  </h4>
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {homeLabTech.map((tech, i) => (
+                      <span
+                        key={i}
+                        className="font-mono text-xs px-3 py-1.5 rounded bg-accent/10 border border-accent/25 text-accent-200"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">focus</h4>
+                  <p className="font-mono text-xs leading-relaxed text-primary-300 mb-8">
+                    bare-metal Linux · container observability · metric cardinality · attack-surface
+                    reduction · zero-ingress networking · backup automation (systemd / udev) · capacity
+                    planning on fixed hardware
+                  </p>
+                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">the constraint</h4>
+                  <p className="text-xs leading-relaxed text-primary-300 border-l-2 border-accent/40 pl-4">
+                    No GPU, no managed services, no inbound ports. Everything has to earn its RAM.
+                  </p>
                 </div>
-                <h4 className="font-mono text-sm font-semibold text-accent mb-3">focus</h4>
-                <p className="font-mono text-xs leading-relaxed text-primary-300">
-                  bare-metal Kubernetes (k3s) · self-hosted storage · high availability &amp; fault tolerance ·
-                  cron-based auto-deploy · Prometheus / Grafana observability
-                </p>
               </div>
             </div>
           </div>

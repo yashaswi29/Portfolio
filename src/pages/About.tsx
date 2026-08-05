@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Award, GraduationCap, Briefcase, Cloud, Zap
+  Award, GraduationCap, Briefcase, Cloud, Zap, Users
 } from 'lucide-react';
 import { ThemeContext } from '../context/ThemeContext';
 import { useTracker } from '../hooks/useTracker';
@@ -42,15 +42,18 @@ const About: React.FC = () => {
             <div className="grid lg:grid-cols-2 gap-12 w-full mt-4">
               <div className="space-y-6">
                 <p className={`text-2xl leading-relaxed ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>
-                  Software & Cloud DevOps Engineer building scalable backends and automated infrastructure — and turning messy systems into reliable ones.
+                  Backend SDE with a Cloud & DevOps spine — building reliable services and automated infrastructure, and turning messy systems into boring ones.
                 </p>
                 <p className={`text-lg leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
-                  My day-to-day spans Flask APIs, database architecture & migrations, and cloud architecture.
-                  I believe in "Infrastructure as Code" and keeping systems boring (read: stable).
-                  In my spare time I build self-hosted AI tools that are actually useful to me — like a local-first knowledge engine running entirely on my home server.
+                  Right now my day-to-day is privacy engineering: translating India's DPDP Act into working
+                  software — consent and rights management platforms, Flask APIs, and the database
+                  architecture underneath them. Before that I spent two years on cloud infrastructure and
+                  automation. I believe in "Infrastructure as Code" and keeping systems boring (read: stable).
+                  Outside work you'll find me on Linux, self-hosting models, and building AI tools that are
+                  actually useful to me — like a local-first knowledge engine running entirely on my home server.
                 </p>
                 <div className="flex flex-wrap gap-2 pt-4">
-                  {['Flask', 'Python', 'PostgreSQL', 'Neo4j', 'DB Migrations', 'Terraform', 'Azure', 'Docker', 'Linux'].map(tech => (
+                  {['Python', 'Flask', 'REST APIs', 'PostgreSQL', 'SQLAlchemy', 'DPDPA / Privacy', 'Neo4j', 'Terraform', 'Azure', 'Docker', 'Linux'].map(tech => (
                     <span key={tech} className="font-mono px-3 py-1 rounded text-sm font-medium bg-accent/10 border border-accent/20 text-accent-700 dark:text-accent-300">
                       {tech}
                     </span>
@@ -59,7 +62,7 @@ const About: React.FC = () => {
 
                 <div className="pt-6">
                   <a
-                    href="https://drive.google.com/file/d/1jxUeh8PvNFWB3EXztM5SAsMo28Aywyno/view?usp=sharing"
+                    href="https://drive.google.com/file/d/1Z29QgPKEC5tonkkur-pqj_nvtb2P2geF/view?usp=sharing"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackEvent('ui', 'interaction', 'about_resume_click')}
@@ -91,7 +94,7 @@ const About: React.FC = () => {
                   {
                     icon: <Briefcase className="w-7 h-7 text-primary-900" />,
                     title: 'Current Journey',
-                    body: 'Software Engineer at DPDP Consultants (Noida), working across Flask services, database architecture & migrations, and cloud architecture. Previously a Cloud Engineer optimizing Azure infrastructure at AFI Digital Services, and an AWS/Terraform trainee at Wipro.',
+                    body: 'Backend SDE at DPDP Consultants (Noida), sitting between functional consulting and engineering — turning Digital Personal Data Protection Act requirements into shipped software: consent management, data principal rights, and the Flask services and schemas behind them. Previously a Cloud Engineer at AFI Digital Services (Azure, Neo4j, Terraform, K3s) and an AWS/Terraform trainee at Wipro.',
                   },
                   {
                     icon: <Zap className="w-7 h-7 text-primary-900" />,
@@ -166,12 +169,13 @@ const About: React.FC = () => {
                   {[
                     {
                       date: 'April 2026 – Present',
-                      role: 'Software Engineer',
+                      role: 'Software Development Engineer — Backend',
                       org: 'DPDP Consultants, Noida',
                       bullets: [
-                        'Build and maintain Flask services powering production features, owning API design and reliability.',
-                        'Design relational database schemas and run low-downtime migrations across environments.',
-                        'Shape database and cloud architecture decisions for new and existing systems.',
+                        'Work across functional consulting and backend engineering, translating Digital Personal Data Protection Act (DPDPA) requirements into scalable software for enterprise privacy compliance.',
+                        'Designed and built a Consent Management Platform covering consent collection, withdrawal, purpose limitation, auditability, and full lifecycle management under DPDPA.',
+                        'Built a Rights Management Platform that lets organizations handle Data Principal requests — access, correction, erasure, and grievance redressal — through configurable workflows.',
+                        'Develop the Flask applications, REST APIs, and backend services powering privacy operations, workflow automation, and compliance management.',
                       ],
                     },
                     {
@@ -182,6 +186,7 @@ const About: React.FC = () => {
                         'Built a Python-driven automated backup pipeline on K3s that orchestrates Neo4j and PostgreSQL dumps and ships them to Azure Blob Storage, hardening overall data recoverability.',
                         'Led the end-to-end migration of a complex content platform from Azure Cosmos DB (NoSQL) to Neo4j, reshaping document-centric data into a relationship-driven graph model across 7 entity types.',
                         'Codified infrastructure with Terraform to eliminate environment drift and keep development and production in lockstep.',
+                        'Configured cloud storage, identity, and access controls to keep organizational data handling secure and aligned with client privacy requirements, including GDPR.',
                       ],
                     },
                     {
@@ -236,12 +241,12 @@ const About: React.FC = () => {
                   {[
                     {
                       date: '2021 – 2025',
-                      title: 'B.Tech in Computer Science',
+                      title: 'B.Tech in Computer Science & DevOps',
                       org: 'Bennett University, Greater Noida',
                     },
                     {
-                      date: 'Graduated 2021',
-                      title: 'Senior Secondary (10+2)',
+                      date: '2015 – 2021',
+                      title: 'Senior Secondary (Class XII)',
                       org: 'Ahlcon International School, Delhi',
                     },
                   ].map((edu, i) => (
@@ -254,6 +259,25 @@ const About: React.FC = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Leadership */}
+                <div className="flex items-center gap-4 mb-8 mt-12">
+                  <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center">
+                    <Users className="w-6 h-6 text-primary-900" />
+                  </div>
+                  <h3 className={`font-mono text-xl font-bold ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>Leadership</h3>
+                </div>
+                <div className="relative pl-8 border-l-2 border-accent/40">
+                  <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
+                  <div className={`p-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
+                    <div className="font-mono text-sm font-medium mb-2 text-accent">2023 – 2024</div>
+                    <h4 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>President, DevOps Club</h4>
+                    <div className={`font-medium mb-3 text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>Bennett University</div>
+                    <p className={`text-base leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
+                      Led a student tech community focused on cloud, automation, and DevOps practice.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
