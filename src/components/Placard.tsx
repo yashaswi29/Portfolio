@@ -1,14 +1,25 @@
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
 import { usePlacard } from '../hooks/usePlacard';
 
 /**
- * Placards are cards that stay compact until asked to open: the summary is
- * always visible, the body unfolds behind a disclosure control (see
- * `usePlacard` for hover vs. click modes).
+ * A placard has two sizes of itself: a compact tile at rest, and a larger
+ * version on hover that holds the full content comfortably.
  *
- * Collapsed content is clipped, never removed from the DOM, so screen readers
- * and in-page search still see the full text.
+ * The expansion happens on the z-axis, never in the document flow. The card is
+ * absolutely positioned inside a slot, so it grows *over* its neighbours —
+ * the grid never reflows and the page height never changes.
+ *
+ * What holds the slot open is a hidden copy of the resting card rendered
+ * underneath (`children(false)`). That means the slot is always exactly as tall
+ * as the tile actually is, at any breakpoint and after any font loads, with no
+ * hardcoded heights to drift out of sync with the content.
+ *
+ * Where there is no cursor there is nothing to hover, so the whole mechanism
+ * switches off: the ghost is dropped, the card returns to normal flow, and the
+ * content renders in full. That's gated on the `hoverable:` variant — pointer
+ * capability, not screen width, since a narrow desktop window still hovers and
+ * a large tablet still can't. Collapsed styling in child components is
+ * therefore written as `hoverable:`-only.
  */
 
 interface RevealProps {
@@ -27,94 +38,49 @@ interface RevealProps {
 export const Reveal: React.FC<RevealProps> = ({ open, delay = 0, className = '', children }) => (
   <div
     style={delay ? { transitionDelay: open ? `${delay}ms` : '0ms' } : undefined}
-    className={`grid transition-[grid-template-rows,opacity] duration-500 ease-out ${
-      open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+      open
+        ? 'grid-rows-[1fr] opacity-100'
+        : 'grid-rows-[1fr] opacity-100 hoverable:grid-rows-[0fr] hoverable:opacity-0'
     } ${className}`}
   >
     <div className="min-h-0 overflow-hidden">{children}</div>
   </div>
 );
 
-interface DisclosureProps {
-  open: boolean;
-  onToggle: () => void;
-  label?: string;
-  openLabel?: string;
-  className?: string;
-}
-
-/**
- * Both controls stop propagation: on a hover placard the wrapper also toggles
- * on click, and without this the two would cancel each other out.
- */
-const handle = (onToggle: () => void) => (e: React.MouseEvent) => {
-  e.stopPropagation();
-  onToggle();
-};
-
-/** Understated chevron for small cards, where hover does most of the work. */
-export const PlacardHint: React.FC<DisclosureProps> = ({
-  open,
-  onToggle,
-  label = 'read more',
-  openLabel = 'show less',
-  className = '',
-}) => (
-  <button
-    type="button"
-    aria-expanded={open}
-    onClick={handle(onToggle)}
-    className={`inline-flex shrink-0 items-center gap-1 rounded font-mono text-[11px] outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-accent/60 ${
-      open ? 'text-accent' : 'text-primary-500 hover:text-accent dark:text-primary-400 dark:hover:text-accent'
-    } ${className}`}
-  >
-    <ChevronDown
-      size={12}
-      className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-    />
-    {open ? openLabel : label}
-  </button>
-);
-
-/**
- * The full control for big cards: on a card that fills half the screen the
- * only way in has to be obvious.
- */
-export const ReadMore: React.FC<DisclosureProps> = ({
-  open,
-  onToggle,
-  label = 'read more',
-  openLabel = 'show less',
-  className = '',
-}) => (
-  <button
-    type="button"
-    aria-expanded={open}
-    onClick={handle(onToggle)}
-    className={`inline-flex items-center gap-2 rounded-lg border border-accent/40 bg-accent/5 px-4 py-2 font-mono text-xs font-semibold text-accent outline-none transition-colors duration-300 hover:bg-accent/15 hover:border-accent/70 focus-visible:ring-2 focus-visible:ring-accent/60 ${className}`}
-  >
-    {open ? openLabel : label}
-    <ChevronDown
-      size={14}
-      className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
-    />
-  </button>
-);
-
 interface PlacardProps {
+  /** The card surface: padding, background, border, radius. */
   className?: string;
-  /** false → click-only, for cards big enough that hover would be disruptive. */
-  hover?: boolean;
+  /** Applied to the card only while expanded — how it grows past its slot. */
+  expandedClassName?: string;
   onToggle?: (open: boolean) => void;
-  children: (open: boolean, toggle: () => void) => React.ReactNode;
+  children: (open: boolean) => React.ReactNode;
 }
 
-const Placard: React.FC<PlacardProps> = ({ className = '', hover = true, onToggle, children }) => {
-  const { open, placardProps, toggle } = usePlacard({ hover, onToggle });
+const Placard: React.FC<PlacardProps> = ({
+  className = '',
+  expandedClassName = 'hoverable:-mx-3',
+  onToggle,
+  children,
+}) => {
+  const { open, placardProps } = usePlacard({ onToggle });
 
   return (
-    <div {...placardProps} className={`group ${className}`}>
-      {children(open, toggle)}
+    <div className="relative">
+      {/* Holds the slot open at exactly the resting height. visibility:hidden
+          keeps it out of screen readers and find-in-page. */}
+      <div aria-hidden className={`invisible hidden hoverable:block ${className}`}>
+        {children(false)}
+      </div>
+
+      <div
+        {...placardProps}
+        className={`group transition-all duration-300 ease-out hoverable:absolute hoverable:inset-x-0 hoverable:top-0 hoverable:min-h-full ${className} ${
+          open ? `z-30 hoverable:-translate-y-1 ${expandedClassName}` : 'z-10'
+        }`}
+      >
+        {children(open)}
+      </div>
     </div>
   );
 };

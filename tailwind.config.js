@@ -1,3 +1,5 @@
+import plugin from 'tailwindcss/plugin';
+
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
@@ -62,5 +64,18 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addVariant }) => {
+      /**
+       * `hoverable:` — styles that only apply where a real cursor exists.
+       *
+       * The two-state placards (compact tile ↔ expanded overlay) are gated on
+       * this rather than on a width breakpoint: what decides whether a preview
+       * is useful is whether the visitor can hover, not how wide their screen
+       * is. A narrow desktop window still gets tiles; a large tablet gets the
+       * content laid out in full, because it can never expand one.
+       */
+      addVariant('hoverable', '@media (hover: hover) and (pointer: fine)');
+    }),
+  ],
 };

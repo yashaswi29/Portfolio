@@ -1,37 +1,31 @@
 import React, { useCallback, useState } from 'react';
 
 /**
- * Expand/collapse state for a placard, in one of two modes.
+ * Hover state for a placard.
  *
- * `hover` (default) suits small cards: hover opens it, keyboard focus opens it,
- * and a tap pins it open on touch devices where hover never fires. Cheap to
- * trigger, cheap to undo.
- *
- * `click` suits cards big enough to reshape the page. Hover is ignored
- * entirely — only the disclosure button toggles it — because a card that grows
- * by half a screen shouldn't fire on a mouse passing over it, and because a
- * "show less" button can't work against a hover that would immediately reopen
- * the card.
+ * Hover is the whole interaction — there is no button and nothing to click.
+ * Two things ride along for the cases hover can't cover: keyboard focus opens
+ * a card so it's reachable without a pointer, and a tap pins it open on touch
+ * devices, where hover never fires at all. Moving the mouse away drops the pin
+ * as well, so the card always returns to its tile when the cursor leaves.
  */
 
 type PlacardHandlers = {
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
-  onFocus?: (e: React.FocusEvent<HTMLElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
-  onClick?: () => void;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  onFocus: (e: React.FocusEvent<HTMLElement>) => void;
+  onBlur: (e: React.FocusEvent<HTMLElement>) => void;
+  onClick: () => void;
 };
 
 interface PlacardOptions {
-  /** false → click-only. Defaults to true. */
-  hover?: boolean;
   onToggle?: (open: boolean) => void;
 }
 
 /**
- * Keyboard focus should open a hover card; the focus a mouse click leaves
- * behind should not — otherwise clicking pins the card open *and* focuses it,
- * and the next click can never close it.
+ * Keyboard focus should open the card; the focus a mouse click leaves behind
+ * should not — otherwise a click pins the card open *and* focuses it, and the
+ * next click can never close it.
  */
 function isKeyboardFocus(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null;
@@ -43,10 +37,9 @@ function isKeyboardFocus(target: EventTarget | null): boolean {
   }
 }
 
-export function usePlacard({ hover = true, onToggle }: PlacardOptions = {}): {
+export function usePlacard({ onToggle }: PlacardOptions = {}): {
   open: boolean;
   placardProps: PlacardHandlers;
-  toggle: () => void;
 } {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -54,8 +47,6 @@ export function usePlacard({ hover = true, onToggle }: PlacardOptions = {}): {
 
   const onMouseEnter = useCallback(() => setHovered(true), []);
 
-  // Leaving with the mouse also drops a pin, so a stray click on desktop
-  // doesn't leave the card stuck open.
   const onMouseLeave = useCallback(() => {
     setHovered(false);
     setPinned(false);
@@ -69,18 +60,15 @@ export function usePlacard({ hover = true, onToggle }: PlacardOptions = {}): {
     if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
   }, []);
 
-  const toggle = useCallback(() => {
+  const onClick = useCallback(() => {
     const next = !pinned;
     setPinned(next);
     onToggle?.(next);
   }, [pinned, onToggle]);
 
   return {
-    open: hover ? hovered || focused || pinned : pinned,
-    placardProps: hover
-      ? { onMouseEnter, onMouseLeave, onFocus, onBlur, onClick: toggle }
-      : {},
-    toggle,
+    open: hovered || focused || pinned,
+    placardProps: { onMouseEnter, onMouseLeave, onFocus, onBlur, onClick },
   };
 }
 

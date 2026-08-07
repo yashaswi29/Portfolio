@@ -127,7 +127,7 @@ const Projects: React.FC = () => {
 
   return (
     <div
-      className={`bg-white dark:bg-primary-900 pt-16 pb-24 transition-colors duration-300 min-h-screen transform transition-all duration-700 ${
+      className={`bg-white dark:bg-primary-900 pt-16 pb-24 hoverable:pb-48 transition-colors duration-300 min-h-screen transform transition-all duration-700 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
       }`}
     >
