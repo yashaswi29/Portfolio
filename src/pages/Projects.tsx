@@ -188,7 +188,7 @@ const Projects: React.FC = () => {
             principleLabel="the discipline"
             principle="It's allowed to be incomplete. It is not allowed to be misleading."
             glowClassName="top-0 right-0 w-72 h-72"
-            onPin={(pinned) =>
+            onToggle={(pinned) =>
               trackEvent('project', 'interaction', 'knowledge_engine', {
                 action: pinned ? 'expand' : 'collapse',
               })
@@ -230,7 +230,7 @@ const Projects: React.FC = () => {
             principleLabel="the constraint"
             principle="No GPU, no managed services, no inbound ports. Everything has to earn its RAM."
             glowClassName="bottom-0 left-0 w-96 h-96"
-            onPin={(pinned) =>
+            onToggle={(pinned) =>
               trackEvent('project', 'interaction', 'homelab', {
                 action: pinned ? 'expand' : 'collapse',
               })

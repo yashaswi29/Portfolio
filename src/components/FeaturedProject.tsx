@@ -1,5 +1,5 @@
 import React from 'react';
-import { Reveal, PlacardHint } from './Placard';
+import { Reveal, ReadMore } from './Placard';
 import { usePlacard } from '../hooks/usePlacard';
 
 export interface Metric {
@@ -31,12 +31,13 @@ interface FeaturedProjectProps {
   principle: React.ReactNode;
   /** Decorative blur blob, positioned by the caller. */
   glowClassName?: string;
-  onPin?: (pinned: boolean) => void;
+  onToggle?: (open: boolean) => void;
 }
 
 /**
  * Featured project placard: identity, numbers and the headline of every
- * engineering point stay visible; the prose behind them unfolds on hover.
+ * engineering point stay visible; the prose behind them is behind "read more".
+ * These cards are far too tall to open on hover.
  */
 const FeaturedProject: React.FC<FeaturedProjectProps> = ({
   path,
@@ -53,15 +54,14 @@ const FeaturedProject: React.FC<FeaturedProjectProps> = ({
   principleLabel,
   principle,
   glowClassName = 'top-0 right-0 w-72 h-72',
-  onPin,
+  onToggle,
 }) => {
-  const { open, placardProps } = usePlacard(onPin);
+  const { open, toggle } = usePlacard({ hover: false, onToggle });
 
   return (
     <div
-      {...placardProps}
       className={`group relative rounded-2xl border bg-gradient-to-br from-primary-800 via-primary-800 to-primary-950 overflow-hidden transition-all duration-300 ${
-        open ? 'border-accent/60 glow-accent' : 'border-accent/25'
+        open ? 'border-accent/60 glow-accent' : 'border-accent/25 hover:border-accent/40'
       }`}
     >
       <div className={`absolute bg-accent/10 rounded-full blur-3xl pointer-events-none ${glowClassName}`} />
@@ -74,7 +74,6 @@ const FeaturedProject: React.FC<FeaturedProjectProps> = ({
             <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-accent/15 border border-accent/30 text-accent">
               {status}
             </span>
-            <PlacardHint open={open} label="expand" openLabel="collapse" className="ml-auto" />
           </div>
 
           <h3 className="font-mono text-2xl md:text-3xl font-bold text-[#F8F8F8] mb-3">
@@ -113,6 +112,14 @@ const FeaturedProject: React.FC<FeaturedProjectProps> = ({
               </li>
             ))}
           </ul>
+
+          <ReadMore
+            open={open}
+            onToggle={toggle}
+            label={`read more · ${highlights.length} engineering notes`}
+            openLabel="show less"
+            className="mt-6"
+          />
         </div>
 
         {/* Right: stack, then the rest on hover */}
