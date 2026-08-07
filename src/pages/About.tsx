@@ -6,7 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { useTracker } from '../hooks/useTracker';
 
 import Terminal from '../components/Terminal';
-import Placard, { Reveal, PlacardHint, ReadMore } from '../components/Placard';
+import Placard, { Reveal } from '../components/Placard';
 
 const About: React.FC = () => {
   const { trackEvent } = useTracker();
@@ -23,11 +23,13 @@ const About: React.FC = () => {
     ? 'bg-primary-800 border border-primary-700 hover:border-accent/50'
     : 'bg-white border border-primary-200 hover:border-accent/50';
 
+  // overflow-x-clip, not overflow-hidden: still no sideways scroll, but a
+  // hovered placard can grow past the section instead of being cut off.
   return (
-    <div className="bg-white dark:bg-primary-900 relative min-h-screen overflow-hidden transition-colors duration-300 animate-fade-in">
+    <div className="bg-white dark:bg-primary-900 relative min-h-screen overflow-x-clip transition-colors duration-300 animate-fade-in">
       <div className="pt-16 bg-terminal-grid">
         <div
-          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 transition-all duration-500 ease-out transform ${
+          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 hoverable:pb-40 transition-all duration-500 ease-out transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
           }`}
         >
@@ -105,18 +107,18 @@ const About: React.FC = () => {
                 ].map((item, i) => (
                   <Placard
                     key={i}
-                    className={`p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${cardBase}`}
+                    className={`p-6 rounded-2xl ${cardBase}`}
+                    expandedClassName={`hoverable:-mx-3 shadow-2xl shadow-black/10 dark:shadow-black/50 ${
+                      isDarkMode ? 'border-accent/60' : 'border-accent/60'
+                    }`}
                   >
-                    {(open, toggle) => (
+                    {(open) => (
                       <div className="flex items-start gap-5">
                         <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center shrink-0">
                           {item.icon}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-3">
-                            <h3 className={`font-mono text-lg font-bold ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{item.title}</h3>
-                            <PlacardHint open={open} onToggle={toggle} className="mt-1" />
-                          </div>
+                          <h3 className={`font-mono text-lg font-bold ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{item.title}</h3>
                           <Reveal open={open}>
                             <p className={`pt-3 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
                               {item.body}
@@ -222,16 +224,17 @@ const About: React.FC = () => {
                   ].map((job, i) => (
                     <div key={i} className="relative pl-8 border-l-2 border-accent/40">
                       <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
-                      {/* Click-only: four bullets of detail is too much to
-                          throw at a passing cursor. */}
-                      <Placard hover={false} className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
-                        {(open, toggle) => (
+                      <Placard
+                        className={`p-5 rounded-xl ${cardBase}`}
+                        expandedClassName="hoverable:-mx-3 border-accent/60 shadow-2xl shadow-black/10 dark:shadow-black/50"
+                      >
+                        {(open) => (
                           <>
                             <div className="font-mono text-sm font-medium mb-2 text-accent">{job.date}</div>
                             <h4 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{job.role}</h4>
                             <div className={`font-medium text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>{job.org}</div>
 
-                            {/* First bullet stays out, so a collapsed card still says something. */}
+                            {/* First bullet rides in the tile, so a resting card still says what the job was. */}
                             <ul className="space-y-2 pt-3">
                               <li className={`flex items-start gap-2.5 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
                                 <span className="text-accent mt-1.5 shrink-0 text-[10px]">▸</span>
@@ -248,16 +251,6 @@ const About: React.FC = () => {
                                 ))}
                               </ul>
                             </Reveal>
-
-                            {job.bullets.length > 1 && (
-                              <ReadMore
-                                open={open}
-                                onToggle={toggle}
-                                label={`read more · ${job.bullets.length - 1} more`}
-                                openLabel="show less"
-                                className="mt-4"
-                              />
-                            )}
                           </>
                         )}
                       </Placard>
@@ -307,13 +300,13 @@ const About: React.FC = () => {
                 </div>
                 <div className="relative pl-8 border-l-2 border-accent/40">
                   <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
-                  <Placard className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
-                    {(open, toggle) => (
+                  <Placard
+                    className={`p-5 rounded-xl ${cardBase}`}
+                    expandedClassName="hoverable:-mx-3 border-accent/60 shadow-2xl shadow-black/10 dark:shadow-black/50"
+                  >
+                    {(open) => (
                       <>
-                        <div className="flex items-start justify-between gap-3 mb-2">
-                          <div className="font-mono text-sm font-medium text-accent">2023 – 2024</div>
-                          <PlacardHint open={open} onToggle={toggle} />
-                        </div>
+                        <div className="font-mono text-sm font-medium mb-2 text-accent">2023 – 2024</div>
                         <h4 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>President, DevOps Club</h4>
                         <div className={`font-medium text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>Bennett University</div>
                         <Reveal open={open}>
