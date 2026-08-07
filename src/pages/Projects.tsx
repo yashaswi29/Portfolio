@@ -4,6 +4,7 @@ import {
   Target, Activity, Lock, Cloud, Archive, Thermometer, Gauge,
 } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
+import FeaturedProject from '../components/FeaturedProject';
 import { useTracker } from '../hooks/useTracker';
 
 const Projects: React.FC = () => {
@@ -124,31 +125,6 @@ const Projects: React.FC = () => {
     },
   ];
 
-  const metricStrip = (metrics: { value: string; label: string }[]) => (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-accent/20 border border-accent/20 rounded-lg overflow-hidden mb-8">
-      {metrics.map((m, i) => (
-        <div key={i} className="bg-primary-900/60 px-4 py-3">
-          <div className="font-mono text-lg font-bold text-accent leading-none mb-1.5">{m.value}</div>
-          <div className="font-mono text-[11px] text-primary-400 leading-tight">{m.label}</div>
-        </div>
-      ))}
-    </div>
-  );
-
-  const highlightList = (items: { icon: React.ReactNode; title: string; body: string }[]) => (
-    <ul className="space-y-5">
-      {items.map((h, i) => (
-        <li key={i} className="flex items-start gap-3.5">
-          <span className="text-accent mt-0.5 shrink-0">{h.icon}</span>
-          <div>
-            <div className="font-mono text-sm font-semibold text-[#F8F8F8] mb-1">{h.title}</div>
-            <p className="text-sm leading-relaxed text-primary-300">{h.body}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
-
   return (
     <div
       className={`bg-white dark:bg-primary-900 pt-16 pb-24 transition-colors duration-300 min-h-screen transform transition-all duration-700 ${
@@ -179,131 +155,87 @@ const Projects: React.FC = () => {
 
         <div className="space-y-8">
           {/* Personal knowledge & planning engine */}
-          <div className="relative rounded-2xl border border-accent/30 bg-gradient-to-br from-primary-800 via-primary-800 to-primary-950 overflow-hidden glow-accent">
-            <div className="absolute top-0 right-0 w-72 h-72 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10 grid lg:grid-cols-5 gap-10 p-8 md:p-12">
-              {/* Left: narrative */}
-              <div className="lg:col-span-3">
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <p className="font-mono text-xs text-accent">~/projects/private · solo full-stack</p>
-                  <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-accent/15 border border-accent/30 text-accent">
-                    ● unreleased · in daily use
-                  </span>
-                </div>
-                <h3 className="font-mono text-2xl md:text-3xl font-bold text-[#F8F8F8] mb-4">
-                  Personal Knowledge &amp; Planning Engine
-                </h3>
-                <div className="text-primary-200 leading-relaxed space-y-3 mb-8">
-                  <p>
-                    A private system that reads what I save, keeps track of what I'm actually working
-                    toward, and answers one question well:
-                    <span className="text-accent"> what deserves my attention today, and why?</span>
-                  </p>
-                  <p className="text-primary-300">
-                    Still unreleased, and deliberately so — the interesting part isn't the idea, it's
-                    what it takes to make a system like this honest enough to trust. Everything below is
-                    the engineering underneath it.
-                  </p>
-                </div>
-
-                {metricStrip(engineMetrics)}
-                {highlightList(engineHighlights)}
-              </div>
-
-              {/* Right: stack + skills */}
-              <div className="lg:col-span-2 lg:border-l lg:border-accent/20 lg:pl-10">
-                <div className="lg:sticky lg:top-24">
-                  <h4 className="font-mono text-sm font-semibold text-accent mb-4 flex items-center gap-2">
-                    <Network size={16} /> stack
-                  </h4>
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {engineTech.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="font-mono text-xs px-3 py-1.5 rounded bg-accent/10 border border-accent/25 text-accent-200"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">skills demonstrated</h4>
-                  <p className="font-mono text-xs leading-relaxed text-primary-300 mb-8">
-                    async API design · hybrid vector / full-text retrieval · RRF ranking &amp; eval methodology ·
-                    background workers (arq) · schema design · local LLM inference · multi-tenancy ·
-                    CI/CD · Docker Compose
-                  </p>
-                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">the discipline</h4>
-                  <p className="text-xs leading-relaxed text-primary-300 border-l-2 border-accent/40 pl-4">
-                    It's allowed to be incomplete. It is not allowed to be misleading.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FeaturedProject
+            path="~/projects/private · solo full-stack"
+            status="● unreleased · in daily use"
+            title={<>Personal Knowledge &amp; Planning Engine</>}
+            lead={
+              <>
+                A private system that reads what I save, keeps track of what I'm actually working
+                toward, and answers one question well:
+                <span className="text-accent"> what deserves my attention today, and why?</span>
+              </>
+            }
+            detail={
+              <>
+                Still unreleased, and deliberately so — the interesting part isn't the idea, it's
+                what it takes to make a system like this honest enough to trust. Everything below is
+                the engineering underneath it.
+              </>
+            }
+            metrics={engineMetrics}
+            highlights={engineHighlights}
+            stackIcon={<Network size={16} />}
+            stack={engineTech}
+            focusLabel="skills demonstrated"
+            focus={
+              <>
+                async API design · hybrid vector / full-text retrieval · RRF ranking &amp; eval
+                methodology · background workers (arq) · schema design · local LLM inference ·
+                multi-tenancy · CI/CD · Docker Compose
+              </>
+            }
+            principleLabel="the discipline"
+            principle="It's allowed to be incomplete. It is not allowed to be misleading."
+            glowClassName="top-0 right-0 w-72 h-72"
+            onPin={(pinned) =>
+              trackEvent('project', 'interaction', 'knowledge_engine', {
+                action: pinned ? 'expand' : 'collapse',
+              })
+            }
+          />
 
           {/* HomeLab */}
-          <div className="relative rounded-2xl border border-accent/30 bg-gradient-to-br from-primary-800 via-primary-800 to-primary-950 overflow-hidden glow-accent">
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10 grid lg:grid-cols-5 gap-10 p-8 md:p-12">
-              {/* Left: narrative */}
-              <div className="lg:col-span-3">
-                <div className="flex flex-wrap items-center gap-3 mb-3">
-                  <p className="font-mono text-xs text-accent">~/infra/homelab · debian 13 bare metal</p>
-                  <span className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-accent/15 border border-accent/30 text-accent">
-                    ● live · serving this page
-                  </span>
-                </div>
-                <h3 className="font-mono text-2xl md:text-3xl font-bold text-[#F8F8F8] mb-4">
-                  Self-Hosted Infrastructure &amp; Observability
-                </h3>
-                <div className="text-primary-200 leading-relaxed space-y-3 mb-8">
-                  <p>
-                    One Debian 13 box — i5-10400F, 16 GB, 500 GB NVMe — running{' '}
-                    <span className="text-accent">14 containers across 4 Compose projects</span>: this site,
-                    a RAG application, a self-hosted photo library, and the monitoring stack watching all of
-                    it. Docker's data root sits off the system path so a full disk never takes the OS down
-                    with it.
-                  </p>
-                  <p className="text-primary-300">
-                    It's a real production environment on commodity hardware, which means the failures are
-                    real too — and so are the fixes.
-                  </p>
-                </div>
-
-                {metricStrip(homeLabMetrics)}
-                {highlightList(homeLabHighlights)}
-              </div>
-
-              {/* Right: stack */}
-              <div className="lg:col-span-2 lg:border-l lg:border-accent/20 lg:pl-10">
-                <div className="lg:sticky lg:top-24">
-                  <h4 className="font-mono text-sm font-semibold text-accent mb-4 flex items-center gap-2">
-                    <Server size={16} /> stack
-                  </h4>
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {homeLabTech.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="font-mono text-xs px-3 py-1.5 rounded bg-accent/10 border border-accent/25 text-accent-200"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">focus</h4>
-                  <p className="font-mono text-xs leading-relaxed text-primary-300 mb-8">
-                    bare-metal Linux · container observability · metric cardinality · attack-surface
-                    reduction · zero-ingress networking · backup automation (systemd / udev) · capacity
-                    planning on fixed hardware
-                  </p>
-                  <h4 className="font-mono text-sm font-semibold text-accent mb-3">the constraint</h4>
-                  <p className="text-xs leading-relaxed text-primary-300 border-l-2 border-accent/40 pl-4">
-                    No GPU, no managed services, no inbound ports. Everything has to earn its RAM.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FeaturedProject
+            path="~/infra/homelab · debian 13 bare metal"
+            status="● live · serving this page"
+            title={<>Self-Hosted Infrastructure &amp; Observability</>}
+            lead={
+              <>
+                One Debian 13 box — i5-10400F, 16 GB, 500 GB NVMe — running{' '}
+                <span className="text-accent">14 containers across 4 Compose projects</span>: this
+                site, a RAG application, a self-hosted photo library, and the monitoring stack
+                watching all of it. Docker's data root sits off the system path so a full disk never
+                takes the OS down with it.
+              </>
+            }
+            detail={
+              <>
+                It's a real production environment on commodity hardware, which means the failures
+                are real too — and so are the fixes.
+              </>
+            }
+            metrics={homeLabMetrics}
+            highlights={homeLabHighlights}
+            stackIcon={<Server size={16} />}
+            stack={homeLabTech}
+            focusLabel="focus"
+            focus={
+              <>
+                bare-metal Linux · container observability · metric cardinality · attack-surface
+                reduction · zero-ingress networking · backup automation (systemd / udev) · capacity
+                planning on fixed hardware
+              </>
+            }
+            principleLabel="the constraint"
+            principle="No GPU, no managed services, no inbound ports. Everything has to earn its RAM."
+            glowClassName="bottom-0 left-0 w-96 h-96"
+            onPin={(pinned) =>
+              trackEvent('project', 'interaction', 'homelab', {
+                action: pinned ? 'expand' : 'collapse',
+              })
+            }
+          />
         </div>
 
         {/* All projects grid */}
