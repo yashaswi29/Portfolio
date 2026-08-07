@@ -6,6 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { useTracker } from '../hooks/useTracker';
 
 import Terminal from '../components/Terminal';
+import Placard, { Reveal, PlacardHint } from '../components/Placard';
 
 const About: React.FC = () => {
   const { trackEvent } = useTracker();
@@ -102,19 +103,29 @@ const About: React.FC = () => {
                     body: 'Constant building and learning — from backend and database internals to container orchestration and self-hosted AI. I thrive on solving complex problems and sharing what I learn with the community.',
                   },
                 ].map((item, i) => (
-                  <div key={i} className={`p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${cardBase}`}>
-                    <div className="flex items-start gap-6">
-                      <div className="w-14 h-14 rounded-xl bg-accent flex items-center justify-center shrink-0">
-                        {item.icon}
+                  <Placard
+                    key={i}
+                    className={`p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${cardBase}`}
+                  >
+                    {(open) => (
+                      <div className="flex items-start gap-5">
+                        <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center shrink-0">
+                          {item.icon}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-3">
+                            <h3 className={`font-mono text-lg font-bold ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{item.title}</h3>
+                            <PlacardHint open={open} className="mt-1" />
+                          </div>
+                          <Reveal open={open}>
+                            <p className={`pt-3 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
+                              {item.body}
+                            </p>
+                          </Reveal>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className={`font-mono text-xl font-bold mb-3 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{item.title}</h3>
-                        <p className={`text-base leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
-                          {item.body}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                    )}
+                  </Placard>
                 ))}
               </div>
 
@@ -211,19 +222,32 @@ const About: React.FC = () => {
                   ].map((job, i) => (
                     <div key={i} className="relative pl-8 border-l-2 border-accent/40">
                       <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
-                      <div className={`p-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
-                        <div className="font-mono text-sm font-medium mb-2 text-accent">{job.date}</div>
-                        <h4 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{job.role}</h4>
-                        <div className={`font-medium mb-3 text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>{job.org}</div>
-                        <ul className="space-y-2">
-                          {job.bullets.map((point, b) => (
-                            <li key={b} className={`flex items-start gap-2.5 text-base leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
-                              <span className="text-accent mt-1.5 shrink-0 text-xs">▸</span>
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      <Placard className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
+                        {(open) => (
+                          <>
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <div className="font-mono text-sm font-medium text-accent">{job.date}</div>
+                              <PlacardHint
+                                open={open}
+                                label={`${job.bullets.length} highlights`}
+                                openLabel="collapse"
+                              />
+                            </div>
+                            <h4 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{job.role}</h4>
+                            <div className={`font-medium text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>{job.org}</div>
+                            <Reveal open={open}>
+                              <ul className="space-y-2 pt-3">
+                                {job.bullets.map((point, b) => (
+                                  <li key={b} className={`flex items-start gap-2.5 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
+                                    <span className="text-accent mt-1.5 shrink-0 text-[10px]">▸</span>
+                                    <span>{point}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </Reveal>
+                          </>
+                        )}
+                      </Placard>
                     </div>
                   ))}
                 </div>
@@ -252,9 +276,9 @@ const About: React.FC = () => {
                   ].map((edu, i) => (
                     <div key={i} className="relative pl-8 border-l-2 border-accent/40">
                       <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
-                      <div className={`p-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
+                      <div className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
                         <div className="font-mono text-sm font-medium mb-2 text-accent">{edu.date}</div>
-                        <h4 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{edu.title}</h4>
+                        <h4 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{edu.title}</h4>
                         <div className={`font-medium text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>{edu.org}</div>
                       </div>
                     </div>
@@ -270,14 +294,23 @@ const About: React.FC = () => {
                 </div>
                 <div className="relative pl-8 border-l-2 border-accent/40">
                   <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
-                  <div className={`p-6 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
-                    <div className="font-mono text-sm font-medium mb-2 text-accent">2023 – 2024</div>
-                    <h4 className={`text-xl font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>President, DevOps Club</h4>
-                    <div className={`font-medium mb-3 text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>Bennett University</div>
-                    <p className={`text-base leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
-                      Led a student tech community focused on cloud, automation, and DevOps practice.
-                    </p>
-                  </div>
+                  <Placard className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
+                    {(open) => (
+                      <>
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <div className="font-mono text-sm font-medium text-accent">2023 – 2024</div>
+                          <PlacardHint open={open} openLabel="collapse" />
+                        </div>
+                        <h4 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>President, DevOps Club</h4>
+                        <div className={`font-medium text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>Bennett University</div>
+                        <Reveal open={open}>
+                          <p className={`pt-3 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
+                            Led a student tech community focused on cloud, automation, and DevOps practice.
+                          </p>
+                        </Reveal>
+                      </>
+                    )}
+                  </Placard>
                 </div>
               </div>
             </div>
