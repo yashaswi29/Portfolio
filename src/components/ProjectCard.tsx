@@ -20,9 +20,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   liveUrl,
 }) => {
   const { trackEvent } = useTracker();
-  const { open, placardProps } = usePlacard((pinned) =>
-    trackEvent('project', 'interaction', title, { action: pinned ? 'expand' : 'collapse' })
-  );
+  const { open, placardProps, toggle } = usePlacard({
+    onToggle: (isOpen) =>
+      trackEvent('project', 'interaction', title, { action: isOpen ? 'expand' : 'collapse' }),
+  });
 
   const handleGithubClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -58,7 +59,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <h3 className={`font-mono text-lg font-bold leading-snug transition-colors ${open ? 'text-accent' : 'text-primary-900 dark:text-[#F8F8F8]'}`}>
             {title}
           </h3>
-          <PlacardHint open={open} className="mt-1" />
+          <PlacardHint open={open} onToggle={toggle} className="mt-1" />
         </div>
 
         {/* Two lines collapsed, full text on hover. */}

@@ -6,7 +6,7 @@ import { ThemeContext } from '../context/ThemeContext';
 import { useTracker } from '../hooks/useTracker';
 
 import Terminal from '../components/Terminal';
-import Placard, { Reveal, PlacardHint } from '../components/Placard';
+import Placard, { Reveal, PlacardHint, ReadMore } from '../components/Placard';
 
 const About: React.FC = () => {
   const { trackEvent } = useTracker();
@@ -107,7 +107,7 @@ const About: React.FC = () => {
                     key={i}
                     className={`p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${cardBase}`}
                   >
-                    {(open) => (
+                    {(open, toggle) => (
                       <div className="flex items-start gap-5">
                         <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center shrink-0">
                           {item.icon}
@@ -115,7 +115,7 @@ const About: React.FC = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start justify-between gap-3">
                             <h3 className={`font-mono text-lg font-bold ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{item.title}</h3>
-                            <PlacardHint open={open} className="mt-1" />
+                            <PlacardHint open={open} onToggle={toggle} className="mt-1" />
                           </div>
                           <Reveal open={open}>
                             <p className={`pt-3 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
@@ -222,22 +222,25 @@ const About: React.FC = () => {
                   ].map((job, i) => (
                     <div key={i} className="relative pl-8 border-l-2 border-accent/40">
                       <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
-                      <Placard className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
-                        {(open) => (
+                      {/* Click-only: four bullets of detail is too much to
+                          throw at a passing cursor. */}
+                      <Placard hover={false} className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
+                        {(open, toggle) => (
                           <>
-                            <div className="flex items-start justify-between gap-3 mb-2">
-                              <div className="font-mono text-sm font-medium text-accent">{job.date}</div>
-                              <PlacardHint
-                                open={open}
-                                label={`${job.bullets.length} highlights`}
-                                openLabel="collapse"
-                              />
-                            </div>
+                            <div className="font-mono text-sm font-medium mb-2 text-accent">{job.date}</div>
                             <h4 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>{job.role}</h4>
                             <div className={`font-medium text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>{job.org}</div>
+
+                            {/* First bullet stays out, so a collapsed card still says something. */}
+                            <ul className="space-y-2 pt-3">
+                              <li className={`flex items-start gap-2.5 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
+                                <span className="text-accent mt-1.5 shrink-0 text-[10px]">▸</span>
+                                <span>{job.bullets[0]}</span>
+                              </li>
+                            </ul>
                             <Reveal open={open}>
-                              <ul className="space-y-2 pt-3">
-                                {job.bullets.map((point, b) => (
+                              <ul className="space-y-2 pt-2">
+                                {job.bullets.slice(1).map((point, b) => (
                                   <li key={b} className={`flex items-start gap-2.5 text-sm leading-relaxed ${isDarkMode ? 'text-primary-300' : 'text-gray-600'}`}>
                                     <span className="text-accent mt-1.5 shrink-0 text-[10px]">▸</span>
                                     <span>{point}</span>
@@ -245,6 +248,16 @@ const About: React.FC = () => {
                                 ))}
                               </ul>
                             </Reveal>
+
+                            {job.bullets.length > 1 && (
+                              <ReadMore
+                                open={open}
+                                onToggle={toggle}
+                                label={`read more · ${job.bullets.length - 1} more`}
+                                openLabel="show less"
+                                className="mt-4"
+                              />
+                            )}
                           </>
                         )}
                       </Placard>
@@ -295,11 +308,11 @@ const About: React.FC = () => {
                 <div className="relative pl-8 border-l-2 border-accent/40">
                   <div className="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-accent" />
                   <Placard className={`p-5 rounded-xl transition-all duration-300 hover:-translate-y-0.5 ${cardBase}`}>
-                    {(open) => (
+                    {(open, toggle) => (
                       <>
                         <div className="flex items-start justify-between gap-3 mb-2">
                           <div className="font-mono text-sm font-medium text-accent">2023 – 2024</div>
-                          <PlacardHint open={open} openLabel="collapse" />
+                          <PlacardHint open={open} onToggle={toggle} />
                         </div>
                         <h4 className={`text-lg font-bold mb-1 ${isDarkMode ? 'text-[#F8F8F8]' : 'text-gray-800'}`}>President, DevOps Club</h4>
                         <div className={`font-medium text-sm ${isDarkMode ? 'text-primary-400' : 'text-gray-600'}`}>Bennett University</div>

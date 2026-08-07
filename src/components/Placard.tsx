@@ -3,9 +3,9 @@ import { ChevronDown } from 'lucide-react';
 import { usePlacard } from '../hooks/usePlacard';
 
 /**
- * Placards are cards that stay compact until you look at them: the summary is
- * always visible, the body unfolds on hover (see `usePlacard` for how the
- * open state is driven across pointer, keyboard and touch).
+ * Placards are cards that stay compact until asked to open: the summary is
+ * always visible, the body unfolds behind a disclosure control (see
+ * `usePlacard` for hover vs. click modes).
  *
  * Collapsed content is clipped, never removed from the DOM, so screen readers
  * and in-page search still see the full text.
@@ -35,66 +35,86 @@ export const Reveal: React.FC<RevealProps> = ({ open, delay = 0, className = '',
   </div>
 );
 
-interface PlacardHintProps {
+interface DisclosureProps {
   open: boolean;
+  onToggle: () => void;
   label?: string;
   openLabel?: string;
   className?: string;
 }
 
 /**
- * The affordance that makes a collapsed card read as "there is more here" —
- * and a real disclosure control, so the card is one tab stop that announces its
- * expanded state instead of a focusable generic div. The click bubbles to the
- * placard wrapper, which owns the open state.
+ * Both controls stop propagation: on a hover placard the wrapper also toggles
+ * on click, and without this the two would cancel each other out.
  */
-export const PlacardHint: React.FC<PlacardHintProps> = ({
+const handle = (onToggle: () => void) => (e: React.MouseEvent) => {
+  e.stopPropagation();
+  onToggle();
+};
+
+/** Understated chevron for small cards, where hover does most of the work. */
+export const PlacardHint: React.FC<DisclosureProps> = ({
   open,
-  label = 'expand',
-  openLabel,
+  onToggle,
+  label = 'read more',
+  openLabel = 'show less',
   className = '',
 }) => (
   <button
     type="button"
     aria-expanded={open}
+    onClick={handle(onToggle)}
     className={`inline-flex shrink-0 items-center gap-1 rounded font-mono text-[11px] outline-none transition-colors duration-300 focus-visible:ring-2 focus-visible:ring-accent/60 ${
-      open ? 'text-accent' : 'text-primary-500 dark:text-primary-400'
+      open ? 'text-accent' : 'text-primary-500 hover:text-accent dark:text-primary-400 dark:hover:text-accent'
     } ${className}`}
   >
     <ChevronDown
       size={12}
       className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
     />
-    {open ? openLabel ?? 'less' : label}
+    {open ? openLabel : label}
+  </button>
+);
+
+/**
+ * The full control for big cards: on a card that fills half the screen the
+ * only way in has to be obvious.
+ */
+export const ReadMore: React.FC<DisclosureProps> = ({
+  open,
+  onToggle,
+  label = 'read more',
+  openLabel = 'show less',
+  className = '',
+}) => (
+  <button
+    type="button"
+    aria-expanded={open}
+    onClick={handle(onToggle)}
+    className={`inline-flex items-center gap-2 rounded-lg border border-accent/40 bg-accent/5 px-4 py-2 font-mono text-xs font-semibold text-accent outline-none transition-colors duration-300 hover:bg-accent/15 hover:border-accent/70 focus-visible:ring-2 focus-visible:ring-accent/60 ${className}`}
+  >
+    {open ? openLabel : label}
+    <ChevronDown
+      size={14}
+      className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+    />
   </button>
 );
 
 interface PlacardProps {
   className?: string;
-  /**
-   * Makes the card itself a tab stop. Only needed when it has no `PlacardHint`
-   * — the hint is already a focusable control, and two stops means two tabs.
-   */
-  focusable?: boolean;
-  onPin?: (pinned: boolean) => void;
-  children: (open: boolean) => React.ReactNode;
+  /** false → click-only, for cards big enough that hover would be disruptive. */
+  hover?: boolean;
+  onToggle?: (open: boolean) => void;
+  children: (open: boolean, toggle: () => void) => React.ReactNode;
 }
 
-const Placard: React.FC<PlacardProps> = ({
-  className = '',
-  focusable = false,
-  onPin,
-  children,
-}) => {
-  const { open, placardProps } = usePlacard(onPin);
+const Placard: React.FC<PlacardProps> = ({ className = '', hover = true, onToggle, children }) => {
+  const { open, placardProps, toggle } = usePlacard({ hover, onToggle });
 
   return (
-    <div
-      {...placardProps}
-      tabIndex={focusable ? 0 : undefined}
-      className={`group outline-none focus-visible:ring-2 focus-visible:ring-accent/50 ${className}`}
-    >
-      {children(open)}
+    <div {...placardProps} className={`group ${className}`}>
+      {children(open, toggle)}
     </div>
   );
 };
